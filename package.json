@@ -44,7 +44,7 @@
   "files": [
     "src/*"
   ],
-  "main": "uttori-utilities",
+  "main": "src/index.js",
   "nyc": {
     "cache": true,
     "all": true,
