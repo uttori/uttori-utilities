@@ -1,4 +1,3 @@
-// https://github.com/shaunpersad/throttled-queue
 const debug = require('debug')('Uttori.Utilities.FunctionQueue');
 
 /**

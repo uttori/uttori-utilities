@@ -11,6 +11,7 @@ const R = require('ramda');
   * ➜ [{ ... }, { ... }, ...]
   */
 const parseQueryToRamda = (ast) => {
+  debug('AST:', JSON.stringify(ast, null, 2));
   const operation = [];
   Object.keys(ast).forEach((key) => {
     // Construct filters for each item or group of items.

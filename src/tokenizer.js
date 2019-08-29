@@ -1,5 +1,3 @@
-// https://github.com/shaunpersad/tokenize-this
-
 const MODE_NONE = 'modeNone';
 const MODE_DEFAULT = 'modeDefault';
 const MODE_MATCH = 'modeMatch';

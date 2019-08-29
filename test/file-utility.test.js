@@ -75,8 +75,7 @@ test('readJSON(folder, name, extension, encoding): returns undefined when unable
 
 test('readFolder(folder): returns the contents of the folder', async (t) => {
   const result = await FileUtility.readFolder('test/site/content');
-  t.deepEqual(result, [
-    'Third-title',
+  t.deepEqual(result.sort(), [
     'example-title',
     'history',
   ]);

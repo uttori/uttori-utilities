@@ -90,15 +90,24 @@ const readFile = async (folder, name, extension, encoding = 'utf8') => {
 const readJSON = async (folder, name, extension, encoding = 'utf8') => {
   debug('Reading File:', folder, name, extension, encoding);
   const target = `${folder}/${sanitize(`${name}`)}.${extension}`;
-  debug('Reading target:', target);
   let content;
-  try { content = await fs.readFile(target, encoding); } catch (error) {
-    /* istanbul ignore next */
-    debug('Error reading file:', target, error);
+  if (await fs.exists(target)) {
+    debug('Reading target:', target);
+    try { content = await fs.readFile(target, encoding); } catch (error) {
+      /* istanbul ignore next */
+      debug('Error reading file:', target, error);
+    }
+  } else {
+    debug('Target does not exist:', target);
+    return content;
   }
-  try { content = JSON.parse(content); } catch (error) {
-    /* istanbul ignore next */
-    debug('Error parsing JSON:', content, error);
+  if (content) {
+    try { content = JSON.parse(content); } catch (error) {
+      /* istanbul ignore next */
+      debug('Error parsing JSON:', content, error);
+    }
+  } else {
+    debug('Content was null or undefined.');
   }
   return content;
 };
@@ -130,7 +139,7 @@ const readFolder = async (folder) => {
  * @param {string} encoding - The encoding of the file to be written as.
  */
 const writeFile = async (folder, name, extension, content, encoding = 'utf8') => {
-  debug('writeFile:', folder, name, extension, content, encoding);
+  debug('Writing File with:', { folder, name, extension, content, encoding });
   const target = `${folder}/${sanitize(`${name}`)}.${extension}`;
   debug('Writing target:', target);
   try { await fs.writeFile(target, content, encoding); } catch (error) {

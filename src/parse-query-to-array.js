@@ -1,3 +1,4 @@
+const debug = require('debug')('Uttori.Utilities.parseQueryToArray');
 const Operator = require('./operator');
 const SqlWhereParser = require('./where-parser');
 
@@ -25,6 +26,7 @@ const SqlWhereParser = require('./where-parser');
   *  ]
   */
 const parseQueryToArray = (query) => {
+  debug('Query:', query);
   const parser = new SqlWhereParser();
   let expression = [];
   let tokenCount = 0;

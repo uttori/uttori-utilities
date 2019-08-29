@@ -57,6 +57,7 @@
     "security/detect-non-literal-fs-filename": 0,
     "max-classes-per-file": 0,
     "unicorn/no-for-loop": 0,
-    "unicorn/catch-error-name": 0
+    "unicorn/catch-error-name": 0,
+    "object-curly-newline": 0,
   }
 }

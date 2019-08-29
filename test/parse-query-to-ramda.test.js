@@ -198,3 +198,9 @@ test('Level 1: IN OR LIKE', (t) => {
   out = filter(sql);
   t.is(out.length, 3);
 });
+
+test('Level 2: = AND = AND (= OR = AND IN AND =)', (t) => {
+  sql = 'name = "First Last" AND age = 27 AND (favorite = vanilla OR size = 8 AND location IN (NY, WA) AND weight = 10)';
+  out = filter(sql);
+  t.is(out.length, 1);
+});

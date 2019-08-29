@@ -1,5 +1,4 @@
 /* eslint-disable security/detect-possible-timing-attacks */
-// https://github.com/shaunpersad/sql-where-parser
 const Operator = require('./operator');
 const TokenizeThis = require('./tokenizer');
 
