@@ -2,6 +2,20 @@ const debug = require('debug')('Uttori.Utilities.parseQueryToRamda');
 const R = require('ramda');
 
 /**
+  * Pretty format a value as JSON or a joined array.
+  * @property {*} value - The value to be converted to a nice string.
+  * @example <caption>parseQueryToRamda(ast)</caption>
+  * debugHelper(['one','two']);
+  * ➜ '["one", "two"]'
+  */
+const debugHelper = (value) => {
+  if (Array.isArray(value)) {
+    return `["${value.join('","')}"]`;
+  }
+  return JSON.stringify(value);
+};
+
+/**
   * Using default SQL tree output, iterate over that to convert to items to be checked group by group (AND, OR), prop by prop to filter functions.
   * Both `+` and `-` should be done in a pre-parser step or before the query is constructed, or after results are returned.
   * @property {Object} ast - The parsed output of SqlWhereParser to be filtered.
@@ -37,7 +51,7 @@ const parseQueryToRamda = (ast) => {
           if (!Array.isArray(value)) {
             value = [value];
           }
-          debug(`R.compose(\n  R.complement(R.isEmpty),\n  R.intersection(['${value.join("','")}']),\n  R.insert(0, R.__, []),\n  R.prop('${operands[0]}')\n)`);
+          debug(`R.compose(\n  R.complement(R.isEmpty),\n  R.intersection(${debugHelper(value)}),\n  R.insert(0, R.__, []),\n  R.prop(${debugHelper(operands[0])})\n)`);
           operation.push(R.compose(R.complement(R.isEmpty), R.intersection(value), R.insert(0, R.__, []), R.prop(operands[0])));
           break;
         }
@@ -47,22 +61,22 @@ const parseQueryToRamda = (ast) => {
           if (!Array.isArray(value)) {
             value = [value];
           }
-          debug(`R.compose(\n  R.complement(R.isEmpty),\n  R.intersection(['${value.join("','")}']),\n  R.prop('${operands[0]}')\n)`);
+          debug(`R.compose(\n  R.complement(R.isEmpty),\n  R.intersection(${debugHelper(value)}),\n  R.prop(${debugHelper(operands[0])})\n)`);
           operation.push(R.compose(R.complement(R.isEmpty), R.intersection(value), R.prop(operands[0])));
           break;
         }
         case 'IS_NULL': {
-          debug(`R.compose(R.anyPass([R.isEmpty, R.isNil]), R.prop('${operands[0]}'))`);
+          debug(`R.compose(R.anyPass([R.isEmpty, R.isNil]), R.prop(${debugHelper(operands[0])}))`);
           operation.push(R.compose(R.anyPass([R.isEmpty, R.isNil]), R.prop(operands[0])));
           break;
         }
         case 'IS_NOT_NULL': {
-          debug(`R.complement(R.compose(R.anyPass([R.isEmpty, R.isNil]), R.prop('${operands[0]}')))`);
+          debug(`R.complement(R.compose(R.anyPass([R.isEmpty, R.isNil]), R.prop(${debugHelper(operands[0])})))`);
           operation.push(R.compose(R.complement(R.anyPass([R.isEmpty, R.isNil])), R.prop(operands[0])));
           break;
         }
         case 'LIKE': {
-          debug(`R.compose(R.contains('${operands[1]}'), R.prop('${operands[0]}'))`);
+          debug(`R.compose(R.contains('${operands[1]}'), R.prop(${debugHelper(operands[0])}))`);
           operation.push(R.compose(R.contains(operands[1]), R.prop(operands[0])));
           break;
         }

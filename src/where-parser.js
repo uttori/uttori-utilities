@@ -1,4 +1,5 @@
 /* eslint-disable security/detect-possible-timing-attacks */
+const debug = require('debug')('Uttori.Utilities.SqlWhereParser');
 const Operator = require('./operator');
 const TokenizeThis = require('./tokenizer');
 
@@ -21,6 +22,7 @@ class SqlWhereParser {
   * @constructor
   */
   constructor(config = {}) {
+    debug('constructor:', config);
     config = {
       operators: [
         {
@@ -102,6 +104,7 @@ class SqlWhereParser {
    * @returns {Object} - The parsed query tree.
    */
   parse(sql, evaluator) {
+    debug('parse:', sql);
     const operatorStack = [];
     const outputStream = [];
     let lastOperator;
@@ -253,6 +256,7 @@ class SqlWhereParser {
    * @returns {Boolean}
    */
   operatorPrecedenceFromValues(operatorValue1, operatorValue2) {
+    debug('operatorPrecedenceFromValues:', operatorValue1, operatorValue2);
     return this.operators[operatorValue2].precedence <= this.operators[operatorValue1].precedence;
   }
 
@@ -262,6 +266,7 @@ class SqlWhereParser {
    * @returns {*}
    */
   getOperator(operatorValue) {
+    debug('getOperator:', operatorValue);
     if (typeof operatorValue === 'string') {
       return this.operators[operatorValue.toUpperCase()];
     }
@@ -279,6 +284,7 @@ class SqlWhereParser {
    */
   // eslint-disable-next-line class-methods-use-this
   static defaultEvaluator(operatorValue, operands) {
+    debug('defaultEvaluator:', operatorValue);
     // Convert back to regular minus, now that we have the proper number of operands.
     if (operatorValue === Operator.type('unary-minus')) {
       operatorValue = '-';

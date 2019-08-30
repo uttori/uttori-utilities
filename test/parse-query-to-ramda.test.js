@@ -12,6 +12,7 @@ const docs = [
     location: 'WA',
     favorite: null,
     tags: ['new', 'cool'],
+    slug: 'first-last',
   },
   {
     name: '1st 2nd',
@@ -22,6 +23,7 @@ const docs = [
     location: 'NY',
     favorite: 'Chcolate',
     tags: ['old', 'cool'],
+    slug: '1st-2nd',
   },
   {
     name: 'No Name',
@@ -32,6 +34,7 @@ const docs = [
     location: 'SF',
     favorite: '',
     tags: ['new', 'lame'],
+    slug: 'no-name',
   },
 ];
 
@@ -201,6 +204,18 @@ test('Level 1: IN OR LIKE', (t) => {
 
 test('Level 2: = AND = AND (= OR = AND IN AND =)', (t) => {
   sql = 'name = "First Last" AND age = 27 AND (favorite = vanilla OR size = 8 AND location IN (NY, WA) AND weight = 10)';
+  out = filter(sql);
+  t.is(out.length, 1);
+});
+
+test.only('Level 2: Hyphonated Strings used with IN', (t) => {
+  sql = 'slug IN ("first-last","no-name")';
+  out = filter(sql);
+  t.is(out.length, 2);
+  sql = 'slug IN ("no-name")';
+  out = filter(sql);
+  t.is(out.length, 1);
+  sql = 'slug IN ("no-name","not-real")';
   out = filter(sql);
   t.is(out.length, 1);
 });
