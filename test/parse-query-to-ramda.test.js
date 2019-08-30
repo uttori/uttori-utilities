@@ -142,6 +142,24 @@ test('Level 0: IN', (t) => {
   t.is(out.length, 3);
 });
 
+test('Level 0: NOT_IN', (t) => {
+  sql = 'location NOT_IN (NY)';
+  out = filter(sql);
+  t.is(out.length, 2);
+
+  sql = 'location NOT_IN (NY, SF)';
+  out = filter(sql);
+  t.is(out.length, 1);
+
+  sql = 'location NOT_IN (NY, SF, WA)';
+  out = filter(sql);
+  t.is(out.length, 0);
+
+  sql = 'location NOT_IN (TN)';
+  out = filter(sql);
+  t.is(out.length, 3);
+});
+
 test('Level 0: INCLUDES', (t) => {
   sql = 'tags INCLUDES (cool)';
   out = filter(sql);
@@ -208,7 +226,7 @@ test('Level 2: = AND = AND (= OR = AND IN AND =)', (t) => {
   t.is(out.length, 1);
 });
 
-test.only('Level 2: Hyphonated Strings used with IN', (t) => {
+test('Level 2: Hyphonated Strings used with IN', (t) => {
   sql = 'slug IN ("first-last","no-name")';
   out = filter(sql);
   t.is(out.length, 2);

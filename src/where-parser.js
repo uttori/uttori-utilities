@@ -60,6 +60,7 @@ class SqlWhereParser {
         {
           BETWEEN: Operator.type('ternary'),
           IN: Operator.type('binary'),
+          NOT_IN: Operator.type('binary'),
           INCLUDES: Operator.type('binary'),
           IS: Operator.type('binary'),
           IS_NULL: Operator.type('unary'),

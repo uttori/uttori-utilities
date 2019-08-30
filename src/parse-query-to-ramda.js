@@ -55,6 +55,16 @@ const parseQueryToRamda = (ast) => {
           operation.push(R.compose(R.complement(R.isEmpty), R.intersection(value), R.insert(0, R.__, []), R.prop(operands[0])));
           break;
         }
+        case 'NOT_IN': {
+          // NOTE: Always wrap the input value in an array if not already an array so we can support single items & arrays.
+          let value = operands[1];
+          if (!Array.isArray(value)) {
+            value = [value];
+          }
+          debug(`R.compose(\n  R.isEmpty,\n  R.intersection(${debugHelper(value)}),\n  R.insert(0, R.__, []),\n  R.prop(${debugHelper(operands[0])})\n)`);
+          operation.push(R.compose(R.isEmpty, R.intersection(value), R.insert(0, R.__, []), R.prop(operands[0])));
+          break;
+        }
         case 'INCLUDES': {
           // NOTE: Always wrap the input value in an array if not already an array so we can support single items & arrays.
           let value = operands[1];
