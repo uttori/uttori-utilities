@@ -58,6 +58,22 @@ const deleteFile = async (folder, name, extension) => {
 };
 
 /**
+ * Deletes a file from the file system, synchronously.
+ * @param {string} folder - The folder of the file to be deleted.
+ * @param {string} name - The name of the file to be deleted.
+ * @param {string} extension - The file extension of the file to be deleted.
+ */
+const deleteFileSync = (folder, name, extension) => {
+  debug('deleteFile:', folder, name, extension);
+  const target = `${folder}/${sanitize(`${name}`)}.${extension}`;
+  debug('Deleting target:', target);
+  try { fs.unlinkSync(target); } catch (error) {
+    /* istanbul ignore next */
+    debug('Error deleting file:', target, error);
+  }
+};
+
+/**
  * Reads a file from the file system.
  * @async
  * @param {string} folder - The folder of the file to be read.
@@ -72,6 +88,26 @@ const readFile = async (folder, name, extension, encoding = 'utf8') => {
   debug('Reading target:', target);
   let content;
   try { content = await fs.readFile(target, encoding); } catch (error) {
+    /* istanbul ignore next */
+    debug('Error reading file:', target, error);
+  }
+  return content;
+};
+
+/**
+ * Reads a file from the file system, synchronously.
+ * @param {string} folder - The folder of the file to be read.
+ * @param {string} name - The name of the file to be read.
+ * @param {string} extension - The file extension of the file to be read.
+ * @param {string} encoding - The encoding of the file to be read as.
+ * @returns {Object} - The parsed JSON file contents.
+ */
+const readFileSync = (folder, name, extension, encoding = 'utf8') => {
+  debug('Reading File:', folder, name, extension, encoding);
+  const target = `${folder}/${sanitize(`${name}`)}.${extension}`;
+  debug('Reading target:', target);
+  let content;
+  try { content = fs.readFileSync(target, encoding); } catch (error) {
     /* istanbul ignore next */
     debug('Error reading file:', target, error);
   }
@@ -107,6 +143,41 @@ const readJSON = async (folder, name, extension, encoding = 'utf8') => {
       debug('Error parsing JSON:', content, error);
     }
   } else {
+    /* istanbul ignore next */
+    debug('Content was null or undefined.');
+  }
+  return content;
+};
+
+/**
+ * Reads a JSON file from the file system and parses it to an object, synchronously.
+ * @param {string} folder - The folder of the file to be read.
+ * @param {string} name - The name of the file to be read.
+ * @param {string} extension - The file extension of the file to be read.
+ * @param {string} encoding - The encoding of the file to be read as.
+ * @returns {Object} - The parsed JSON file contents.
+ */
+const readJSONSync = (folder, name, extension, encoding = 'utf8') => {
+  debug('Reading File:', folder, name, extension, encoding);
+  const target = `${folder}/${sanitize(`${name}`)}.${extension}`;
+  let content;
+  if (fs.existsSync(target)) {
+    debug('Reading target:', target);
+    try { content = fs.readFileSync(target, encoding); } catch (error) {
+      /* istanbul ignore next */
+      debug('Error reading file:', target, error);
+    }
+  } else {
+    debug('Target does not exist:', target);
+    return content;
+  }
+  if (content) {
+    try { content = JSON.parse(content); } catch (error) {
+      /* istanbul ignore next */
+      debug('Error parsing JSON:', content, error);
+    }
+  } else {
+    /* istanbul ignore next */
     debug('Content was null or undefined.');
   }
   return content;
@@ -122,6 +193,21 @@ const readFolder = async (folder) => {
   debug('Reading Folder:', folder);
   if (await fs.exists(folder)) {
     const content = await fs.readdir(folder);
+    return content.map((file) => path.parse(file).name);
+  }
+  debug('Folder not found!');
+  return [];
+};
+
+/**
+ * Reads a folder from the file system, synchronysly.
+ * @param {string} folder - The folder to be read.
+ * @returns {string[]} - The file paths found in the folder.
+ */
+const readFolderSync = (folder) => {
+  debug('Reading Folder:', folder);
+  if (fs.existsSync(folder)) {
+    const content = fs.readdirSync(folder);
     return content.map((file) => path.parse(file).name);
   }
   debug('Folder not found!');
@@ -148,12 +234,36 @@ const writeFile = async (folder, name, extension, content, encoding = 'utf8') =>
   }
 };
 
+/**
+ * Write a file to the file system, synchronysly.
+ * @param {object} config - The configuration object.
+ * @param {string} config.extension - The file extension of the file to be written.
+ * @param {string} folder - The folder of the file to be written.
+ * @param {string} name - The name of the file to be written.
+ * @param {string} content - The content of the file to be written.
+ * @param {string} encoding - The encoding of the file to be written as.
+ */
+const writeFileSync = (folder, name, extension, content, encoding = 'utf8') => {
+  debug('Writing File with:', { folder, name, extension, content, encoding });
+  const target = `${folder}/${sanitize(`${name}`)}.${extension}`;
+  debug('Writing target:', target);
+  try { fs.writeFileSync(target, content, encoding); } catch (error) {
+    /* istanbul ignore next */
+    debug('Error writing file:', target, content, error);
+  }
+};
+
 module.exports = {
   ensureDirectory,
   ensureDirectorySync,
   deleteFile,
+  deleteFileSync,
   readFile,
+  readFileSync,
   readJSON,
+  readJSONSync,
   readFolder,
+  readFolderSync,
   writeFile,
+  writeFileSync,
 };
