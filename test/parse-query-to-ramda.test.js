@@ -161,7 +161,7 @@ test('Level 0: NOT_IN', (t) => {
 });
 
 test('Level 0: INCLUDES', (t) => {
-  sql = 'tags INCLUDES (cool)';
+  sql = 'tags INCLUDES ("cool")';
   out = filter(sql);
   t.is(out.length, 2);
 
@@ -173,7 +173,7 @@ test('Level 0: INCLUDES', (t) => {
   out = filter(sql);
   t.is(out.length, 1);
 
-  sql = 'tags INCLUDES (new, cool)';
+  sql = 'tags INCLUDES ("new", "cool")';
   out = filter(sql);
   t.is(out.length, 3);
 });
