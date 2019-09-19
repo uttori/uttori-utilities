@@ -73,12 +73,16 @@ test('validateQuery: throws an error when ORDER BY is invalid', (t) => {
   t.throws(() => {
     validateQuery('SELECT * FROM table WHERE field IS 7 ORDER BY field LIMIT 7');
   }, 'Invalid Query: Invalid ORDER BY');
+
+  t.throws(() => {
+    validateQuery('SELECT * FROM table WHERE field IS 7 ORDER BY field DES LIMIT 7');
+  }, 'Invalid Query: Invalid ORDER BY, sort must be one of ASC or DESC, got DES');
 });
 
 test('validateQuery: can extract table from an ORDER BY statement', (t) => {
   t.deepEqual(validateQuery(query).order, [{ prop: 'field_b', sort: 'DESC' }]);
 
-  t.deepEqual(validateQuery('SELECT a FROM b WHERE a IS 7 ORDER BY RANDOM LIMIT 1').order, [{ prop: 'RANDOM' }]);
+  t.deepEqual(validateQuery('SELECT a FROM b WHERE a IS 7 ORDER BY RANDOM LIMIT 1').order, [{ prop: 'RANDOM', sort: 'ASC' }]);
 });
 
 // LIMIT

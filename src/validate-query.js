@@ -80,12 +80,21 @@ const validateQuery = (query) => {
     R.split(','),
     R.trim,
   )(pieces[7]);
-  // TODO: Validate every sort piece is either ASC or DESC.
+  if (order.length === 1 && order[0].prop === 'RANDOM') {
+    order[0].sort = 'ASC';
+  }
   if (pieces[7] === '' || (order.length === 1 && !order[0].sort && order[0].prop !== 'RANDOM')) {
     error = 'Invalid Query: Invalid ORDER BY';
     debug(error, pieces[7]);
     throw new Error(error);
   }
+  order.forEach((ordering) => {
+    if (!(ordering.sort === 'ASC' || ordering.sort === 'DESC')) {
+      error = `Invalid Query: Invalid ORDER BY, sort must be one of ASC or DESC, got ${ordering.sort}`;
+      debug(error, pieces[7]);
+      throw new Error(error);
+    }
+  });
 
   // Limit
   if (pieces[8] !== 'LIMIT') {
