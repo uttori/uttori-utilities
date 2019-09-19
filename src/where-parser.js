@@ -98,7 +98,7 @@ class SqlWhereParser {
 
   /**
    * Parse a SQL statement with an evaluator function.
-   * Uses an implementation of the Shunting-Yard Algorithm: http://wcipeg.com/wiki/Shunting_yard_algorithm
+   * Uses an implementation of the Shunting-Yard Algorithm: https://wcipeg.com/wiki/Shunting_yard_algorithm
    * See also: https://en.wikipedia.org/wiki/Shunting-yard_algorithm
    * @param {String} sql - Query string to process.
    * @param {Function} [evaluator] - Function to evaluate operators.

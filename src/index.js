@@ -7,4 +7,9 @@ module.exports = {
   TokenizeThis: require('./tokenizer'),
   validateQuery: require('./validate-query'),
   SqlWhereParser: require('./where-parser'),
+  Classifier: require('./classifier'),
+  NaiveBayes: require('./classifier_naive_bayes'),
+  Fisher: require('./classifier_fisher'),
+  UttoriEvent: require('./event'),
+  EventDispatcher: require('./event-dispatcher'),
 };
