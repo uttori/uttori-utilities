@@ -137,6 +137,7 @@ const readJSON = async (folder, name, extension, encoding = 'utf8') => {
     debug('Target does not exist:', target);
     return content;
   }
+  /* istanbul ignore else */
   if (content) {
     try { content = JSON.parse(content); } catch (error) {
       /* istanbul ignore next */
@@ -171,6 +172,7 @@ const readJSONSync = (folder, name, extension, encoding = 'utf8') => {
     debug('Target does not exist:', target);
     return content;
   }
+  /* istanbul ignore else */
   if (content) {
     try { content = JSON.parse(content); } catch (error) {
       /* istanbul ignore next */

@@ -6,10 +6,8 @@ const { FileUtility } = require('../src');
 const config = {
   content_dir: 'test/site/content',
   history_dir: 'test/site/content/history',
-  data_dir: 'test/site/data',
   extension: 'json',
   spaces_document: null,
-  spaces_data: null,
   spaces_history: null,
 };
 
@@ -98,7 +96,6 @@ test('readJSONSync(folder, name, extension, encoding): returns undefined when un
 test('readFolder(folder): returns the contents of the folder', async (t) => {
   const result = await FileUtility.readFolder('test/site/content');
   t.deepEqual(result.sort(), [
-    'Third-title',
     'example-title',
     'history',
   ]);
@@ -117,7 +114,6 @@ test('readFolderSync(folder): returns undefined when no folder is provided', (t)
 test('readFolderSync(folder): returns the contents of the folder', (t) => {
   const result = FileUtility.readFolderSync('test/site/content');
   t.deepEqual(result.sort(), [
-    'Third-title',
     'example-title',
     'history',
   ]);
