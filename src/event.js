@@ -14,10 +14,11 @@ class UttoriEvent {
   fire(data) {
     debug('fire:', data);
     const callbacks = this.callbacks.slice(0);
-    debug('fire:', data);
+    debug('callbacks:', callbacks.length);
     callbacks.forEach((callback) => {
-      callback(data);
+      data = callback(data);
     });
+    return data;
   }
 
   register(callback) {

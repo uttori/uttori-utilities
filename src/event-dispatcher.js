@@ -16,10 +16,12 @@ class EventDispatcher {
     }
     const event = this.events[label];
     if (event) {
-      event.fire(data);
+      data = event.fire(data);
     } else {
       debug('No event to fire:', label, data);
     }
+
+    return data;
   }
 
   on(label, callback) {

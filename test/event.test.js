@@ -87,24 +87,39 @@ test('#unregister: removes callbacks from the event', (t) => {
 
 test('#fire: executes the callbacks on the event', (t) => {
   const spy_a = sinon.spy();
-  const spy_b = sinon.spy();
   const data = { cool: 'very' };
 
   const event = new UttoriEvent('test');
   t.is(event.callbacks.length, 0);
   event.register(spy_a);
-  event.register(spy_b);
-  t.is(event.callbacks.length, 2);
+  t.is(event.callbacks.length, 1);
 
   event.fire(data);
   t.is(spy_a.callCount, 1);
-  t.is(spy_b.callCount, 1);
   t.true(spy_a.calledWith(data));
-  t.true(spy_b.calledWith(data));
 
   event.fire();
   t.is(spy_a.callCount, 2);
-  t.is(spy_b.callCount, 2);
   t.true(spy_a.calledWith(undefined));
-  t.true(spy_b.calledWith(undefined));
+});
+
+test('#fire: returns the data', (t) => {
+  let data = { cool: 'very', update: 'a' };
+
+  const addB = (data) => {
+    return { ...data, update: `${data.update}b` };
+  };
+  const addC = (data) => {
+    return { ...data, update: `${data.update}c` };
+  };
+
+  const event = new UttoriEvent('test');
+  t.is(event.callbacks.length, 0);
+  event.register(addB);
+  event.register(addC);
+  t.is(event.callbacks.length, 2);
+
+  data = event.fire(data);
+
+  t.deepEqual(data, { cool: 'very', update: 'abc' });
 });

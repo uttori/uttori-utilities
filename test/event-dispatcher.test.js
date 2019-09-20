@@ -46,6 +46,26 @@ test('#dispatch: can dispatch an event', (t) => {
   t.throws(() => { ed.dispatch(NaN); });
 });
 
+test('#dispatch: can return dispatched event modified data', (t) => {
+  const ed = new EventDispatcher();
+
+  let data = { cool: 'very', update: 'a' };
+
+  const addB = (data) => {
+    return { ...data, update: `${data.update}b` };
+  };
+  const addC = (data) => {
+    return { ...data, update: `${data.update}c` };
+  };
+
+  ed.on('test', addC);
+  ed.on('test', addB);
+
+  data = ed.dispatch('test', data);
+
+  t.deepEqual(data, { cool: 'very', update: 'acb' });
+});
+
 test('#on: adds callbacks to the given event', (t) => {
   const ed = new EventDispatcher();
   t.is(Object.keys(ed.events).length, 0);
