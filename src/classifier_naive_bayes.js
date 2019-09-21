@@ -1,11 +1,33 @@
 const debug = require('debug')('Uttori.Utilities.NaiveBayes');
 const Classifier = require('./classifier');
 
-// https://en.wikipedia.org/wiki/Naive_Bayes_classifier
-// https://github.com/ttezel/bayes/blob/master/lib/naive_bayes.js
-// https://github.com/substack/gamma.js/blob/master/index.js
-// https://github.com/zetos/inv-chisquare-cdf/blob/master/src/invChiSquareCDF.js
+/**
+ * A Naive-Bayes text classifier based on the idea of Bayes' Theorem,
+ * which is used to calculate conditional probabilities.
+ * The basic idea is to find out what the probability of a document belonging to a class is,
+ * based on the words in the text, whereas the single words are treated as independent features.
+ * Useful for categorizing any text content into any arbitrary set of categories.
+ * Example: is an email spam, or not spam?
+ * Example: is a news article about technology, politics, or sports?
+ * Example: is a piece of text expressing positive emotions, or negative emotions?
+ * @example <caption>new NaiveBayes()</caption>
+ * const messages = [
+ *   ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'clean'],
+ *   ['Donec faucibus vulputate feugiat.', 'spam'],
+ *   ['Duis eu sapien nec elit consectetur convallis.', 'clean'],
+ *   [1, 'spam'],
+ * ];
+ * const filter = new NaiveBayes();
+ * messages.forEach(([message, category]) => {
+ *   filter.train(message, category);
+ * });
+ * filter.setThreshold('spam', 0.5);
+ * filter.classify('dolor sit amet');
+ *  ➜ 'clean'
+ * @class
+ */
 class NaiveBayes extends Classifier {
+  // returns the category or a fallback if a category cannot be determined.
   classify(item, fallback = '_') {
     debug('classify:', item, fallback);
     if (typeof item !== 'string' || item.length === 0) {

@@ -1,13 +1,32 @@
 const debug = require('debug')('Uttori.Utilities.EventDispatcher');
 const UttoriEvent = require('./event');
 
-// https://atech.blog/atech/creating-a-simple-custom-event-system-in-javascript
+/**
+ * An event bus system for registering, unregistering and triggering events.
+ * @property {Object} events - The collection of events to listen for.
+ * @example <caption>new EventDispatcher()</caption>
+ * const bus = new EventDispatcher();
+ * bus.on('update', callback);
+ * bus.dispatch('update', { data }, { context });
+ * bus.off('update', callback);
+ * @class
+ */
 class EventDispatcher {
+  /**
+   * Creates a new EventDispatcher instance.
+   * @constructor
+   */
   constructor() {
     this.events = {};
   }
 
-  dispatch(label, data) {
+  /**
+   * Fires off an event with passed in data and context for a given label.
+   * @param {*} data - Data to be used, updated, or modified by event callbacks.
+   * @param {Object} [context] - Context to help with updating or modification of the data.
+   * @returns {*} - The original input data, either modified or untouched.
+   */
+  dispatch(label, data, context) {
     debug('dispatch:', label, data);
     if (typeof label !== 'string' || label.length === 0) {
       const error = `Event label must be a string, got: ${typeof label}`;
@@ -16,7 +35,7 @@ class EventDispatcher {
     }
     const event = this.events[label];
     if (event) {
-      data = event.fire(data);
+      data = event.fire(data, context);
     } else {
       debug('No event to fire:', label, data);
     }
@@ -24,6 +43,12 @@ class EventDispatcher {
     return data;
   }
 
+  /**
+   * Add a function to an event that will be called when the label is dispatched.
+   * If no label is found, one is created.
+   * @param {String} label - The human readable identifier of the event.
+   * @param {Function} callback - Function to be called when the event is fired.
+   */
   on(label, callback) {
     debug('on:', label, callback);
     let event = this.events[label];
@@ -34,6 +59,11 @@ class EventDispatcher {
     event.register(callback);
   }
 
+  /**
+   * Remove a function from an event.
+   * @param {String} label - The human readable identifier of the event.
+   * @param {Function} callback - Function to be removed.
+   */
   off(label, callback) {
     debug('off:', label, callback);
     const event = this.events[label];

@@ -6,7 +6,7 @@ const { UttoriEvent } = require('../src');
 const a = () => false;
 const b = () => true;
 
-test('#constructor: can setup an event and throws an error with invalid labels', (t) => {
+test('#constructor(label): can setup an event and throws an error with invalid labels', (t) => {
   t.notThrows(() => { new UttoriEvent('test'); });
   t.throws(() => { new UttoriEvent(''); });
   t.throws(() => { new UttoriEvent(null); });
@@ -20,7 +20,7 @@ test('#constructor: can setup an event and throws an error with invalid labels',
   t.throws(() => { new UttoriEvent(() => {}); });
 });
 
-test('#register: throws an error with invalid callbacks', (t) => {
+test('#register(callback): throws an error with invalid callbacks', (t) => {
   const event = new UttoriEvent('test');
   t.notThrows(() => { event.register(a); });
   t.notThrows(() => { event.register(() => true); });
@@ -37,7 +37,7 @@ test('#register: throws an error with invalid callbacks', (t) => {
   t.throws(() => { event.register(NaN); });
 });
 
-test('#register: adds callbacks to the event', (t) => {
+test('#register(callback): adds callbacks to the event', (t) => {
   const event = new UttoriEvent('test');
   t.is(event.callbacks.length, 0);
 
@@ -51,7 +51,7 @@ test('#register: adds callbacks to the event', (t) => {
   t.is(event.callbacks.length, 2);
 });
 
-test('#unregister: throws an error with invalid callbacks', (t) => {
+test('#unregister(callback): throws an error with invalid callbacks', (t) => {
   const event = new UttoriEvent('test');
   t.notThrows(() => { event.unregister(a); });
   t.notThrows(() => { event.unregister(() => true); });
@@ -68,7 +68,7 @@ test('#unregister: throws an error with invalid callbacks', (t) => {
   t.throws(() => { event.unregister(NaN); });
 });
 
-test('#unregister: removes callbacks from the event', (t) => {
+test('#unregister(callback): removes callbacks from the event', (t) => {
   const event = new UttoriEvent('test');
   t.is(event.callbacks.length, 0);
   event.register(a);
@@ -85,7 +85,7 @@ test('#unregister: removes callbacks from the event', (t) => {
   t.is(event.callbacks.length, 0);
 });
 
-test('#fire: executes the callbacks on the event', (t) => {
+test('#fire(data, context): executes the callbacks on the event', (t) => {
   const spy_a = sinon.spy();
   const data = { cool: 'very' };
 
@@ -103,7 +103,7 @@ test('#fire: executes the callbacks on the event', (t) => {
   t.true(spy_a.calledWith(undefined));
 });
 
-test('#fire: returns the data', (t) => {
+test('#fire(data, context): returns the data', (t) => {
   let data = { cool: 'very', update: 'a' };
 
   const addB = (data) => {

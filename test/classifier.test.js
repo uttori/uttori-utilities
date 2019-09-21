@@ -45,7 +45,6 @@ test('Classifier: can load a model and use it', (t) => {
   t.is(filter2.featureProbability('lorem', 'clean'), 0.5);
   t.is(filter2.featureProbability('missing', 'missing'), 0);
 
-
   FileUtility.deleteFileSync('test', 'test', 'json');
 });
 

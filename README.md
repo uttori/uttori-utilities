@@ -52,6 +52,10 @@ Validates and parses a SQL-like query structure using `SqlWhereParser`.
 
 Using default SQL tree output, from `SqlWhereParser` for example, iterate over that tree to convert to items to be checked group-by-group (AND, OR), prop-by-prop to filter functions with [Ramda](https://ramdajs.com/).
 
+## Classifiers - Naive Bayes / Fisher's Discriminant Ratio aka Fisher's Linear Discriminant
+
+A fork of [spam-filter](https://github.com/zrajnis/spam-filter) by [Zvonimir Rajniš](https://github.com/zrajnis). Cleaned up and converted to ES6 with more test coverage and a more readable code flow and some optimizations for more generic use.
+
 # Namesake
 
 > ウットリ, うっとり: When you become enraptured by beauty. In rapture, in ecstasy, captivated. A rapt stare.

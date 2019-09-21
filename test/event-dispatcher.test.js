@@ -9,7 +9,7 @@ test('#constructor: can setup an EventDispatcher', (t) => {
   t.notThrows(() => { new EventDispatcher('test'); });
 });
 
-test('#dispatch: throws an error with invalid callbacks', (t) => {
+test('#dispatch(label, data, context): throws an error with invalid callbacks', (t) => {
   const ed = new EventDispatcher();
   t.notThrows(() => { ed.dispatch('test'); });
   t.notThrows(() => { ed.dispatch('test', {}); });
@@ -27,7 +27,7 @@ test('#dispatch: throws an error with invalid callbacks', (t) => {
   t.throws(() => { ed.dispatch(NaN); });
 });
 
-test('#dispatch: can dispatch an event', (t) => {
+test('#dispatch(label, data, context): can dispatch an event', (t) => {
   const ed = new EventDispatcher();
   ed.on('test', a);
   t.notThrows(() => { ed.dispatch('test'); });
@@ -46,7 +46,7 @@ test('#dispatch: can dispatch an event', (t) => {
   t.throws(() => { ed.dispatch(NaN); });
 });
 
-test('#dispatch: can return dispatched event modified data', (t) => {
+test('#dispatch(label, data, context): can return dispatched event modified data', (t) => {
   const ed = new EventDispatcher();
 
   let data = { cool: 'very', update: 'a' };
@@ -66,7 +66,7 @@ test('#dispatch: can return dispatched event modified data', (t) => {
   t.deepEqual(data, { cool: 'very', update: 'acb' });
 });
 
-test('#on: adds callbacks to the given event', (t) => {
+test('#on(label, callback): adds callbacks to the given event', (t) => {
   const ed = new EventDispatcher();
   t.is(Object.keys(ed.events).length, 0);
   ed.on('test', a);
@@ -75,7 +75,7 @@ test('#on: adds callbacks to the given event', (t) => {
   t.is(Object.keys(ed.events).length, 1);
 });
 
-test('#on: throws an error with invalid label or callback', (t) => {
+test('#on(label, callback): throws an error with invalid label or callback', (t) => {
   const ed = new EventDispatcher();
   t.throws(() => { ed.on('', a); });
   t.throws(() => { ed.on(null, a); });
@@ -97,7 +97,7 @@ test('#on: throws an error with invalid label or callback', (t) => {
   t.throws(() => { ed.on('test', NaN); });
 });
 
-test('#off: removes callbacks from the given event', (t) => {
+test('#off(label, callback): removes callbacks from the given event', (t) => {
   const ed = new EventDispatcher();
   t.is(Object.keys(ed.events).length, 0);
   ed.on('test', a);

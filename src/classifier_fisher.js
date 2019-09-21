@@ -39,6 +39,7 @@ class Fisher extends Classifier {
     return clf / freqSum;
   }
 
+  // using Inverse Chi Squared
   fisherProbability(item, category) {
     const features = Classifier.getFeatures(item);
     const probability = features.reduce(
@@ -46,6 +47,8 @@ class Fisher extends Classifier {
     );
     const fScore = (-2) * Math.log(probability);
 
+    // fScore === probability === mean
+    // degreeOfFreedom === variance
     return Fisher.inverseChiSquared(fScore, features.length * 2);
   }
 
@@ -62,6 +65,7 @@ class Fisher extends Classifier {
     debug('setThreshold is only used with the NaiveBayes classifier, this is Fisher');
     return this;
   }
+
 
   static inverseChiSquared(probability, degreeOfFreedom) {
     const m = probability / 2;
