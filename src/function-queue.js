@@ -35,8 +35,7 @@ class FunctionQueue {
 
     /**
      * Gets called at a set interval to remove items from the queue.
-     * This is a self-adjusting timer,
-     * since the browser's setTimeout is highly inaccurate.
+     * This is a self-adjusting timer, since the browser's setTimeout is highly inaccurate.
      */
     const dequeue = () => {
       const threshold = last_called + interval;

@@ -27,7 +27,13 @@ const Classifier = require('./classifier');
  * @class
  */
 class NaiveBayes extends Classifier {
-  // returns the category or a fallback if a category cannot be determined.
+  /**
+   * Returns the category for a given item, or a fallback if a category cannot be determined.
+   * @param {String} item - The item to classify.
+   * @param {String} [fallback='_'] - The category to fallback to when one cannot be determined.
+   * @returns {String} - The best category for the provided item.
+   * @memberof Classifier
+   */
   classify(item, fallback = '_') {
     debug('classify:', item, fallback);
     if (typeof item !== 'string' || item.length === 0) {
@@ -57,13 +63,29 @@ class NaiveBayes extends Classifier {
     return found ? fallback : best;
   }
 
+  /**
+   * Returns the weighted probability of a given document (item) in a given category.
+   * @param {String} item - The item to find the probability of being in the given category.
+   * @param {String} category - The category to check against the item.
+   * @returns {Number} - The weighted probability of the item in the category.
+   * @memberof Classifier
+   */
   documentProbability(item, category) {
     debug('documentProbability:', item, category);
-    return Classifier.getFeatures(item).reduce(
+    const probability = Classifier.getFeatures(item).reduce(
       (result, feature) => result * this.weightedProbability(feature, category, this.featureProbability(feature, category)), 1,
     );
+    debug('documentProbability =', probability);
+    return probability;
   }
 
+  /**
+   * Returns the probability of a given document (item) in a given category.
+   * @param {String} item - The item to find the probability of being in the given category.
+   * @param {String} category - The category to check against the item.
+   * @returns {Number} - The probability of the item in the category.
+   * @memberof Classifier
+   */
   probability(item, category) {
     debug('probability:', item, category);
     const categoryProbability = this.categoryCount(category) / this.totalCount();
@@ -74,7 +96,12 @@ class NaiveBayes extends Classifier {
     return probability;
   }
 
-  // get thresholds for categories.
+  /**
+   * Returns the threshold for a given category.
+   * @param {String} category - The category to get the threshold for.
+   * @returns {Number} - The miniumum for the category, or 0.5.
+   * @memberof Classifier
+   */
   getThreshold(category) {
     debug('getThreshold:', category);
     const threshold = this.thresholds[category] || 0.5;
@@ -82,7 +109,13 @@ class NaiveBayes extends Classifier {
     return threshold;
   }
 
-  // set thresholds for categories.
+  /**
+   * Sets the threshold for a given category.
+   * @param {String} category - The category to set the threshold for.
+   * @param {Number} threshold - The threshold to set for the category.
+   * @returns {Number} - The threshold for the category.
+   * @memberof Classifier
+   */
   setThreshold(category, threshold) {
     debug('setThreshold:', category, threshold);
     this.thresholds[category] = threshold;
@@ -90,9 +123,9 @@ class NaiveBayes extends Classifier {
     return this;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   setMinimum() {
     debug('setMinimum is only used with the Fisher classifier, this is NaiveBayes');
-    return this;
   }
 }
 

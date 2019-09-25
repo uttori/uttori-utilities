@@ -9,61 +9,111 @@ test('#constructor: can setup an EventDispatcher', (t) => {
   t.notThrows(() => { new EventDispatcher('test'); });
 });
 
-test('#dispatch(label, data, context): throws an error with invalid callbacks', (t) => {
+test('#dispatch(label, data, context): throws an error with invalid callbacks', async (t) => {
   const ed = new EventDispatcher();
-  t.notThrows(() => { ed.dispatch('test'); });
-  t.notThrows(() => { ed.dispatch('test', {}); });
-  t.throws(() => { ed.dispatch(() => true); });
-  // eslint-disable-next-line prefer-arrow-callback
-  t.throws(() => { ed.dispatch(function named() { return true; }); });
-  t.throws(() => { ed.dispatch(); });
-  t.throws(() => { ed.dispatch(''); });
-  t.throws(() => { ed.dispatch(null); });
-  t.throws(() => { ed.dispatch(undefined); });
-  t.throws(() => { ed.dispatch(1); });
-  t.throws(() => { ed.dispatch(1.2); });
-  t.throws(() => { ed.dispatch(true); });
-  t.throws(() => { ed.dispatch(false); });
-  t.throws(() => { ed.dispatch(NaN); });
+  await t.notThrowsAsync(async () => { await ed.dispatch('test'); });
+  await t.notThrowsAsync(async () => { await ed.dispatch('test', {}); });
+  await t.throwsAsync(async () => { await ed.dispatch(() => true); });
+  await // eslint-disable-next-line prefer-arrow-callback
+  await t.throwsAsync(async () => { await ed.dispatch(function named() { return true; }); });
+  await t.throwsAsync(async () => { await ed.dispatch(); });
+  await t.throwsAsync(async () => { await ed.dispatch(''); });
+  await t.throwsAsync(async () => { await ed.dispatch(null); });
+  await t.throwsAsync(async () => { await ed.dispatch(undefined); });
+  await t.throwsAsync(async () => { await ed.dispatch(1); });
+  await t.throwsAsync(async () => { await ed.dispatch(1.2); });
+  await t.throwsAsync(async () => { await ed.dispatch(true); });
+  await t.throwsAsync(async () => { await ed.dispatch(false); });
+  await t.throwsAsync(async () => { await ed.dispatch(NaN); });
 });
 
-test('#dispatch(label, data, context): can dispatch an event', (t) => {
+test('#dispatch(label, data, context): can dispatch an event', async (t) => {
   const ed = new EventDispatcher();
   ed.on('test', a);
-  t.notThrows(() => { ed.dispatch('test'); });
-  t.notThrows(() => { ed.dispatch('test', {}); });
-  t.throws(() => { ed.dispatch(() => true); });
-  // eslint-disable-next-line prefer-arrow-callback
-  t.throws(() => { ed.dispatch(function named() { return true; }); });
-  t.throws(() => { ed.dispatch(); });
-  t.throws(() => { ed.dispatch(''); });
-  t.throws(() => { ed.dispatch(null); });
-  t.throws(() => { ed.dispatch(undefined); });
-  t.throws(() => { ed.dispatch(1); });
-  t.throws(() => { ed.dispatch(1.2); });
-  t.throws(() => { ed.dispatch(true); });
-  t.throws(() => { ed.dispatch(false); });
-  t.throws(() => { ed.dispatch(NaN); });
+  await t.notThrowsAsync(async () => { await ed.dispatch('test'); });
+  await t.notThrowsAsync(async () => { await ed.dispatch('test', {}); });
+  await t.throwsAsync(async () => { await ed.dispatch(() => true); });
+  await // eslint-disable-next-line prefer-arrow-callback
+  await t.throwsAsync(async () => { await ed.dispatch(function named() { return true; }); });
+  await t.throwsAsync(async () => { await ed.dispatch(); });
+  await t.throwsAsync(async () => { await ed.dispatch(''); });
+  await t.throwsAsync(async () => { await ed.dispatch(null); });
+  await t.throwsAsync(async () => { await ed.dispatch(undefined); });
+  await t.throwsAsync(async () => { await ed.dispatch(1); });
+  await t.throwsAsync(async () => { await ed.dispatch(1.2); });
+  await t.throwsAsync(async () => { await ed.dispatch(true); });
+  await t.throwsAsync(async () => { await ed.dispatch(false); });
+  await t.throwsAsync(async () => { await ed.dispatch(NaN); });
 });
 
-test('#dispatch(label, data, context): can return dispatched event modified data', (t) => {
+test('#dispatchSync(label, data, context): throws an error with invalid callbacks', (t) => {
+  const ed = new EventDispatcher();
+  t.notThrows(() => { ed.dispatchSync('test'); });
+  t.notThrows(() => { ed.dispatchSync('test', {}); });
+  t.throws(() => { ed.dispatchSync(() => true); });
+  // eslint-disable-next-line prefer-arrow-callback
+  t.throws(() => { ed.dispatchSync(function named() { return true; }); });
+  t.throws(() => { ed.dispatchSync(); });
+  t.throws(() => { ed.dispatchSync(''); });
+  t.throws(() => { ed.dispatchSync(null); });
+  t.throws(() => { ed.dispatchSync(undefined); });
+  t.throws(() => { ed.dispatchSync(1); });
+  t.throws(() => { ed.dispatchSync(1.2); });
+  t.throws(() => { ed.dispatchSync(true); });
+  t.throws(() => { ed.dispatchSync(false); });
+  t.throws(() => { ed.dispatchSync(NaN); });
+});
+
+test('#dispatchSync(label, data, context): can dispatch an event', (t) => {
+  const ed = new EventDispatcher();
+  ed.on('test', a);
+  t.notThrows(() => { ed.dispatchSync('test'); });
+  t.notThrows(() => { ed.dispatchSync('test', {}); });
+  t.throws(() => { ed.dispatchSync(() => true); });
+  // eslint-disable-next-line prefer-arrow-callback
+  t.throws(() => { ed.dispatchSync(function named() { return true; }); });
+  t.throws(() => { ed.dispatchSync(); });
+  t.throws(() => { ed.dispatchSync(''); });
+  t.throws(() => { ed.dispatchSync(null); });
+  t.throws(() => { ed.dispatchSync(undefined); });
+  t.throws(() => { ed.dispatchSync(1); });
+  t.throws(() => { ed.dispatchSync(1.2); });
+  t.throws(() => { ed.dispatchSync(true); });
+  t.throws(() => { ed.dispatchSync(false); });
+  t.throws(() => { ed.dispatchSync(NaN); });
+});
+
+test('#dispatch(label, data, context): can return dispatched event modified data', async (t) => {
   const ed = new EventDispatcher();
 
-  let data = { cool: 'very', update: 'a' };
+  const input = { cool: 'very', update: 'a' };
 
-  const addB = (data) => {
-    return { ...data, update: `${data.update}b` };
+  const addB = (data) => ({ ...data, update: `${data.update}b` });
+  const addC = (data) => ({ ...data, update: `${data.update}c` });
+  const addD = async (data) => {
+    const output = await Promise.resolve(data);
+    return { ...output, update: `${data.update}d` };
   };
-  const addC = (data) => {
-    return { ...data, update: `${data.update}c` };
+  const addE = async (data) => {
+    const promise = new Promise((resolve, _reject) => {
+      setTimeout(() => resolve({ ...data, update: `${data.update}e` }), 500);
+    });
+    const result = await promise;
+    return result;
   };
+  const addF = async (data) => ({ ...data, update: `${data.update}f` });
+  const nop = async (data) => Promise.resolve(data);
 
   ed.on('test', addC);
   ed.on('test', addB);
+  ed.on('test', addD);
+  ed.on('test', nop);
+  ed.on('test', addF);
+  ed.on('test', addE);
 
-  data = ed.dispatch('test', data);
+  const output = await ed.dispatch('test', input);
 
-  t.deepEqual(data, { cool: 'very', update: 'acb' });
+  t.deepEqual(output, { cool: 'very', update: 'acbdfe' });
 });
 
 test('#on(label, callback): adds callbacks to the given event', (t) => {

@@ -43,7 +43,7 @@ const parsed = parser.parse(sql);
 
 ### sqlWhereParser.parse(sql, [evaluator]) ⇒ <code>Object</code>
 Parse a SQL statement with an evaluator function.
-Uses an implementation of the Shunting-Yard Algorithm: http://wcipeg.com/wiki/Shunting_yard_algorithm
+Uses an implementation of the Shunting-Yard Algorithm: https://wcipeg.com/wiki/Shunting_yard_algorithm
 See also: https://en.wikipedia.org/wiki/Shunting-yard_algorithm
 
 **Kind**: instance method of [<code>SqlWhereParser</code>](#SqlWhereParser)  

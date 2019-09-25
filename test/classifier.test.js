@@ -1,6 +1,6 @@
 /* eslint-disable no-console, no-loop-func */
 const test = require('ava');
-const { FileUtility, NaiveBayes, Fisher } = require('../src');
+const { NaiveBayes, Fisher } = require('../src');
 
 const messages = [
   ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'clean'],
@@ -32,9 +32,7 @@ test('Classifier: can load a model and use it', (t) => {
   t.is(filter.classify(messages[1][0]), 'spam');
   t.is(filter.classify(messages[2][0]), 'clean');
 
-  filter.save('test', 'test', 'json', 'utf8');
-
-  const loaded = FileUtility.readJSONSync('test', 'test', 'json');
+  const loaded = JSON.parse(filter.save());
   const filter2 = new NaiveBayes(loaded);
 
   t.is(filter2.classify(messages[0][0]), 'clean');
@@ -44,8 +42,6 @@ test('Classifier: can load a model and use it', (t) => {
   t.is(filter2.categoryCount('missing'), 0);
   t.is(filter2.featureProbability('lorem', 'clean'), 0.5);
   t.is(filter2.featureProbability('missing', 'missing'), 0);
-
-  FileUtility.deleteFileSync('test', 'test', 'json');
 });
 
 test('NaiveBayes: can train with Cyrillic characters', (t) => {
@@ -144,4 +140,10 @@ test('Fisher: can train and categorize the same imput correctly', (t) => {
   t.is(filter.classify(messages[0][0]), 'clean');
   t.is(filter.classify(messages[1][0]), 'spam');
   t.is(filter.classify(messages[2][0]), 'clean');
+});
+
+// TODO: These seem incredibly wrong, see https://github.com/zetos/inv-chisquare-cdf/blob/master/src/invChiSquareCDF.spec.js
+test('Fisher.inverseChiSquared(probability, degreeOfFreedom): returns the inverse chi-square cdf with "degreeOfFreedom" for the "probability"', (t) => {
+  t.is(Fisher.inverseChiSquared(0.05, 2), 0.9753099120283326); // 0.10258658877510105
+  t.is(Fisher.inverseChiSquared(0.95, 10), 0.9998640507693177); // 18.307038053275143
 });

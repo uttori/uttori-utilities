@@ -59,5 +59,6 @@
     "unicorn/no-for-loop": 0,
     "unicorn/catch-error-name": 0,
     "object-curly-newline": 0,
+    "unicorn/consistent-function-scoping": 0
   }
 }
