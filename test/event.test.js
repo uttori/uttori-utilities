@@ -85,7 +85,7 @@ test('#unregister(callback): removes callbacks from the event', (t) => {
   t.is(event.callbacks.length, 0);
 });
 
-test('#fire(data, context): executes the callbacks on the event', async (t) => {
+test('#filter(data, context): executes the callbacks on the event', async (t) => {
   const spy_a = sinon.spy();
   const data = { cool: 'very' };
 
@@ -94,16 +94,16 @@ test('#fire(data, context): executes the callbacks on the event', async (t) => {
   event.register(spy_a);
   t.is(event.callbacks.length, 1);
 
-  await event.fire(data);
+  await event.filter(data);
   t.is(spy_a.callCount, 1);
   t.true(spy_a.calledWith(data));
 
-  await event.fire();
+  await event.filter();
   t.is(spy_a.callCount, 2);
   t.true(spy_a.calledWith(undefined));
 });
 
-test('#fire(data, context): returns the data', async (t) => {
+test('#filter(data, context): returns the data', async (t) => {
   const input = 'a';
 
   const addB = (data) => `${data}b`;
@@ -132,12 +132,12 @@ test('#fire(data, context): returns the data', async (t) => {
   event.register(addF);
   t.is(event.callbacks.length, 6);
 
-  const final = await event.fire(input);
+  const final = await event.filter(input);
 
   t.is(final, 'abcdef');
 });
 
-test('#fireSync(data, context): executes the callbacks on the event', (t) => {
+test('#fire(data, context): executes the callbacks on the event', (t) => {
   const spy_a = sinon.spy();
   const data = { cool: 'very' };
 
@@ -146,39 +146,11 @@ test('#fireSync(data, context): executes the callbacks on the event', (t) => {
   event.register(spy_a);
   t.is(event.callbacks.length, 1);
 
-  event.fireSync(data);
+  event.fire(data);
   t.is(spy_a.callCount, 1);
   t.true(spy_a.calledWith(data));
 
-  event.fireSync();
+  event.fire();
   t.is(spy_a.callCount, 2);
   t.true(spy_a.calledWith(undefined));
-});
-
-test('#fireSync(data, context): returns the data', (t) => {
-  const input = 'a';
-
-  const addB = (data) => `${data}b`;
-  const addC = (data) => `${data}c`;
-  const addD = (data) => {
-    const output = data;
-    return `${output}d`;
-  };
-  const addE = (data) => `${data}e`;
-  const addF = (data) => `${data}f`;
-  const nop = (data) => data;
-
-  const event = new UttoriEvent('test');
-  t.is(event.callbacks.length, 0);
-  event.register(addB);
-  event.register(addC);
-  event.register(addD);
-  event.register(nop);
-  event.register(addE);
-  event.register(addF);
-  t.is(event.callbacks.length, 6);
-
-  const final = event.fireSync(input);
-
-  t.is(final, 'abcdef');
 });

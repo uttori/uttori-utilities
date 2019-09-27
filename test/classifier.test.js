@@ -142,7 +142,6 @@ test('Fisher: can train and categorize the same imput correctly', (t) => {
   t.is(filter.classify(messages[2][0]), 'clean');
 });
 
-// TODO: These seem incredibly wrong, see https://github.com/zetos/inv-chisquare-cdf/blob/master/src/invChiSquareCDF.spec.js
 test('Fisher.inverseChiSquared(probability, degreeOfFreedom): returns the inverse chi-square cdf with "degreeOfFreedom" for the "probability"', (t) => {
   t.is(Fisher.inverseChiSquared(0.05, 2), 0.9753099120283326); // 0.10258658877510105
   t.is(Fisher.inverseChiSquared(0.95, 10), 0.9998640507693177); // 18.307038053275143

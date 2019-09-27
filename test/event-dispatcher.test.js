@@ -1,5 +1,6 @@
 /* eslint-disable ramda/prefer-ramda-boolean, no-new */
 const test = require('ava');
+const sinon = require('sinon');
 const { EventDispatcher } = require('../src');
 
 const a = () => false;
@@ -9,81 +10,81 @@ test('#constructor: can setup an EventDispatcher', (t) => {
   t.notThrows(() => { new EventDispatcher('test'); });
 });
 
-test('#dispatch(label, data, context): throws an error with invalid callbacks', async (t) => {
+test('#filter(label, data, context): throws an error with invalid callbacks', async (t) => {
   const ed = new EventDispatcher();
-  await t.notThrowsAsync(async () => { await ed.dispatch('test'); });
-  await t.notThrowsAsync(async () => { await ed.dispatch('test', {}); });
-  await t.throwsAsync(async () => { await ed.dispatch(() => true); });
+  await t.notThrowsAsync(async () => { await ed.filter('test'); });
+  await t.notThrowsAsync(async () => { await ed.filter('test', {}); });
+  await t.throwsAsync(async () => { await ed.filter(() => true); });
   await // eslint-disable-next-line prefer-arrow-callback
-  await t.throwsAsync(async () => { await ed.dispatch(function named() { return true; }); });
-  await t.throwsAsync(async () => { await ed.dispatch(); });
-  await t.throwsAsync(async () => { await ed.dispatch(''); });
-  await t.throwsAsync(async () => { await ed.dispatch(null); });
-  await t.throwsAsync(async () => { await ed.dispatch(undefined); });
-  await t.throwsAsync(async () => { await ed.dispatch(1); });
-  await t.throwsAsync(async () => { await ed.dispatch(1.2); });
-  await t.throwsAsync(async () => { await ed.dispatch(true); });
-  await t.throwsAsync(async () => { await ed.dispatch(false); });
-  await t.throwsAsync(async () => { await ed.dispatch(NaN); });
+  await t.throwsAsync(async () => { await ed.filter(function named() { return true; }); });
+  await t.throwsAsync(async () => { await ed.filter(); });
+  await t.throwsAsync(async () => { await ed.filter(''); });
+  await t.throwsAsync(async () => { await ed.filter(null); });
+  await t.throwsAsync(async () => { await ed.filter(undefined); });
+  await t.throwsAsync(async () => { await ed.filter(1); });
+  await t.throwsAsync(async () => { await ed.filter(1.2); });
+  await t.throwsAsync(async () => { await ed.filter(true); });
+  await t.throwsAsync(async () => { await ed.filter(false); });
+  await t.throwsAsync(async () => { await ed.filter(NaN); });
 });
 
-test('#dispatch(label, data, context): can dispatch an event', async (t) => {
+test('#filter(label, data, context): can dispatch an event', async (t) => {
   const ed = new EventDispatcher();
   ed.on('test', a);
-  await t.notThrowsAsync(async () => { await ed.dispatch('test'); });
-  await t.notThrowsAsync(async () => { await ed.dispatch('test', {}); });
-  await t.throwsAsync(async () => { await ed.dispatch(() => true); });
+  await t.notThrowsAsync(async () => { await ed.filter('test'); });
+  await t.notThrowsAsync(async () => { await ed.filter('test', {}); });
+  await t.throwsAsync(async () => { await ed.dispafiltertch(() => true); });
   await // eslint-disable-next-line prefer-arrow-callback
-  await t.throwsAsync(async () => { await ed.dispatch(function named() { return true; }); });
-  await t.throwsAsync(async () => { await ed.dispatch(); });
-  await t.throwsAsync(async () => { await ed.dispatch(''); });
-  await t.throwsAsync(async () => { await ed.dispatch(null); });
-  await t.throwsAsync(async () => { await ed.dispatch(undefined); });
-  await t.throwsAsync(async () => { await ed.dispatch(1); });
-  await t.throwsAsync(async () => { await ed.dispatch(1.2); });
-  await t.throwsAsync(async () => { await ed.dispatch(true); });
-  await t.throwsAsync(async () => { await ed.dispatch(false); });
-  await t.throwsAsync(async () => { await ed.dispatch(NaN); });
+  await t.throwsAsync(async () => { await ed.filter(function named() { return true; }); });
+  await t.throwsAsync(async () => { await ed.filter(); });
+  await t.throwsAsync(async () => { await ed.filter(''); });
+  await t.throwsAsync(async () => { await ed.filter(null); });
+  await t.throwsAsync(async () => { await ed.filter(undefined); });
+  await t.throwsAsync(async () => { await ed.filter(1); });
+  await t.throwsAsync(async () => { await ed.filter(1.2); });
+  await t.throwsAsync(async () => { await ed.filter(true); });
+  await t.throwsAsync(async () => { await ed.filter(false); });
+  await t.throwsAsync(async () => { await ed.filter(NaN); });
 });
 
-test('#dispatchSync(label, data, context): throws an error with invalid callbacks', (t) => {
+test('#dispatch(label, data, context): throws an error with invalid callbacks', (t) => {
   const ed = new EventDispatcher();
-  t.notThrows(() => { ed.dispatchSync('test'); });
-  t.notThrows(() => { ed.dispatchSync('test', {}); });
-  t.throws(() => { ed.dispatchSync(() => true); });
+  t.notThrows(() => { ed.dispatch('test'); });
+  t.notThrows(() => { ed.dispatch('test', {}); });
+  t.throws(() => { ed.dispatch(() => true); });
   // eslint-disable-next-line prefer-arrow-callback
-  t.throws(() => { ed.dispatchSync(function named() { return true; }); });
-  t.throws(() => { ed.dispatchSync(); });
-  t.throws(() => { ed.dispatchSync(''); });
-  t.throws(() => { ed.dispatchSync(null); });
-  t.throws(() => { ed.dispatchSync(undefined); });
-  t.throws(() => { ed.dispatchSync(1); });
-  t.throws(() => { ed.dispatchSync(1.2); });
-  t.throws(() => { ed.dispatchSync(true); });
-  t.throws(() => { ed.dispatchSync(false); });
-  t.throws(() => { ed.dispatchSync(NaN); });
+  t.throws(() => { ed.dispatch(function named() { return true; }); });
+  t.throws(() => { ed.dispatch(); });
+  t.throws(() => { ed.dispatch(''); });
+  t.throws(() => { ed.dispatch(null); });
+  t.throws(() => { ed.dispatch(undefined); });
+  t.throws(() => { ed.dispatch(1); });
+  t.throws(() => { ed.dispatch(1.2); });
+  t.throws(() => { ed.dispatch(true); });
+  t.throws(() => { ed.dispatch(false); });
+  t.throws(() => { ed.dispatch(NaN); });
 });
 
-test('#dispatchSync(label, data, context): can dispatch an event', (t) => {
+test('#dispatch(label, data, context): can dispatch an event', (t) => {
   const ed = new EventDispatcher();
   ed.on('test', a);
-  t.notThrows(() => { ed.dispatchSync('test'); });
-  t.notThrows(() => { ed.dispatchSync('test', {}); });
-  t.throws(() => { ed.dispatchSync(() => true); });
+  t.notThrows(() => { ed.dispatch('test'); });
+  t.notThrows(() => { ed.dispatch('test', {}); });
+  t.throws(() => { ed.dispatch(() => true); });
   // eslint-disable-next-line prefer-arrow-callback
-  t.throws(() => { ed.dispatchSync(function named() { return true; }); });
-  t.throws(() => { ed.dispatchSync(); });
-  t.throws(() => { ed.dispatchSync(''); });
-  t.throws(() => { ed.dispatchSync(null); });
-  t.throws(() => { ed.dispatchSync(undefined); });
-  t.throws(() => { ed.dispatchSync(1); });
-  t.throws(() => { ed.dispatchSync(1.2); });
-  t.throws(() => { ed.dispatchSync(true); });
-  t.throws(() => { ed.dispatchSync(false); });
-  t.throws(() => { ed.dispatchSync(NaN); });
+  t.throws(() => { ed.dispatch(function named() { return true; }); });
+  t.throws(() => { ed.dispatch(); });
+  t.throws(() => { ed.dispatch(''); });
+  t.throws(() => { ed.dispatch(null); });
+  t.throws(() => { ed.dispatch(undefined); });
+  t.throws(() => { ed.dispatch(1); });
+  t.throws(() => { ed.dispatch(1.2); });
+  t.throws(() => { ed.dispatch(true); });
+  t.throws(() => { ed.dispatch(false); });
+  t.throws(() => { ed.dispatch(NaN); });
 });
 
-test('#dispatch(label, data, context): can return dispatched event modified data', async (t) => {
+test('#filter(label, data, context): can return dispatched event modified data', async (t) => {
   const ed = new EventDispatcher();
 
   const input = { cool: 'very', update: 'a' };
@@ -111,9 +112,27 @@ test('#dispatch(label, data, context): can return dispatched event modified data
   ed.on('test', addF);
   ed.on('test', addE);
 
-  const output = await ed.dispatch('test', input);
+  const output = await ed.filter('test', input);
 
   t.deepEqual(output, { cool: 'very', update: 'acbdfe' });
+});
+
+test('#dispatch(label, data, context): fires events, but does not return any data', (t) => {
+  const ed = new EventDispatcher();
+  const spy_a = sinon.spy();
+  const spy_b = sinon.spy();
+
+  const input = { cool: 'very', update: 'a' };
+
+  ed.on('test', spy_a);
+  ed.on('test', spy_b);
+  ed.dispatch('test', input);
+
+  t.is(spy_a.callCount, 1);
+  t.true(spy_a.calledWith(input));
+
+  t.is(spy_a.callCount, 1);
+  t.true(spy_a.calledWith(input));
 });
 
 test('#on(label, callback): adds callbacks to the given event', (t) => {

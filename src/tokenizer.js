@@ -186,7 +186,7 @@ class Tokenizer {
     // A substring was found, but not at the very beginning of the string, e.g. A=B, where "=" is the substring.
     // This will push out "A" first.
     if (lowestIndexOfTokenize > 0) {
-      this.push(this.currentToken.substring(0, lowestIndexOfTokenize));
+      this.push(this.currentToken.slice(0, lowestIndexOfTokenize));
     }
 
     // Push out the substring, then modify the current token to be everything past that substring.
@@ -194,7 +194,7 @@ class Tokenizer {
     /* istanbul ignore else */
     if (lowestIndexOfTokenize !== -1) {
       this.push(toTokenize);
-      this.currentToken = this.currentToken.substring(lowestIndexOfTokenize + toTokenize.length);
+      this.currentToken = this.currentToken.slice(lowestIndexOfTokenize + toTokenize.length);
       this.pushDefaultModeTokenizables();
     }
   }
@@ -208,7 +208,7 @@ class Tokenizer {
       if (this.previousChr !== this.factory.escapeCharacter) {
         return this.completeCurrentMode();
       }
-      this.currentToken = this.currentToken.substring(0, this.currentToken.length - 1);
+      this.currentToken = this.currentToken.slice(0, this.currentToken.length - 1);
     }
 
     this.currentToken += chr;

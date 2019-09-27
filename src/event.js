@@ -76,12 +76,12 @@ class UttoriEvent {
    * @param {Object} [context] - Context to help with updating or modification of the data.
    * @returns {Promise} - A Promise resolving to the original input data, either modified or untouched.
    * @example
-   * event.fire({ data }, this);
+   * output = await event.filter({ data }, this);
    * @async
    * @memberof UttoriEvent
    */
-  async fire(data, context) {
-    debug('fire:', data);
+  async filter(data, context) {
+    debug('filter:', data);
     const callbacks = this.callbacks.slice(0);
     debug('callbacks:', callbacks.length);
     // Callbacks need to be run in the order recieved.
@@ -90,34 +90,30 @@ class UttoriEvent {
     // We then await it to resolve it and pass it to the first callback.
     // Each callback is awaited should the callback be async.
     // As async methods always return a Promise, we can safely loop.
-    return callbacks.reduce(async (previousPromise, callback) => {
+    const result = callbacks.reduce(async (previousPromise, callback) => {
       let output = await previousPromise;
       output = await callback(output, context);
       return output;
     }, Promise.resolve(data));
+    debug('filter =', result);
+    return result;
   }
 
   /**
    * Executes all the callbacks present on an event with passed in data and context.
    * @param {*} data - Data to be used, updated, or modified by event callbacks.
    * @param {Object} [context] - Context to help with updating or modification of the data.
-   * @returns {*} - The original input data, either modified or untouched.
    * @example
-   * event.fireSync({ data }, this);
+   * event.fire({ data }, this);
    * @memberof UttoriEvent
    */
-  fireSync(data, context) {
-    debug('fireSync:', data);
+  fire(data, context) {
+    debug('fire:', data);
     const callbacks = this.callbacks.slice(0);
     debug('callbacks:', callbacks.length);
-    callbacks.forEach((callback, i) => {
-      /* istanbul ignore next */
-      if (data instanceof Promise) {
-        debug('fireSync: data is a Promise potential async callback registered as sync, at callback:', i);
-      }
-      data = callback(data, context);
+    callbacks.forEach((callback) => {
+      callback(data, context);
     });
-    return data;
   }
 }
 

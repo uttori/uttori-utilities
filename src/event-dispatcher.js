@@ -26,11 +26,11 @@ class EventDispatcher {
    * @param {Object} [context] - Context to help with updating or modification of the data.
    * @returns {*} - The original input data, either modified or untouched.
    * @example
-   * bus.dispatch('loaded', { data }, this);
+   * output = await bus.filter('loaded', { data }, this);
    * @async
    * @memberof EventDispatcher
    */
-  async dispatch(label, data, context) {
+  async filter(label, data, context) {
     debug('dispatch:', label, data);
     if (typeof label !== 'string' || label.length === 0) {
       const error = `Event label must be a string, got: ${typeof label}`;
@@ -39,9 +39,9 @@ class EventDispatcher {
     }
     const event = this.events[label];
     if (event) {
-      data = await event.fire(data, context);
+      data = await event.filter(data, context);
     } else {
-      debug('No event to fire:', label, data);
+      debug('No event to fire:', label);
     }
     return data;
   }
@@ -50,12 +50,11 @@ class EventDispatcher {
    * Fires off an event with passed in data and context for a given label.
    * @param {*} data - Data to be used, updated, or modified by event callbacks.
    * @param {Object} [context] - Context to help with updating or modification of the data.
-   * @returns {*} - The original input data, either modified or untouched.
    * @example
    * bus.dispatch('loaded', { data }, this);
    * @memberof EventDispatcher
    */
-  dispatchSync(label, data, context) {
+  dispatch(label, data, context) {
     debug('dispatchSync:', label, data);
     if (typeof label !== 'string' || label.length === 0) {
       const error = `Event label must be a string, got: ${typeof label}`;
@@ -64,11 +63,10 @@ class EventDispatcher {
     }
     const event = this.events[label];
     if (event) {
-      data = event.fire(data, context);
+      event.fire(data, context);
     } else {
-      debug('No event to fire:', label, data);
+      debug('No event to fire:', label);
     }
-    return data;
   }
 
   /**
