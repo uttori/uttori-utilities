@@ -74,6 +74,33 @@ class UttoriEvent {
    * Executes all the callbacks present on an event with passed in data and context.
    * @param {*} data - Data to be used, updated, or modified by event callbacks.
    * @param {Object} [context] - Context to help with updating or modification of the data.
+   * @returns {Promise} - A Promise resolving to the result of the check, either true (invalid) or false (valid).
+   * @example
+   * is_spam = await event.validate({ data }, this);
+   * @async
+   * @memberof UttoriEvent
+   */
+  async validate(data, context) {
+    debug('validate:', data);
+    const callbacks = this.callbacks.slice(0);
+    debug('callbacks:', callbacks.length);
+    const results = await Promise.all(callbacks.map(async (callback) => callback(data, context)));
+    debug('callback results:', results);
+    // Check for anything that isn't false, and invert the result.
+    const valid = !results.every((element) => {
+      if (typeof element !== 'boolean') {
+        debug('validate callbacks should only return true (invalid) or false (valid), got:', element);
+      }
+      return element === false;
+    });
+    debug('validate =', valid);
+    return valid;
+  }
+
+  /**
+   * Executes all the callbacks present on an event with passed in data and context.
+   * @param {*} data - Data to be used, updated, or modified by event callbacks.
+   * @param {Object} [context] - Context to help with updating or modification of the data.
    * @returns {Promise} - A Promise resolving to the original input data, either modified or untouched.
    * @example
    * output = await event.filter({ data }, this);

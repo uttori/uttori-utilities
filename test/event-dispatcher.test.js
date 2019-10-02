@@ -84,6 +84,45 @@ test('#dispatch(label, data, context): can dispatch an event', (t) => {
   t.throws(() => { ed.dispatch(NaN); });
 });
 
+test('#validate(label, data, context): can return dispatched event validation results', async (t) => {
+  const ed = new EventDispatcher();
+
+  const addB = (data) => data.length !== 3;
+  const addC = (data) => data === 'def';
+  const addD = async (data) => {
+    const output = await Promise.resolve(data);
+    return typeof output !== 'string';
+  };
+
+  ed.on('test', addB);
+  ed.on('test', addC);
+  ed.on('test', addD);
+
+  let final = null;
+  final = await ed.validate('test', 'abc');
+  t.is(final, false);
+
+  final = await ed.validate('test', 'ab');
+  t.is(final, true);
+
+  final = await ed.validate('test', 'def');
+  t.is(final, true);
+});
+
+test('#validate(label, data, context): returns false when no event is found', async (t) => {
+  const ed = new EventDispatcher();
+
+  let final = null;
+  final = await ed.validate('test', 'abc');
+  t.is(final, false);
+
+  final = await ed.validate('test', 'ab');
+  t.is(final, false);
+
+  final = await ed.validate('test', 'def');
+  t.is(final, false);
+});
+
 test('#filter(label, data, context): can return dispatched event modified data', async (t) => {
   const ed = new EventDispatcher();
 

@@ -21,7 +21,49 @@ class EventDispatcher {
   }
 
   /**
+   * Verifies an event label.
+   * @param {String} label - The human readable identifier of the event.
+   * @example
+   * EventDispatcher.check('event'); // No Error
+   * EventDispatcher.check(1); // Throws Error
+   * @static
+   */
+  static check(label) {
+    if (typeof label !== 'string' || label.length === 0) {
+      const error = `Event label must be a string, got: ${typeof label}`;
+      debug(error);
+      throw new Error(error);
+    }
+  }
+
+  /**
    * Fires off an event with passed in data and context for a given label.
+   * @param {String} label - The human readable identifier of the event.
+   * @param {*} data - Data to be used, updated, or modified by event callbacks.
+   * @param {Object} [context] - Context to help with updating or modification of the data.
+   * @returns {Promise} - The conclusion of the spam checks, true being it is spam, false meaning it is clean.
+   * @example
+   * is_spam = await bus.validate('check-for-spam', { data }, this);
+   * @async
+   * @memberof EventDispatcher
+   */
+  async validate(label, data, context) {
+    debug('validate:', label, data);
+    EventDispatcher.check(label);
+    const event = this.events[label];
+    let result = false;
+    if (event) {
+      result = await event.validate(data, context);
+    } else {
+      debug('No event to fire:', label);
+    }
+    return result;
+  }
+
+
+  /**
+   * Fires off an event with passed in data and context for a given label.
+   * @param {String} label - The human readable identifier of the event.
    * @param {*} data - Data to be used, updated, or modified by event callbacks.
    * @param {Object} [context] - Context to help with updating or modification of the data.
    * @returns {*} - The original input data, either modified or untouched.
@@ -31,12 +73,8 @@ class EventDispatcher {
    * @memberof EventDispatcher
    */
   async filter(label, data, context) {
-    debug('dispatch:', label, data);
-    if (typeof label !== 'string' || label.length === 0) {
-      const error = `Event label must be a string, got: ${typeof label}`;
-      debug(error);
-      throw new Error(error);
-    }
+    debug('filter:', label, data);
+    EventDispatcher.check(label);
     const event = this.events[label];
     if (event) {
       data = await event.filter(data, context);
@@ -48,6 +86,7 @@ class EventDispatcher {
 
   /**
    * Fires off an event with passed in data and context for a given label.
+   * @param {String} label - The human readable identifier of the event.
    * @param {*} data - Data to be used, updated, or modified by event callbacks.
    * @param {Object} [context] - Context to help with updating or modification of the data.
    * @example
@@ -55,12 +94,8 @@ class EventDispatcher {
    * @memberof EventDispatcher
    */
   dispatch(label, data, context) {
-    debug('dispatchSync:', label, data);
-    if (typeof label !== 'string' || label.length === 0) {
-      const error = `Event label must be a string, got: ${typeof label}`;
-      debug(error);
-      throw new Error(error);
-    }
+    debug('dispatch:', label, data);
+    EventDispatcher.check(label);
     const event = this.events[label];
     if (event) {
       event.fire(data, context);

@@ -12,4 +12,5 @@ module.exports = {
   Fisher: require('./classifier_fisher'),
   UttoriEvent: require('./event'),
   EventDispatcher: require('./event-dispatcher'),
+  Network: require('./network'),
 };

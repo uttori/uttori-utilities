@@ -2,21 +2,21 @@ const debug = require('debug')('Uttori.Utilities.FunctionQueue');
 
 /**
   * Queue functionality for function calling.
-  * @example <caption>FunctionQueue.throttle(max_requests_per_interval, interval)</caption>
-  * const throttle = FunctionQueue.throttle(max_requests_per_interval, interval);
+  * @example <caption>FunctionQueue.throttle(max_requests_per_interval, interval, evenly_spaced)</caption>
+  * const throttle = FunctionQueue.throttle(max_requests_per_interval, interval, evenly_spaced);
   * throttle(() => { ... });
   * @class
   */
 class FunctionQueue {
   /**
-   * @param {number} max_requests_per_interval
-   * @param {number} interval
-   * @param {boolean} evenly_spaced
+   * @param {Number} max_requests_per_interval - The number of calls to execute for a single interval.
+   * @param {Number} interval - The time between calls in ms.
+   * @param {Boolean} evenly_spaced - Determines if all requests should be evenly spaced.
    * @static
    */
   static throttle(max_requests_per_interval, interval, evenly_spaced) {
     /**
-     * If all requests should be evenly spaced, adjust to suit.
+     * If all requests should be evenly spaced, adjust them.
      */
     if (evenly_spaced) {
       interval /= max_requests_per_interval;
@@ -25,7 +25,6 @@ class FunctionQueue {
 
     /* istanbul ignore next */
     if (interval < 200) {
-      // eslint-disable-next-line no-console
       debug('An interval of less than 200ms can create performance issues.');
     }
 

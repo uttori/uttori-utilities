@@ -13,10 +13,14 @@ An event bus system for registering, unregistering and triggering events.
 
 * [EventDispatcher](#EventDispatcher)
     * [new EventDispatcher()](#new_EventDispatcher_new)
-    * [.dispatch(data, [context])](#EventDispatcher+dispatch) ⇒ <code>\*</code>
-    * [.dispatchSync(data, [context])](#EventDispatcher+dispatchSync) ⇒ <code>\*</code>
-    * [.on(label, callback)](#EventDispatcher+on)
-    * [.off(label, callback)](#EventDispatcher+off)
+    * _instance_
+        * [.validate(label, data, [context])](#EventDispatcher+validate) ⇒ <code>Promise</code>
+        * [.filter(label, data, [context])](#EventDispatcher+filter) ⇒ <code>\*</code>
+        * [.dispatch(label, data, [context])](#EventDispatcher+dispatch)
+        * [.on(label, callback)](#EventDispatcher+on)
+        * [.off(label, callback)](#EventDispatcher+off)
+    * _static_
+        * [.check(label)](#EventDispatcher.check)
 
 <a name="new_EventDispatcher_new"></a>
 
@@ -30,26 +34,27 @@ bus.on('update', callback);
 bus.dispatch('update', { data }, { context });
 bus.off('update', callback);
 ```
-<a name="EventDispatcher+dispatch"></a>
+<a name="EventDispatcher+validate"></a>
 
-### eventDispatcher.dispatch(data, [context]) ⇒ <code>\*</code>
+### eventDispatcher.validate(label, data, [context]) ⇒ <code>Promise</code>
 Fires off an event with passed in data and context for a given label.
 
 **Kind**: instance method of [<code>EventDispatcher</code>](#EventDispatcher)  
-**Returns**: <code>\*</code> - - The original input data, either modified or untouched.  
+**Returns**: <code>Promise</code> - - The conclusion of the spam checks, true being it is spam, false meaning it is clean.  
 
 | Param | Type | Description |
 | --- | --- | --- |
+| label | <code>String</code> | The human readable identifier of the event. |
 | data | <code>\*</code> | Data to be used, updated, or modified by event callbacks. |
 | [context] | <code>Object</code> | Context to help with updating or modification of the data. |
 
 **Example**  
 ```js
-bus.dispatch('loaded', { data }, this);
+is_spam = await bus.validate('check-for-spam', { data }, this);
 ```
-<a name="EventDispatcher+dispatchSync"></a>
+<a name="EventDispatcher+filter"></a>
 
-### eventDispatcher.dispatchSync(data, [context]) ⇒ <code>\*</code>
+### eventDispatcher.filter(label, data, [context]) ⇒ <code>\*</code>
 Fires off an event with passed in data and context for a given label.
 
 **Kind**: instance method of [<code>EventDispatcher</code>](#EventDispatcher)  
@@ -57,6 +62,24 @@ Fires off an event with passed in data and context for a given label.
 
 | Param | Type | Description |
 | --- | --- | --- |
+| label | <code>String</code> | The human readable identifier of the event. |
+| data | <code>\*</code> | Data to be used, updated, or modified by event callbacks. |
+| [context] | <code>Object</code> | Context to help with updating or modification of the data. |
+
+**Example**  
+```js
+output = await bus.filter('loaded', { data }, this);
+```
+<a name="EventDispatcher+dispatch"></a>
+
+### eventDispatcher.dispatch(label, data, [context])
+Fires off an event with passed in data and context for a given label.
+
+**Kind**: instance method of [<code>EventDispatcher</code>](#EventDispatcher)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| label | <code>String</code> | The human readable identifier of the event. |
 | data | <code>\*</code> | Data to be used, updated, or modified by event callbacks. |
 | [context] | <code>Object</code> | Context to help with updating or modification of the data. |
 
@@ -96,4 +119,20 @@ Remove a function from an event.
 **Example**  
 ```js
 bus.off('loaded', callback);
+```
+<a name="EventDispatcher.check"></a>
+
+### EventDispatcher.check(label)
+Verifies an event label.
+
+**Kind**: static method of [<code>EventDispatcher</code>](#EventDispatcher)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| label | <code>String</code> | The human readable identifier of the event. |
+
+**Example**  
+```js
+EventDispatcher.check('event'); // No Error
+EventDispatcher.check(1); // Throws Error
 ```

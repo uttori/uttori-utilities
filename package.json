@@ -22,7 +22,7 @@
   "devDependencies": {
     "ava": "^2.4.0",
     "coveralls": "^3.0.6",
-    "eslint": "^6.4.0",
+    "eslint": "^6.5.1",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-plugin-ava": "^9.0.0",
     "eslint-plugin-import": "^2.18.2",
@@ -31,11 +31,12 @@
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-optimize-regex": "^1.1.7",
     "eslint-plugin-ramda": "^2.5.1",
-    "eslint-plugin-react": "^7.14.3",
-    "eslint-plugin-react-hooks": "^2.0.1",
+    "eslint-plugin-react": "^7.15.1",
+    "eslint-plugin-react-hooks": "^2.1.1",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-unicorn": "^12.0.1",
     "eslint-plugin-xss": "^0.1.9",
+    "express": "^4.17.1",
     "jsdoc-to-markdown": "^5.0.1",
     "nyc": "^14.1.1",
     "sinon": "^7.5.0",
@@ -55,7 +56,7 @@
     "exclude": []
   },
   "scripts": {
-    "docs": "jsdoc2md --private --example-lang js src/classifier_fisher.js > docs/classifier_fisher.md; jsdoc2md --private --example-lang js src/classifier_naive_bayes.js > docs/classifier_naive_bayes.md; jsdoc2md --private --example-lang js src/classifier.js > docs/classifier.md; jsdoc2md --private --example-lang js src/event-dispatcher.js > docs/event-dispatcher.md; jsdoc2md --private --example-lang js src/event.js > docs/event.md; jsdoc2md --private --example-lang js src/file-utility.js > docs/file-utility.md; jsdoc2md --private --example-lang js src/function-queue.js > docs/function-queue.md; jsdoc2md --private --example-lang js src/operator.js > docs/operator.md; jsdoc2md --private --example-lang js src/parse-query-to-array.js > docs/parse-query-to-array.md; jsdoc2md --private --example-lang js src/parse-query-to-ramda.js > docs/parse-query-to-ramda.md; jsdoc2md --private --example-lang js src/tokenizer.js > docs/tokenizer.md; jsdoc2md --private --example-lang js src/validate-query.js > docs/validate-query.md; jsdoc2md --private --example-lang js src/where-parser.js > docs/where-parser.md;",
+    "docs": "jsdoc2md --private --example-lang js src/classifier_fisher.js > docs/classifier_fisher.md; jsdoc2md --private --example-lang js src/classifier_naive_bayes.js > docs/classifier_naive_bayes.md; jsdoc2md --private --example-lang js src/classifier.js > docs/classifier.md; jsdoc2md --private --example-lang js src/event-dispatcher.js > docs/event-dispatcher.md; jsdoc2md --private --example-lang js src/event.js > docs/event.md; jsdoc2md --private --example-lang js src/file-utility.js > docs/file-utility.md; jsdoc2md --private --example-lang js src/function-queue.js > docs/function-queue.md; jsdoc2md --private --example-lang js src/network.js > docs/network.md; jsdoc2md --private --example-lang js src/operator.js > docs/operator.md; jsdoc2md --private --example-lang js src/parse-query-to-array.js > docs/parse-query-to-array.md; jsdoc2md --private --example-lang js src/parse-query-to-ramda.js > docs/parse-query-to-ramda.md; jsdoc2md --private --example-lang js src/tokenizer.js > docs/tokenizer.md; jsdoc2md --private --example-lang js src/validate-query.js > docs/validate-query.md; jsdoc2md --private --example-lang js src/where-parser.js > docs/where-parser.md;",
     "docs-serve": "docsify serve ./docs",
     "lint": "eslint .",
     "report": "nyc report --reporter=html",

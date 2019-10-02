@@ -16,8 +16,9 @@ Event class used in conjunction with the Event Dispatcher.
     * [new UttoriEvent(label)](#new_UttoriEvent_new)
     * [.register(callback)](#UttoriEvent+register)
     * [.unregister(callback)](#UttoriEvent+unregister)
-    * [.fire(data, [context])](#UttoriEvent+fire) ⇒ <code>Promise</code>
-    * [.fireSync(data, [context])](#UttoriEvent+fireSync) ⇒ <code>\*</code>
+    * [.validate(data, [context])](#UttoriEvent+validate) ⇒ <code>Promise</code>
+    * [.filter(data, [context])](#UttoriEvent+filter) ⇒ <code>Promise</code>
+    * [.fire(data, [context])](#UttoriEvent+fire)
 
 <a name="new_UttoriEvent_new"></a>
 
@@ -65,9 +66,26 @@ Remove a function from an event that would be called when the event is fired.
 ```js
 event.unregister(callback);
 ```
-<a name="UttoriEvent+fire"></a>
+<a name="UttoriEvent+validate"></a>
 
-### uttoriEvent.fire(data, [context]) ⇒ <code>Promise</code>
+### uttoriEvent.validate(data, [context]) ⇒ <code>Promise</code>
+Executes all the callbacks present on an event with passed in data and context.
+
+**Kind**: instance method of [<code>UttoriEvent</code>](#UttoriEvent)  
+**Returns**: <code>Promise</code> - - A Promise resolving to the result of the check, either true (invalid) or false (valid).  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>\*</code> | Data to be used, updated, or modified by event callbacks. |
+| [context] | <code>Object</code> | Context to help with updating or modification of the data. |
+
+**Example**  
+```js
+is_spam = await event.validate({ data }, this);
+```
+<a name="UttoriEvent+filter"></a>
+
+### uttoriEvent.filter(data, [context]) ⇒ <code>Promise</code>
 Executes all the callbacks present on an event with passed in data and context.
 
 **Kind**: instance method of [<code>UttoriEvent</code>](#UttoriEvent)  
@@ -80,15 +98,14 @@ Executes all the callbacks present on an event with passed in data and context.
 
 **Example**  
 ```js
-event.fire({ data }, this);
+output = await event.filter({ data }, this);
 ```
-<a name="UttoriEvent+fireSync"></a>
+<a name="UttoriEvent+fire"></a>
 
-### uttoriEvent.fireSync(data, [context]) ⇒ <code>\*</code>
+### uttoriEvent.fire(data, [context])
 Executes all the callbacks present on an event with passed in data and context.
 
 **Kind**: instance method of [<code>UttoriEvent</code>](#UttoriEvent)  
-**Returns**: <code>\*</code> - - The original input data, either modified or untouched.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -97,5 +114,5 @@ Executes all the callbacks present on an event with passed in data and context.
 
 **Example**  
 ```js
-event.fireSync({ data }, this);
+event.fire({ data }, this);
 ```

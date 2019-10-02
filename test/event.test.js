@@ -85,6 +85,73 @@ test('#unregister(callback): removes callbacks from the event', (t) => {
   t.is(event.callbacks.length, 0);
 });
 
+test('#validate(data, context): returns true when the data is invalid, false when data is valid', async (t) => {
+  const addB = (data) => data.length !== 3;
+  const addC = (data) => data === 'def';
+  const addD = async (data) => {
+    const output = await Promise.resolve(data);
+    return typeof output !== 'string';
+  };
+
+  const event = new UttoriEvent('test');
+  t.is(event.callbacks.length, 0);
+  event.register(addB);
+  event.register(addC);
+  event.register(addD);
+  t.is(event.callbacks.length, 3);
+
+  let final = null;
+  final = await event.validate('abc');
+  t.is(final, false);
+
+  final = await event.validate('ab');
+  t.is(final, true);
+
+  final = await event.validate('def');
+  t.is(final, true);
+});
+
+test('#validate(data, context): returns false when there are no callbacks', async (t) => {
+  const event = new UttoriEvent('test');
+  t.is(event.callbacks.length, 0);
+
+  let final = null;
+  final = await event.validate('abc');
+  t.is(final, false);
+
+  final = await event.validate('ab');
+  t.is(final, false);
+
+  final = await event.validate('def');
+  t.is(final, false);
+});
+
+test('#validate(data, context): returns true when a callback returns a non boolean type', async (t) => {
+  const addB = (data) => data.length !== 3;
+  const addC = (data) => data;
+  const addD = async (data) => {
+    const output = await Promise.resolve(data);
+    return typeof output !== 'string';
+  };
+
+  const event = new UttoriEvent('test');
+  t.is(event.callbacks.length, 0);
+  event.register(addB);
+  event.register(addC);
+  event.register(addD);
+  t.is(event.callbacks.length, 3);
+
+  let final = null;
+  final = await event.validate('abc');
+  t.is(final, true);
+
+  final = await event.validate('ab');
+  t.is(final, true);
+
+  final = await event.validate('def');
+  t.is(final, true);
+});
+
 test('#filter(data, context): executes the callbacks on the event', async (t) => {
   const spy_a = sinon.spy();
   const data = { cool: 'very' };
