@@ -15,29 +15,72 @@ test.before(() => {
   server.post('/user', (req, res) => {
     res.status(200).json({ update: true });
   });
+  server.get('/error', (req, res) => {
+    res.status(200).json();
+  });
+  server.get('/text', (req, res) => {
+    res.status(200).send('not json');
+  });
+  server.get('/empty', (req, res) => {
+    res.status(200).send('');
+  });
   server.listen(server.get('port'), server.get('ip'));
 });
 
-test('Network.request(): can make a HTTP GET request', async (t) => {
+test('Network: can make a HTTP GET request', async (t) => {
   let output;
+  output = await Network.json('http://127.0.0.1:8123/user');
+  t.deepEqual(output, { name: 'tobi' });
+
+  output = await Network.json('http://127.0.0.1:8123/user', {});
+  t.deepEqual(output, { name: 'tobi' });
+
+  output = await Network.json('http://127.0.0.1:8123/user', {}, { presponseEncoding: 'utf8' });
+  t.deepEqual(output, { name: 'tobi' });
+
+
+  output = await Network.raw('http://127.0.0.1:8123/user');
+  t.is(output.responseBody, '{"name":"tobi"}');
+
+  output = await Network.raw('http://127.0.0.1:8123/user', {});
+  t.is(output.responseBody, '{"name":"tobi"}');
+
+  output = await Network.raw('http://127.0.0.1:8123/user', {}, { presponseEncoding: 'utf8' });
+  t.is(output.responseBody, '{"name":"tobi"}');
+
   output = await Network.request('http://127.0.0.1:8123/user');
   t.is(output, '{"name":"tobi"}');
 
-  output = await Network.request('http://127.0.0.1:8123/user', {}, { parseResponseBody: true });
-  t.deepEqual(output, { name: 'tobi' });
+  output = await Network.request('http://127.0.0.1:8123/user', {});
+  t.is(output, '{"name":"tobi"}');
 
-  output = await Network.request('http://127.0.0.1:8123/user', {}, { parseResponseBody: true, responseEncoding: 'utf8' });
-  t.deepEqual(output, { name: 'tobi' });
+  output = await Network.request('http://127.0.0.1:8123/user', {}, { presponseEncoding: 'utf8' });
+  t.is(output, '{"name":"tobi"}');
 });
 
-test('Network.request(): can make a HTTP POST request', async (t) => {
+test('Network: can make a HTTP POST request', async (t) => {
   let output;
-  output = await Network.request('http://127.0.0.1:8123/user', { method: 'POST' }, { data: '{ "update": true }' });
+  output = await Network.json('http://127.0.0.1:8123/user', { method: 'POST' }, { data: '{ "update": 1 }' });
+  t.deepEqual(output, { update: true });
+
+  output = await Network.raw('http://127.0.0.1:8123/user', { method: 'POST' }, { data: '{ "update": 1 }' });
+  t.is(output.responseBody, '{"update":true}');
+
+  output = await Network.request('http://127.0.0.1:8123/user', { method: 'POST' }, { data: '{ "update": 1 }', responseEncoding: 'utf8' });
   t.is(output, '{"update":true}');
+});
 
-  output = await Network.request('http://127.0.0.1:8123/user', { method: 'POST' }, { data: '{ "update": true }', parseResponseBody: true });
-  t.deepEqual(output, { update: true });
+test('Network.json(): can set a fallback', async (t) => {
+  const output = await Network.json('http://127.0.0.1:8123/error', { method: 'GET' }, { fallback: 'ok' });
+  t.is(output, 'ok');
+});
 
-  output = await Network.request('http://127.0.0.1:8123/user', { method: 'POST' }, { data: '{ "update": true }', parseResponseBody: true, responseEncoding: 'utf8' });
-  t.deepEqual(output, { update: true });
+test('Network.json(): can set a fallback with an error', async (t) => {
+  const output = await Network.json('http://127.0.0.1:8123/text', { method: 'GET' }, { fallback: 'ok' });
+  t.is(output, 'ok');
+});
+
+test('Network.request(): can set a fallback with an error', async (t) => {
+  const output = await Network.request('http://127.0.0.1:8123/empty', { method: 'GET' }, { fallback: 'ok' });
+  t.is(output, 'ok');
 });
