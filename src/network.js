@@ -33,7 +33,10 @@ const base = (url, options = {}, context = {}, callback) => {
       });
 
       response.on('end', () => {
+        debug('statusCode:', response.statusCode);
+        debug('headers:', response.headers);
         response.responseBody = responseBody;
+        debug('responseBody:', response.responseBody);
         const output = callback(response, options, context);
         resolve(output);
       });
@@ -113,7 +116,7 @@ const raw = (url, options, context) => {
  * @param {*} [context.fallback] - Data to return if no responseBody is found.
  * @return {Promise} a Promise of requested call
  * @example <caption>Network.request(url, options, context)</caption>
- * const responseBody = await Network.raw('https://api.domain.tld', { method: 'POST', data: '{ "user": 1 }' }, { fallback: '' });
+ * const responseBody = await Network.request('https://api.domain.tld', { method: 'POST', data: '{ "user": 1 }' }, { fallback: '' });
  * @external https://nodejs.org/api/http.html#http_http_request_options_callback
  * @external https://nodejs.org/api/https.html#https_https_request_url_options_callback
  */
