@@ -124,6 +124,24 @@ class EventDispatcher {
   }
 
   /**
+   * Add a function to an event that will be called only once when the label is dispatched.
+   * Uses the `EventDispatcher.on` method with a function wrapped to call off on use.
+   * @param {String} label - The human readable identifier of the event.
+   * @param {Function} callback - Function to be called when the event is fired.
+   * @example
+   * bus.once('one-time-process', callback);
+   * @memberof EventDispatcher
+   */
+  once(label, callback) {
+    debug('once:', label, callback);
+    const cb = (...args) => {
+      this.off(label, cb);
+      callback.apply(this, args);
+    };
+    this.on(label, cb);
+  }
+
+  /**
    * Remove a function from an event.
    * @param {String} label - The human readable identifier of the event.
    * @param {Function} callback - Function to be removed.

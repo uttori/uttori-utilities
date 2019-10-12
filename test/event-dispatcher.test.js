@@ -183,6 +183,17 @@ test('#on(label, callback): adds callbacks to the given event', (t) => {
   t.is(Object.keys(ed.events).length, 1);
 });
 
+test('#once(label, callback): adds callbacks to the given event', (t) => {
+  const ed = new EventDispatcher();
+  t.is(Object.keys(ed.events).length, 0);
+  ed.once('test', a);
+  t.is(Object.keys(ed.events).length, 1);
+  ed.once('test', b);
+  t.is(Object.keys(ed.events).length, 1);
+  ed.dispatch('test', b);
+  t.is(Object.keys(ed.events).length, 0);
+});
+
 test('#on(label, callback): throws an error with invalid label or callback', (t) => {
   const ed = new EventDispatcher();
   t.throws(() => { ed.on('', a); });
