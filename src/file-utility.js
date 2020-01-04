@@ -49,7 +49,11 @@ const ensureDirectorySync = (folder) => {
  */
 const deleteFile = async (folder, name, extension) => {
   debug('deleteFile:', folder, name, extension);
-  const target = `${folder}/${sanitize(`${name}`)}.${extension}`;
+  /* istanbul ignore else */
+  if (extension) {
+    extension = `.${extension}`;
+  }
+  const target = `${folder}/${sanitize(`${name}${extension}`)}`;
   debug('Deleting target:', target);
   try { await fs.unlink(target); } catch (error) {
     /* istanbul ignore next */
@@ -65,7 +69,11 @@ const deleteFile = async (folder, name, extension) => {
  */
 const deleteFileSync = (folder, name, extension) => {
   debug('deleteFile:', folder, name, extension);
-  const target = `${folder}/${sanitize(`${name}`)}.${extension}`;
+  /* istanbul ignore else */
+  if (extension) {
+    extension = `.${extension}`;
+  }
+  const target = `${folder}/${sanitize(`${name}${extension}`)}`;
   debug('Deleting target:', target);
   try { fs.unlinkSync(target); } catch (error) {
     /* istanbul ignore next */
@@ -84,7 +92,11 @@ const deleteFileSync = (folder, name, extension) => {
  */
 const readFile = async (folder, name, extension, encoding = 'utf8') => {
   debug('Reading File:', folder, name, extension, encoding);
-  const target = `${folder}/${sanitize(`${name}`)}.${extension}`;
+  /* istanbul ignore else */
+  if (extension) {
+    extension = `.${extension}`;
+  }
+  const target = `${folder}/${sanitize(`${name}${extension}`)}`;
   debug('Reading target:', target);
   let content;
   try { content = await fs.readFile(target, encoding); } catch (error) {
@@ -104,7 +116,11 @@ const readFile = async (folder, name, extension, encoding = 'utf8') => {
  */
 const readFileSync = (folder, name, extension, encoding = 'utf8') => {
   debug('Reading File:', folder, name, extension, encoding);
-  const target = `${folder}/${sanitize(`${name}`)}.${extension}`;
+  /* istanbul ignore else */
+  if (extension) {
+    extension = `.${extension}`;
+  }
+  const target = `${folder}/${sanitize(`${name}${extension}`)}`;
   debug('Reading target:', target);
   let content;
   try { content = fs.readFileSync(target, encoding); } catch (error) {
@@ -125,7 +141,11 @@ const readFileSync = (folder, name, extension, encoding = 'utf8') => {
  */
 const readJSON = async (folder, name, extension, encoding = 'utf8') => {
   debug('Reading File:', folder, name, extension, encoding);
-  const target = `${folder}/${sanitize(`${name}`)}.${extension}`;
+  /* istanbul ignore else */
+  if (extension) {
+    extension = `.${extension}`;
+  }
+  const target = `${folder}/${sanitize(`${name}${extension}`)}`;
   let content;
   if (await fs.exists(target)) {
     debug('Reading target:', target);
@@ -160,7 +180,11 @@ const readJSON = async (folder, name, extension, encoding = 'utf8') => {
  */
 const readJSONSync = (folder, name, extension, encoding = 'utf8') => {
   debug('Reading File:', folder, name, extension, encoding);
-  const target = `${folder}/${sanitize(`${name}`)}.${extension}`;
+  /* istanbul ignore else */
+  if (extension) {
+    extension = `.${extension}`;
+  }
+  const target = `${folder}/${sanitize(`${name}${extension}`)}`;
   let content;
   if (fs.existsSync(target)) {
     debug('Reading target:', target);
@@ -228,7 +252,11 @@ const readFolderSync = (folder) => {
  */
 const writeFile = async (folder, name, extension, content, encoding = 'utf8') => {
   debug('Writing File with:', { folder, name, extension, content, encoding });
-  const target = `${folder}/${sanitize(`${name}`)}.${extension}`;
+  /* istanbul ignore else */
+  if (extension) {
+    extension = `.${extension}`;
+  }
+  const target = `${folder}/${sanitize(`${name}${extension}`)}`;
   debug('Writing target:', target);
   try { await fs.writeFile(target, content, encoding); } catch (error) {
     /* istanbul ignore next */
@@ -247,7 +275,11 @@ const writeFile = async (folder, name, extension, content, encoding = 'utf8') =>
  */
 const writeFileSync = (folder, name, extension, content, encoding = 'utf8') => {
   debug('Writing File with:', { folder, name, extension, content, encoding });
-  const target = `${folder}/${sanitize(`${name}`)}.${extension}`;
+  /* istanbul ignore else */
+  if (extension) {
+    extension = `.${extension}`;
+  }
+  const target = `${folder}/${sanitize(`${name}${extension}`)}`;
   debug('Writing target:', target);
   try { fs.writeFileSync(target, content, encoding); } catch (error) {
     /* istanbul ignore next */

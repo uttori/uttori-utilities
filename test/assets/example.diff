@@ -1,0 +1,23 @@
+--- site/content/superdisc-memory-map.json	2019-09-29 20:15:46.000000000 -0700
++++ site/content/history/superdisc-memory-map/1557361655980.json	2019-09-29 20:15:46.000000000 -0700
+@@ -1,13 +1,11 @@
+ {
+-  "content": "Documentation based on byuu's findings.\r\n\r\n## Super Disc System Cartridge ##\r\n\r\n```\r\n$00-7D:8000-FFFF: BIOS ROM\r\n$80-87:8000-FFFF: Expansion RAM (128KiB)\r\n$90   :8000-9FFF: CMOS Backup RAM (8KiB)\r\n```\r\n",
++  "content": "Documentation based on byuu's findings.\r\n\r\n## Super Disc System Cartridge ##\r\n\r\n    $00-7D:8000-FFFF: BIOS ROM\r\n    $80-87:8000-FFFF: Expansion RAM (128KiB)\r\n    $90   :8000-9FFF: CMOS Backup RAM (8KiB)\r\n",
+   "createDate": null,
+-  "excerpt": "SuperDisc Memory Map",
++  "excerpt": "1111",
+   "html": "",
+   "language": "",
+-  "slug": "superdisc-memory-map",
+-  "tags": [
+-    "reference"
+-  ],
+-  "title": "SuperDisc Memory Map",
+-  "updateDate": 1557722844706
++  "slug": "superdisc-memory-map11",
++  "tags": [],
++  "title": "SuperDisc Memory Map11",
++  "updateDate": 1557361655973
+ }
+\ No newline at end of file

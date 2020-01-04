@@ -8,7 +8,7 @@ const MODE_MATCH = 'modeMatch';
   * @property {TokenizeThis} factory - Holds the processed configuration.
   * @property {string} str - The string to tokenize.
   * @property {function} forEachToken - The function to call for teach token.
-  * @property {String} previousChr - The previous character consumed.
+  * @property {String} previousCharacter - The previous character consumed.
   * @property {String} toMatch - The current quote to match.
   * @property {String} currentToken - The current token being created.
   * @property {Array} modeStack - Keeps track of the current "mode" of tokenization. The tokenization rules are different depending if you are tokenizing an explicit string (surrounded by quotes), versus a non-explicit string (not surrounded by quotes).
@@ -28,7 +28,7 @@ class Tokenizer {
     this.factory = factory;
     this.str = str;
     this.forEachToken = forEachToken;
-    this.previousChr = '';
+    this.previousCharacter = '';
     this.toMatch = '';
     this.currentToken = '';
     this.modeStack = [MODE_NONE];
@@ -109,7 +109,7 @@ class Tokenizer {
    */
   consume(chr) {
     this[this.getCurrentMode()](chr);
-    this.previousChr = chr;
+    this.previousCharacter = chr;
   }
 
   /**
@@ -205,7 +205,7 @@ class Tokenizer {
    */
   [MODE_MATCH](chr) {
     if (chr === this.toMatch) {
-      if (this.previousChr !== this.factory.escapeCharacter) {
+      if (this.previousCharacter !== this.factory.escapeCharacter) {
         return this.completeCurrentMode();
       }
       this.currentToken = this.currentToken.slice(0, this.currentToken.length - 1);
@@ -219,9 +219,9 @@ class Tokenizer {
 
 /**
  * Sorts the tokenizable substrings by their length DESC.
- * @param {string} a
- * @param {string} b
- * @returns {number}
+ * @param {String} a
+ * @param {String} b
+ * @returns {Number}
  */
 const sortTokenizableSubstrings = (a, b) => {
   if (a.length > b.length) {
@@ -301,8 +301,8 @@ class TokenizeThis {
   /**
    * Creates a Tokenizer, then immediately calls "tokenize".
    *
-   * @param {string} str
-   * @param {function} forEachToken
+   * @param {String} str
+   * @param {Function} forEachToken
    * @returns {*}
    */
   tokenize(str, forEachToken) {

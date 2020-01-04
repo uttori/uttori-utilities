@@ -1,3 +1,4 @@
+// TODO Restructure to allow https://jaketrent.com/post/import-parts-node-packages-slash/
 module.exports = {
   FileUtility: require('./file-utility'),
   FunctionQueue: require('./function-queue'),
@@ -13,4 +14,11 @@ module.exports = {
   UttoriEvent: require('./event'),
   EventDispatcher: require('./event-dispatcher'),
   Network: require('./network'),
+  DataStream: require('./data-stream'),
+  DataBuffer: require('./data-buffer'),
+  DataBufferList: require('./data-buffer-list'),
+  DataBitstream: require('./data-bitstream'),
+  ImagePNG: require('./data-image-png'),
+  CRC32: require('./data-hash-crc32'),
+  DiffParser: require('./diff-parser'),
 };

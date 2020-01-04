@@ -43,6 +43,7 @@ class FunctionQueue {
       /**
        * Adjust the timer if it was called too early.
        */
+      /* istanbul ignore next */
       if (now < threshold) {
         clearTimeout(timeout);
         timeout = setTimeout(dequeue, threshold - now);

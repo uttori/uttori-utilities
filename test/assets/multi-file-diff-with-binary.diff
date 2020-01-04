@@ -1,0 +1,12 @@
+Binary files old/image.jpg and new/image.jpg differ
+diff --unified old/text.txt new/text.txt
+--- old/text.txt	2019-10-24 13:32:36.000000000 -0700
++++ new/text.txt	2019-10-24 13:32:45.000000000 -0700
+@@ -1,6 +1,5 @@
+-a
++
+ b
+ c
+ d
+-e
+ f
