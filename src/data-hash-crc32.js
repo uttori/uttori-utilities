@@ -39,7 +39,7 @@ const CRC32_TABLE = [
 // https://rosettacode.org/wiki/CRC-32
 class CRC32 {
   constructor() {
-    this.crc = ~0;
+    this.crc = -1;
   }
 
   static of(data) {

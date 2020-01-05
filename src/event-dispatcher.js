@@ -48,7 +48,7 @@ class EventDispatcher {
    * @memberof EventDispatcher
    */
   async validate(label, data, context) {
-    debug('validate:', label, data);
+    debug('validate:', label);
     EventDispatcher.check(label);
     const event = this.events[label];
     let result = false;
@@ -73,7 +73,7 @@ class EventDispatcher {
    * @memberof EventDispatcher
    */
   async filter(label, data, context) {
-    debug('filter:', label, data);
+    debug('filter:', label);
     EventDispatcher.check(label);
     const event = this.events[label];
     if (event) {
@@ -94,7 +94,7 @@ class EventDispatcher {
    * @memberof EventDispatcher
    */
   dispatch(label, data, context) {
-    debug('dispatch:', label, data);
+    debug('dispatch:', label);
     EventDispatcher.check(label);
     const event = this.events[label];
     if (event) {
@@ -114,7 +114,7 @@ class EventDispatcher {
    * @memberof EventDispatcher
    */
   on(label, callback) {
-    debug('on:', label, callback);
+    debug('on:', label);
     let event = this.events[label];
     if (!event) {
       event = new UttoriEvent(label);
@@ -133,7 +133,7 @@ class EventDispatcher {
    * @memberof EventDispatcher
    */
   once(label, callback) {
-    debug('once:', label, callback);
+    debug('once:', label);
     const cb = (...args) => {
       this.off(label, cb);
       callback.apply(this, args);
@@ -150,7 +150,7 @@ class EventDispatcher {
    * @memberof EventDispatcher
    */
   off(label, callback) {
-    debug('off:', label, callback);
+    debug('off:', label);
     const event = this.events[label];
     if (event && event.callbacks.includes(callback)) {
       event.unregister(callback);
