@@ -60,7 +60,6 @@ class EventDispatcher {
     return result;
   }
 
-
   /**
    * Fires off an event with passed in data and context for a given label.
    * @param {String} label - The human readable identifier of the event.

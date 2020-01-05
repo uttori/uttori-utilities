@@ -34,7 +34,7 @@ class UttoriEvent {
    * @memberof UttoriEvent
    */
   register(callback) {
-    debug('register:', callback);
+    debug('register:', this.label);
     if (typeof callback !== 'function') {
       const error = `Event callback must be a function, got: ${typeof callback}`;
       debug(error);
@@ -56,7 +56,7 @@ class UttoriEvent {
    * @memberof UttoriEvent
    */
   unregister(callback) {
-    debug('unregister:', callback);
+    debug('unregister:', this.label);
     if (typeof callback !== 'function') {
       const error = `Event callback must be a function, got: ${typeof callback}`;
       debug(error);
@@ -81,7 +81,7 @@ class UttoriEvent {
    * @memberof UttoriEvent
    */
   async validate(data, context) {
-    debug('validate:', data);
+    debug('validate:', this.label);
     const callbacks = this.callbacks.slice(0);
     debug('callbacks:', callbacks.length);
     const results = await Promise.all(callbacks.map(async (callback) => callback(data, context)));
@@ -108,7 +108,7 @@ class UttoriEvent {
    * @memberof UttoriEvent
    */
   async filter(data, context) {
-    debug('filter:', data);
+    debug('filter:', this.label);
     const callbacks = this.callbacks.slice(0);
     debug('callbacks:', callbacks.length);
     // Callbacks need to be run in the order recieved.
@@ -135,7 +135,7 @@ class UttoriEvent {
    * @memberof UttoriEvent
    */
   fire(data, context) {
-    debug('fire:', data);
+    debug('fire:', this.label);
     const callbacks = this.callbacks.slice(0);
     debug('callbacks:', callbacks.length);
     callbacks.forEach((callback) => {
