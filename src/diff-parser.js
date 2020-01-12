@@ -5,8 +5,6 @@ const debug = require('debug')('Uttori.Utilities.DiffParser');
 const Operator = require('./operator');
 const TokenizeThis = require('./tokenizer');
 
-// https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging
-// https://git-scm.com/docs/git-diff
 /**
   * Parses the output of a unified `diff` string into an abstract syntax tree.
   * The tree is object-based, where each key is the operator, and its value is an array of the operands.
@@ -18,6 +16,8 @@ const TokenizeThis = require('./tokenizer');
   * const parser = new DiffParser();
   * const parsed = parser.parse(unified_diff);
   * @class
+  * @see {@link https://git-scm.com/docs/git-diff|git-diff}
+  * @see {@link https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging|Git Tools Advanced Merging}
   */
 class DiffParser {
 /**
@@ -44,11 +44,12 @@ class DiffParser {
 
   /**
    * Parse a SQL statement with an evaluator function.
-   * Uses an implementation of the Shunting-Yard Algorithm: https://wcipeg.com/wiki/Shunting_yard_algorithm
-   * See also: https://en.wikipedia.org/wiki/Shunting-yard_algorithm
+   * Uses an implementation of the Shunting-Yard Algorithm.
    * @param {String} sql - Query string to process.
    * @param {Function} [evaluator] - Function to evaluate operators.
    * @returns {Object} - The parsed query tree.
+   * @see {@link https://en.wikipedia.org/wiki/Shunting-yard_algorithm|Shunting-Yard Algorithm}
+   * @see {@link https://wcipeg.com/wiki/Shunting_yard_algorithm|Shunting-Yard Algorithm}
    */
   parse(diff) {
     debug('parse:', diff);
@@ -369,6 +370,12 @@ class DiffParser {
     return output;
   }
 
+  /**
+   * Detect the type of diff line provided.
+   * @param {String} line - The line to detect the type of.
+   * @returns {String} - The type of line detected.
+   * @static
+   */
   static detectLineType(line = '') {
     if (!line) {
       return 'unknown';
@@ -431,6 +438,15 @@ class DiffParser {
     return 'unknown';
   }
 
+  /**
+   * Parse Unified Diff content.
+   * @param {String} line - The line to parse.
+   * @param {Object} [header] - The the header for the diff block.
+   * @param {Number} [header.old] - The previous line number of the current line.
+   * @param {Number} [header.new] - The new line number of the current line.
+   * @returns {Object} - The line parsed into its various parts.
+   * @static
+   */
   static parseUnifiedContent(line = '', header = { old: 0, new: 0 }) {
     const lineType = line.slice(0, 1);
     const text = line.slice(1);
@@ -484,6 +500,15 @@ class DiffParser {
     }
   }
 
+  /**
+   * Parse Combined Diff content.
+   * @param {String} line - The line to parse.
+   * @param {Object} [header] - The the header for the diff block.
+   * @param {Number} [header.old] - The previous line number of the current line.
+   * @param {Number} [header.new] - The new line number of the current line.
+   * @returns {Object} - The line parsed into its various parts.
+   * @static
+   */
   static parseCombinedContent(line = '', header = { old: 0, new: 0 }) {
     const lineType = line.slice(0, 2);
     const text = line.slice(2);
@@ -591,9 +616,17 @@ class DiffParser {
     }
   }
 
-  // Hunks of differences; each hunk shows one area where the files differ.
-  // If a hunk contains just one line, only its start line number appears. Otherwise its line numbers look like ‘start,count’. An empty hunk is considered to start at the line that follows the hunk.
-  // If a hunk and its context contain two or more lines, its line numbers look like ‘start,count’. Otherwise only its end line number appears. An empty hunk is considered to end at the line that precedes the hunk.
+  /**
+   * Parse a chunk header.
+   * Hunks of differences; each hunk shows one area where the files differ.
+   * If a hunk contains just one line, only its start line number appears. Otherwise its line numbers look like ‘start,count’. An empty hunk is considered to start at the line that follows the hunk.
+   * If a hunk and its context contain two or more lines, its line numbers look like ‘start,count’. Otherwise only its end line number appears. An empty hunk is considered to end at the line that precedes the hunk.
+   * @param {String} raw - The text to parse.
+   * @returns {Object} - The text parsed into its various parts.
+   * @static
+   * @example <caption>DiffParser.praseChunkHeader(raw)</caption>
+   * const { line_numbers_from_file, line_numbers_to_file, mode, raw } = DiffParser.praseChunkHeader('@@ -1,5 +1,5 @@');
+   */
   static praseChunkHeader(raw = '') {
     let line = raw;
     if (line.startsWith('@@ ') && line.trim().endsWith(' @@')) {
@@ -683,10 +716,16 @@ class DiffParser {
     };
   }
 
-  /*
-   * +++ Date Timestamp[FractionalSeconds] TimeZone
-   * +++ 2002-02-21 23:30:39.942229878 -0800
-   * https://www.gnu.org/software/diffutils/manual/html_node/Detailed-Unified.html
+  /**
+   * Parse file lines.
+   * @param {String} raw - The text to parse.
+   * @returns {Object} - The text parsed into its various parts.
+   * @static
+   * @example <caption>DiffParser.praseFileLine(raw)</caption>
+   * // +++ Date Timestamp[FractionalSeconds] TimeZone
+   * // +++ 2002-02-21 23:30:39.942229878 -0800
+   * const { filename, fraction_seconds, raw, time_zone, time, type } = DiffParser.praseFileLine('--- a/src/attributes/classes.js\n');
+   * @external https://www.gnu.org/software/diffutils/manual/html_node/Detailed-Unified.html
    */
   static praseFileLine(raw) {
     let date = '';
@@ -729,6 +768,7 @@ class DiffParser {
     });
 
     // Extract timestamps generated by the unified diff
+    // eslint-disable-next-line security/detect-unsafe-regex
     const datetime_regex = /\s+\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)? [+-]\d{4}.*$/;
     const matches = filename.match(datetime_regex);
     if (matches && matches.length > 0) {

@@ -3,6 +3,7 @@ const debug = require('debug')('Uttori.Utilities.DataBufferList');
 
 class DataBufferList {
   constructor() {
+    debug('constructor');
     this.first = null;
     this.last = null;
     this.numBuffers = 0;
@@ -11,6 +12,7 @@ class DataBufferList {
   }
 
   copy() {
+    debug('copy');
     const result = new DataBufferList();
 
     result.first = this.first;
@@ -23,6 +25,7 @@ class DataBufferList {
   }
 
   append(buffer) {
+    debug('append');
     buffer.prev = this.last;
     if (this.last) {
       this.last.next = buffer;
@@ -38,6 +41,7 @@ class DataBufferList {
   }
 
   advance() {
+    debug('advance');
     if (this.first) {
       this.availableBytes -= this.first.length;
       this.availableBuffers--;
@@ -49,6 +53,7 @@ class DataBufferList {
   }
 
   rewind() {
+    debug('rewind');
     if (this.first && !this.first.prev) {
       return false;
     }
@@ -64,9 +69,11 @@ class DataBufferList {
   }
 
   reset() {
+    debug('reset');
     return (() => {
       const result = [];
       while (this.rewind()) {
+        // eslint-disable-next-line no-continue
         continue;
       }
       return result;

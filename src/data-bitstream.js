@@ -3,37 +3,44 @@ const debug = require('debug')('Uttori.Utilities.DataBitstream');
 
 class DataBitstream {
   constructor(stream) {
+    debug('constructor');
     this.stream = stream;
     this.bitPosition = 0;
   }
 
   copy() {
+    debug('copy');
     const result = new DataBitstream(this.stream.copy());
     result.bitPosition = this.bitPosition;
     return result;
   }
 
   offset() {
+    debug('offset');
     return (8 * this.stream.offset) + this.bitPosition;
   }
 
   available(bits) {
+    debug('available:', bits);
     return this.stream.available(((bits + 8) - this.bitPosition) / 8);
   }
 
   advance(bits) {
+    debug('advance:', bits);
     const position = this.bitPosition + bits;
     this.stream.advance(position >> 3);
     this.bitPosition = position & 7;
   }
 
   rewind(bits) {
+    debug('rewind:', bits);
     const pos = this.bitPosition - bits;
     this.stream.rewind(Math.abs(pos >> 3));
     this.bitPosition = pos & 7;
   }
 
   seek(offset) {
+    debug('seek:', offset);
     const current_offset = this.offset();
     if (offset > current_offset) {
       this.advance(offset - current_offset);
@@ -43,6 +50,7 @@ class DataBitstream {
   }
 
   align() {
+    debug('align');
     if (this.bitPosition !== 0) {
       this.bitPosition = 0;
       this.stream.advance(1);
@@ -50,6 +58,7 @@ class DataBitstream {
   }
 
   read(bits, signed, advance = true) {
+    debug('read:', bits, signed, advance);
     if (bits === 0) {
       return 0;
     }
@@ -97,10 +106,12 @@ class DataBitstream {
   }
 
   peek(bits, signed) {
+    debug('peek:', bits, signed);
     return this.read(bits, signed, false);
   }
 
   readLSB(bits, signed, advance = true) {
+    debug('readLSB:', bits, signed, advance);
     if (bits === 0) {
       return 0;
     }
@@ -148,6 +159,7 @@ class DataBitstream {
   }
 
   peekLSB(bits, signed) {
+    debug('peekLSB:', bits, signed);
     return this.readLSB(bits, signed, false);
   }
 }

@@ -18,6 +18,7 @@ An event bus system for registering, unregistering and triggering events.
         * [.filter(label, data, [context])](#EventDispatcher+filter) ⇒ <code>\*</code>
         * [.dispatch(label, data, [context])](#EventDispatcher+dispatch)
         * [.on(label, callback)](#EventDispatcher+on)
+        * [.once(label, callback)](#EventDispatcher+once)
         * [.off(label, callback)](#EventDispatcher+off)
     * _static_
         * [.check(label)](#EventDispatcher.check)
@@ -103,6 +104,23 @@ If no label is found, one is created.
 **Example**  
 ```js
 bus.on('loaded', callback);
+```
+<a name="EventDispatcher+once"></a>
+
+### eventDispatcher.once(label, callback)
+Add a function to an event that will be called only once when the label is dispatched.
+Uses the `EventDispatcher.on` method with a function wrapped to call off on use.
+
+**Kind**: instance method of [<code>EventDispatcher</code>](#EventDispatcher)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| label | <code>String</code> | The human readable identifier of the event. |
+| callback | <code>function</code> | Function to be called when the event is fired. |
+
+**Example**  
+```js
+bus.once('one-time-process', callback);
 ```
 <a name="EventDispatcher+off"></a>
 

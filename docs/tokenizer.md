@@ -13,7 +13,7 @@ Create an instance of this class for each new string you wish to parse.</p>
 ## Functions
 
 <dl>
-<dt><a href="#sortTokenizableSubstrings">sortTokenizableSubstrings(a, b)</a> ⇒ <code>number</code></dt>
+<dt><a href="#sortTokenizableSubstrings">sortTokenizableSubstrings(a, b)</a> ⇒ <code>Number</code></dt>
 <dd><p>Sorts the tokenizable substrings by their length DESC.</p>
 </dd>
 </dl>
@@ -32,7 +32,7 @@ Create an instance of this class for each new string you wish to parse.
 | factory | [<code>TokenizeThis</code>](#TokenizeThis) | Holds the processed configuration. |
 | str | <code>string</code> | The string to tokenize. |
 | forEachToken | <code>function</code> | The function to call for teach token. |
-| previousChr | <code>String</code> | The previous character consumed. |
+| previousCharacter | <code>String</code> | The previous character consumed. |
 | toMatch | <code>String</code> | The current quote to match. |
 | currentToken | <code>String</code> | The current token being created. |
 | modeStack | <code>Array</code> | Keeps track of the current "mode" of tokenization. The tokenization rules are different depending if you are tokenizing an explicit string (surrounded by quotes), versus a non-explicit string (not surrounded by quotes). |
@@ -132,18 +132,18 @@ Creates a Tokenizer, then immediately calls "tokenize".
 
 | Param | Type |
 | --- | --- |
-| str | <code>string</code> | 
+| str | <code>String</code> | 
 | forEachToken | <code>function</code> | 
 
 <a name="sortTokenizableSubstrings"></a>
 
-## sortTokenizableSubstrings(a, b) ⇒ <code>number</code>
+## sortTokenizableSubstrings(a, b) ⇒ <code>Number</code>
 Sorts the tokenizable substrings by their length DESC.
 
 **Kind**: global function  
 
 | Param | Type |
 | --- | --- |
-| a | <code>string</code> | 
-| b | <code>string</code> | 
+| a | <code>String</code> | 
+| b | <code>String</code> | 
 
