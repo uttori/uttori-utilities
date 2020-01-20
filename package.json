@@ -11,7 +11,7 @@
     "uttori"
   ],
   "engines": {
-    "node": ">= 10.15.3"
+    "node": ">= 10.18.0"
   },
   "dependencies": {
     "debug": "^4.1.1",
@@ -20,18 +20,19 @@
     "sanitize-filename": "^1.6.3"
   },
   "devDependencies": {
-    "ava": "^2.4.0",
+    "ava": "^3.0.0",
     "coveralls": "^3.0.9",
+    "docsify": "^4.10.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
-    "eslint-plugin-ava": "^9.0.0",
+    "eslint-plugin-ava": "^10.0.0",
     "eslint-plugin-import": "^2.20.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-no-inferred-method-name": "^2.0.0",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-optimize-regex": "^1.1.7",
     "eslint-plugin-ramda": "^2.5.1",
-    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-react-hooks": "^2.3.0",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-unicorn": "^15.0.1",
@@ -39,13 +40,25 @@
     "express": "^4.17.1",
     "jsdoc-to-markdown": "^5.0.3",
     "nyc": "^15.0.0",
-    "sinon": "^8.0.4",
+    "sinon": "^8.1.0",
     "uttori-document": "^1.4.0"
   },
   "files": [
     "src/*"
   ],
   "main": "src/index.js",
+  "ava": {
+    "files": [
+      "test/**/*.test.js"
+    ],
+    "ignoredByWatcher": [
+      "!src/**/*.js"
+    ],
+    "concurrency": 1,
+    "failFast": false,
+    "tap": false,
+    "verbose": true
+  },
   "nyc": {
     "cache": true,
     "all": true,

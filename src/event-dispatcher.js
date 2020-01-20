@@ -104,6 +104,30 @@ class EventDispatcher {
   }
 
   /**
+   * Fires off an event with passed in data and context for a given label and returns an array of the results.
+   * @param {String} label - The human readable identifier of the event.
+   * @param {*} data - Data to be used by event callbacks.
+   * @param {Object} [context] - Context to help with updating or modification of the data.
+   * @returns {Array} - An array of the results.
+   * @example
+   * popular = await bus.fetch('popular-documents', { limit: 10 }, this);
+   * @async
+   * @memberof EventDispatcher
+   */
+  async fetch(label, data, context) {
+    debug('fetch:', label);
+    EventDispatcher.check(label);
+    const event = this.events[label];
+    let results = [];
+    if (event) {
+      results = await event.fetch(data, context);
+    } else {
+      debug('No event to fetch:', label);
+    }
+    return results;
+  }
+
+  /**
    * Add a function to an event that will be called when the label is dispatched.
    * If no label is found, one is created.
    * @param {String} label - The human readable identifier of the event.

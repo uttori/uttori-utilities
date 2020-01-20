@@ -5,7 +5,7 @@ Parses the output of a unified `diff` string into an abstract syntax tree.
 The tree is object-based, where each key is the operator, and its value is an array of the operands.
 The number of operands depends on if the operation is defined as unary, binary, or ternary in the config.
 
-**Kind**: global class
+**Kind**: global class  
 **See**
 
 - [git-diff](https://git-scm.com/docs/git-diff)
@@ -40,7 +40,7 @@ Creates an instance of SqlWhereParser.
 | --- | --- | --- |
 | config | <code>Object</code> | A configuration object. |
 
-**Example** *(Init DiffParser)*
+**Example** *(Init DiffParser)*  
 ```js
 const parser = new DiffParser();
 const parsed = parser.parse(unified_diff);
@@ -51,8 +51,8 @@ const parsed = parser.parse(unified_diff);
 Parse a SQL statement with an evaluator function.
 Uses an implementation of the Shunting-Yard Algorithm.
 
-**Kind**: instance method of [<code>DiffParser</code>](#DiffParser)
-**Returns**: <code>Object</code> - - The parsed query tree.
+**Kind**: instance method of [<code>DiffParser</code>](#DiffParser)  
+**Returns**: <code>Object</code> - - The parsed query tree.  
 **See**
 
 - [Shunting-Yard Algorithm](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)
@@ -69,8 +69,8 @@ Uses an implementation of the Shunting-Yard Algorithm.
 ### DiffParser.detectLineType(line) ⇒ <code>String</code>
 Detect the type of diff line provided.
 
-**Kind**: static method of [<code>DiffParser</code>](#DiffParser)
-**Returns**: <code>String</code> - - The type of line detected.
+**Kind**: static method of [<code>DiffParser</code>](#DiffParser)  
+**Returns**: <code>String</code> - - The type of line detected.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -81,8 +81,8 @@ Detect the type of diff line provided.
 ### DiffParser.parseUnifiedContent(line, [header]) ⇒ <code>Object</code>
 Parse Unified Diff content.
 
-**Kind**: static method of [<code>DiffParser</code>](#DiffParser)
-**Returns**: <code>Object</code> - - The line parsed into its various parts.
+**Kind**: static method of [<code>DiffParser</code>](#DiffParser)  
+**Returns**: <code>Object</code> - - The line parsed into its various parts.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -96,8 +96,8 @@ Parse Unified Diff content.
 ### DiffParser.parseCombinedContent(line, [header]) ⇒ <code>Object</code>
 Parse Combined Diff content.
 
-**Kind**: static method of [<code>DiffParser</code>](#DiffParser)
-**Returns**: <code>Object</code> - - The line parsed into its various parts.
+**Kind**: static method of [<code>DiffParser</code>](#DiffParser)  
+**Returns**: <code>Object</code> - - The line parsed into its various parts.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -114,14 +114,14 @@ Hunks of differences; each hunk shows one area where the files differ.
 If a hunk contains just one line, only its start line number appears. Otherwise its line numbers look like ‘start,count’. An empty hunk is considered to start at the line that follows the hunk.
 If a hunk and its context contain two or more lines, its line numbers look like ‘start,count’. Otherwise only its end line number appears. An empty hunk is considered to end at the line that precedes the hunk.
 
-**Kind**: static method of [<code>DiffParser</code>](#DiffParser)
-**Returns**: <code>Object</code> - - The text parsed into its various parts.
+**Kind**: static method of [<code>DiffParser</code>](#DiffParser)  
+**Returns**: <code>Object</code> - - The text parsed into its various parts.  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | raw | <code>String</code> | The text to parse. |
 
-**Example** *(DiffParser.praseChunkHeader(raw))*
+**Example** *(DiffParser.praseChunkHeader(raw))*  
 ```js
 const { line_numbers_from_file, line_numbers_to_file, mode, raw } = DiffParser.praseChunkHeader('@@ -1,5 +1,5 @@');
 ```

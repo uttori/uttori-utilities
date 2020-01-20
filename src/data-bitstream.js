@@ -84,7 +84,7 @@ class DataBitstream {
       a %= 2 ** (40 - this.bitPosition); // (a << bitPosition) & 0xffffffffff
       a = Math.floor(a / 2 ** (40 - this.bitPosition - bits)); // a >>> (40 - bits)
     } else {
-      throw new Error('Too many bits!');
+      throw new Error(`Too Large: ${mBits} bits`);
     }
 
     // if the sign bit is turned on, flip the bits and add one to convert to a negative value
@@ -116,7 +116,7 @@ class DataBitstream {
       return 0;
     }
     if (bits > 40) {
-      throw new Error('Too many bits!');
+      throw new Error(`Too Large: ${bits} bits`);
     }
 
     const mBits = bits + this.bitPosition;

@@ -7,17 +7,17 @@ const query = 'SELECT field_a, field_b FROM table WHERE field_a IS "test" ORDER 
 test('validateQuery: throws an error when missing SELECT', (t) => {
   t.throws(() => {
     validateQuery('ZELECT');
-  }, 'Invalid Query: Missing SELECT');
+  }, { message: 'Invalid Query: Missing SELECT' });
 });
 
 test('validateQuery: throws an error when SELECT is invalid', (t) => {
   t.throws(() => {
     validateQuery('SELECT FROM');
-  }, 'Invalid Query: Invalid SELECT');
+  }, { message: 'Invalid Query: Invalid SELECT' });
 
   t.throws(() => {
     validateQuery('SELECT  FROM');
-  }, 'Invalid Query: Invalid SELECT');
+  }, { message: 'Invalid Query: Invalid SELECT' });
 });
 
 test('validateQuery: can extract fields from a SELECT statement', (t) => {
@@ -28,17 +28,17 @@ test('validateQuery: can extract fields from a SELECT statement', (t) => {
 test('validateQuery: throws an error when missing FROM', (t) => {
   t.throws(() => {
     validateQuery('SELECT field FORM table');
-  }, 'Invalid Query: Missing FROM');
+  }, { message: 'Invalid Query: Missing FROM' });
 });
 
 test('validateQuery: throws an error when FROM is invalid', (t) => {
   t.throws(() => {
     validateQuery('SELECT * FROM WHERE');
-  }, 'Invalid Query: Invalid FROM');
+  }, { message: 'Invalid Query: Invalid FROM' });
 
   t.throws(() => {
     validateQuery('SELECT field FROM   WHERE');
-  }, 'Invalid Query: Invalid FROM');
+  }, { message: 'Invalid Query: Invalid FROM' });
 });
 
 test('validateQuery: can extract table from a FROM statement', (t) => {
@@ -49,34 +49,34 @@ test('validateQuery: can extract table from a FROM statement', (t) => {
 test('validateQuery: throws an error when missing WHERE', (t) => {
   t.throws(() => {
     validateQuery('SELECT field FROM table ORDER BY field ASC');
-  }, 'Invalid Query: Missing WHERE');
+  }, { message: 'Invalid Query: Missing WHERE' });
 });
 
 test('validateQuery: throws an error when WHERE is invalid', (t) => {
   t.throws(() => {
     validateQuery('SELECT * FROM table WHERE f af8798&(*YHOF&');
-  }, 'Invalid Query: Invalid WHERE: Unmatched parentheses.');
+  }, { message: 'Invalid Query: Invalid WHERE: Unmatched parentheses.' });
 });
 
 // ORDER BY
 test('validateQuery: throws an error when missing ORDER BY', (t) => {
   t.throws(() => {
     validateQuery('SELECT field FROM table WHERE field IS "test"');
-  }, 'Invalid Query: Missing ORDER BY');
+  }, { message: 'Invalid Query: Missing ORDER BY' });
 });
 
 test('validateQuery: throws an error when ORDER BY is invalid', (t) => {
   t.throws(() => {
     validateQuery('SELECT * FROM table WHERE field IS 7 ORDER BY');
-  }, 'Invalid Query: Invalid ORDER BY');
+  }, { message: 'Invalid Query: Invalid ORDER BY' });
 
   t.throws(() => {
     validateQuery('SELECT * FROM table WHERE field IS 7 ORDER BY field LIMIT 7');
-  }, 'Invalid Query: Invalid ORDER BY');
+  }, { message: 'Invalid Query: Invalid ORDER BY' });
 
   t.throws(() => {
     validateQuery('SELECT * FROM table WHERE field IS 7 ORDER BY field DES LIMIT 7');
-  }, 'Invalid Query: Invalid ORDER BY, sort must be one of ASC or DESC, got DES');
+  }, { message: 'Invalid Query: Invalid ORDER BY, sort must be one of ASC or DESC, got DES' });
 });
 
 test('validateQuery: can extract table from an ORDER BY statement', (t) => {
@@ -89,11 +89,11 @@ test('validateQuery: can extract table from an ORDER BY statement', (t) => {
 test('validateQuery: throws an error when missing LIMIT', (t) => {
   t.throws(() => {
     validateQuery('SELECT field FROM table WHERE field IS "test" ORDER BY field DESC');
-  }, 'Invalid Query: Missing LIMIT');
+  }, { message: 'Invalid Query: Missing LIMIT' });
 });
 
 test('validateQuery: throws an error when LIMIT is invalid', (t) => {
   t.throws(() => {
     validateQuery('SELECT * FROM table WHERE field IS 7 ORDER BY field ASC LIMIT seven');
-  }, 'Invalid Query: Invalid LIMIT');
+  }, { message: 'Invalid Query: Invalid LIMIT' });
 });

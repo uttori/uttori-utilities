@@ -47,7 +47,7 @@ test('setCompressionMethod(compressionMethod): throws an error on invalid compre
   t.is(image.compressionMethod, 0);
   t.throws(() => {
     image.setCompressionMethod(1);
-  }, 'Unsupported Compression Method: 1');
+  }, { message: 'Unsupported Compression Method: 1' });
   t.is(image.compressionMethod, 0);
 });
 
@@ -69,7 +69,7 @@ test('setFilterMethod(filterMethod): throws an error on invalid filterMethod val
   t.is(image.filterMethod, 0);
   t.throws(() => {
     image.setFilterMethod(1);
-  }, 'Unsupported Filter Method: 1');
+  }, { message: 'Unsupported Filter Method: 1' });
   t.is(image.filterMethod, 0);
 });
 
@@ -95,7 +95,7 @@ test('setInterlaceMethod(interlaceMethod): throws an error on invalid interlaceM
   t.is(image.interlaceMethod, 0);
   t.throws(() => {
     image.setInterlaceMethod(2);
-  }, 'Unsupported Interlace Method: 2');
+  }, { message: 'Unsupported Interlace Method: 2' });
   t.is(image.interlaceMethod, 0);
 });
 
@@ -133,10 +133,10 @@ test('setPalette(palette): throws an error on invalid palette length', async (t)
   t.deepEqual(image.palette, []);
   t.throws(() => {
     image.setPalette([]);
-  }, 'Palette contains no colors');
+  }, { message: 'Palette contains no colors' });
   t.throws(() => {
     image.setPalette([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-  }, 'Palette contains more colors than 6 ((2 ^ 1) * 3)');
+  }, { message: 'Palette contains more colors than 6 ((2 ^ 1) * 3)' });
   t.deepEqual(image.palette, []);
 });
 
@@ -149,10 +149,9 @@ test('decodeHeader(): can read a valid header', async (t) => {
 
 test('decodeHeader(): throws an error with an invalid header', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets', '512x478x24', 'jpg', null);
-  const error = t.throws(() => {
+  t.throws(() => {
     ImagePNG.fromFile(image_data);
-  }, Error);
-  t.is(error.message, 'Missing or invalid PNG header.');
+  }, { message: 'Missing or invalid PNG header.' });
 });
 
 test('decodeIHDR(): can read a valid PNG IHDR chunk', async (t) => {
@@ -363,37 +362,31 @@ test('decodePixels(): can decode pixel data', async (t) => {
 test('getPixel(x, y): throws errors for missing pixel data', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets', '4x4x8-RGB-MAGENTA', 'png', null);
   const image = ImagePNG.fromFile(image_data);
-  const error = t.throws(() => {
+  t.throws(() => {
     image.getPixel(true, true);
-  }, Error);
-  t.is(error.message, 'Pixel data has not been decoded.');
+  }, { message: 'Pixel data has not been decoded.' });
 });
 
 test('getPixel(x, y): throws errors for invalid params', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets', '4x4x8-RGB-MAGENTA', 'png', null);
   const image = ImagePNG.fromFile(image_data);
   image.decodePixels();
-  let error = null;
 
-  error = t.throws(() => {
+  t.throws(() => {
     image.getPixel(true, true);
-  }, Error);
-  t.is(error.message, 'x position out of bounds or invalid: true');
+  }, { message: 'x position out of bounds or invalid: true' });
 
-  error = t.throws(() => {
+  t.throws(() => {
     image.getPixel(0, true);
-  }, Error);
-  t.is(error.message, 'y position out of bounds or invalid: true');
+  }, { message: 'y position out of bounds or invalid: true' });
 
-  error = t.throws(() => {
+  t.throws(() => {
     image.getPixel(-1, -1);
-  }, Error);
-  t.is(error.message, 'x position out of bounds or invalid: -1');
+  }, { message: 'x position out of bounds or invalid: -1' });
 
-  error = t.throws(() => {
+  t.throws(() => {
     image.getPixel(0, -1);
-  }, Error);
-  t.is(error.message, 'y position out of bounds or invalid: -1');
+  }, { message: 'y position out of bounds or invalid: -1' });
 });
 
 test('getPixel(x, y): throws errors for invalid color type', async (t) => {
@@ -401,10 +394,9 @@ test('getPixel(x, y): throws errors for invalid color type', async (t) => {
   const image = ImagePNG.fromFile(image_data);
   image.decodePixels();
   image.colorType = 1;
-  const error = t.throws(() => {
+  t.throws(() => {
     image.getPixel(0, 0);
-  }, Error);
-  t.is(error.message, 'Unknown Color Type: 1');
+  }, { message: 'Unknown Color Type: 1' });
 });
 
 test('getPixel(x, y): can get a specific pixel of an image (4x4, RGB, 8 bit)', async (t) => {
@@ -1076,109 +1068,96 @@ test('PngSuite - Zlib Compression - z09n2c08 - color, no interlacing, compressio
 // http://www.schaik.com/pngsuite/pngsuite_xxx_png.html
 test('PngSuite - Corrupted Files - xs2n0g01 - signature byte 2 is a "Q"', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets/PngSuite', 'xs2n0g01', 'png', null);
-  const error = t.throws(() => {
+  t.throws(() => {
     ImagePNG.fromFile(image_data);
-  }, Error);
-  t.is(error.message, 'Missing or invalid PNG header.');
+  }, { message: 'Missing or invalid PNG header.' });
 });
 
 test('PngSuite - Corrupted Files - xs4n0g01 - signature byte 4 lowercase', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets/PngSuite', 'xs4n0g01', 'png', null);
-  const error = t.throws(() => {
+  t.throws(() => {
     ImagePNG.fromFile(image_data);
-  }, Error);
-  t.is(error.message, 'Missing or invalid PNG header.');
+  }, { message: 'Missing or invalid PNG header.' });
 });
 
 test('PngSuite - Corrupted Files - xs7n0g01 - 7th byte a space instead of control-Z', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets/PngSuite', 'xs7n0g01', 'png', null);
-  const error = t.throws(() => {
+  t.throws(() => {
     ImagePNG.fromFile(image_data);
-  }, Error);
-  t.is(error.message, 'Missing or invalid PNG header.');
+  }, { message: 'Missing or invalid PNG header.' });
 });
 
 test('PngSuite - Corrupted Files - xcrn0g04 - added cr bytes', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets/PngSuite', 'xcrn0g04', 'png', null);
-  const error = t.throws(() => {
+  t.throws(() => {
     ImagePNG.fromFile(image_data);
-  }, Error);
-  t.is(error.message, 'Missing or invalid PNG header.');
+  }, { message: 'Missing or invalid PNG header.' });
 });
 
 test('PngSuite - Corrupted Files - xlfn0g04 - added lf bytes', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets/PngSuite', 'xlfn0g04', 'png', null);
-  const error = t.throws(() => {
+  t.throws(() => {
     ImagePNG.fromFile(image_data);
-  }, Error);
-  t.is(error.message, 'Missing or invalid PNG header.');
+  }, { message: 'Missing or invalid PNG header.' });
 });
 
 // TODO Enable option to verify IHDR CRCs.
 // eslint-disable-next-line ava/no-skip-test
 test.skip('PngSuite - Corrupted Files - xhdn0g08 - incorrect IHDR checksum', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets/PngSuite', 'xhdn0g08', 'png', null);
-  const error = t.throws(() => {
+  t.throws(() => {
     ImagePNG.fromFile(image_data);
-  }, Error);
-  t.is(error.message, '');
+  }, { message: '' });
 });
 
 test('PngSuite - Corrupted Files - xc1n0g08 - color type 1', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets/PngSuite', 'xc1n0g08', 'png', null);
-  const error = t.throws(() => {
+  t.throws(() => {
     ImagePNG.fromFile(image_data);
-  }, Error);
-  t.is(error.message, 'Invalid Color Type: 1, can be one of: 0, 2, 3, 4, 6');
+  }, { message: 'Invalid Color Type: 1, can be one of: 0, 2, 3, 4, 6' });
 });
 
 test('PngSuite - Corrupted Files - xc9n2c08 - color type 9', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets/PngSuite', 'xc9n2c08', 'png', null);
-  const error = t.throws(() => {
+  t.throws(() => {
     ImagePNG.fromFile(image_data);
-  }, Error);
-  t.is(error.message, 'Invalid Color Type: 9, can be one of: 0, 2, 3, 4, 6');
+  }, { message: 'Invalid Color Type: 9, can be one of: 0, 2, 3, 4, 6' });
 });
 
 test('PngSuite - Corrupted Files - xd0n2c08 - bit-depth 0', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets/PngSuite', 'xd0n2c08', 'png', null);
-  const error = t.throws(() => {
+  t.throws(() => {
     ImagePNG.fromFile(image_data);
-  }, Error);
-  t.is(error.message, 'Invalid Bit Depth: 0, can be one of: 1, 2, 4, 8, 16');
+  }, { message: 'Invalid Bit Depth: 0, can be one of: 1, 2, 4, 8, 16' });
 });
 
 test('PngSuite - Corrupted Files - xd3n2c08 - bit-depth 3', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets/PngSuite', 'xd3n2c08', 'png', null);
-  const error = t.throws(() => {
+  t.throws(() => {
     ImagePNG.fromFile(image_data);
-  }, Error);
-  t.is(error.message, 'Invalid Bit Depth: 3, can be one of: 1, 2, 4, 8, 16');
+  }, { message: 'Invalid Bit Depth: 3, can be one of: 1, 2, 4, 8, 16' });
 });
 
 test('PngSuite - Corrupted Files - xd9n2c08 - bit-depth 99', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets/PngSuite', 'xd9n2c08', 'png', null);
-  const error = t.throws(() => {
+  t.throws(() => {
     ImagePNG.fromFile(image_data);
-  }, Error);
-  t.is(error.message, 'Invalid Bit Depth: 99, can be one of: 1, 2, 4, 8, 16');
+  }, { message: 'Invalid Bit Depth: 99, can be one of: 1, 2, 4, 8, 16' });
 });
 
 test('PngSuite - Corrupted Files - xdtn0g01 - missing IDAT chunk', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets/PngSuite', 'xdtn0g01', 'png', null);
   const image = ImagePNG.fromFile(image_data);
-  const error = t.throws(() => {
+  t.throws(() => {
     image.decodePixels();
-  }, Error);
-  t.is(error.message, 'No IDAT chunks to decode.');
+  }, { message: 'No IDAT chunks to decode.' });
 });
 
 // TODO Enable option to verify IDAT CRCs.
 // eslint-disable-next-line ava/no-skip-test
 test.skip('PngSuite - Corrupted Files - xcsn0g01 - incorrect IDAT checksum', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets/PngSuite', 'xcsn0g01', 'png', null);
-  const error = t.throws(() => {
+  t.throws(() => {
     ImagePNG.fromFile(image_data);
-  }, Error);
-  t.is(error.message, '');
+  }, { message: '' });
 });

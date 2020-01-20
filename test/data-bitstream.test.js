@@ -41,7 +41,7 @@ test('advance', (t) => {
   t.is(1, bitstream.bitPosition);
   t.is(9, bitstream.offset());
 
-  t.throws(() => bitstream.advance(40), Error);
+  t.throws(() => bitstream.advance(40), { message: 'Insufficient Bytes: 5 <= 1' });
 });
 
 test('rewind', (t) => {
@@ -66,7 +66,7 @@ test('rewind', (t) => {
   t.is(6, bitstream.bitPosition);
   t.is(6, bitstream.offset());
 
-  t.throws(() => bitstream.rewind(10), Error);
+  t.throws(() => bitstream.rewind(10), { message: 'Insufficient Bytes: 1 > 0' });
 });
 
 test('seek', (t) => {
@@ -92,9 +92,9 @@ test('seek', (t) => {
   t.is(4, bitstream.bitPosition);
   t.is(4, bitstream.offset());
 
-  t.throws(() => bitstream.seek(100), Error);
+  t.throws(() => bitstream.seek(100), { message: 'Insufficient Bytes: 12 <= 2' });
 
-  t.throws(() => bitstream.seek(-10), Error);
+  t.throws(() => bitstream.seek(-10), { message: 'Insufficient Bytes: 2 > 0' });
 });
 
 test('align', (t) => {
@@ -161,7 +161,7 @@ test('read/peek unsigned', (t) => {
   t.is(0xFFFFFFFFF, bitstream.peek(36));
   t.is(0xFFFFFFFFFF, bitstream.peek(40));
 
-  t.throws(() => bitstream.read(128), Error);
+  t.throws(() => bitstream.read(128), { message: 'Too Large: 128 bits' });
 });
 
 test('read/peek signed', (t) => {
@@ -216,7 +216,7 @@ test('read/peek signed', (t) => {
   t.is(-1, bitstream.peek(36, true));
   t.is(-1, bitstream.peek(40, true));
 
-  t.throws(() => bitstream.read(128), Error);
+  t.throws(() => bitstream.read(128), { message: 'Too Large: 128 bits' });
 });
 
 test('readLSB unsigned', (t) => {
@@ -267,7 +267,7 @@ test('readLSB unsigned', (t) => {
   t.is(0xFFFFFFFFF, bitstream.peekLSB(36));
   t.is(0xFFFFFFFFFF, bitstream.peekLSB(40));
 
-  t.throws(() => bitstream.readLSB(128), Error);
+  t.throws(() => bitstream.readLSB(128), { message: 'Too Large: 128 bits' });
 });
 
 test('readLSB signed', (t) => {
@@ -314,5 +314,5 @@ test('readLSB signed', (t) => {
   t.is(-1, bitstream.peekLSB(36, true));
   t.is(-1, bitstream.peekLSB(40, true));
 
-  t.throws(() => bitstream.readLSB(128), Error);
+  t.throws(() => bitstream.readLSB(128), { message: 'Too Large: 128 bits' });
 });

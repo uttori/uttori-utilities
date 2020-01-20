@@ -221,3 +221,55 @@ test('#fire(data, context): executes the callbacks on the event', (t) => {
   t.is(spy_a.callCount, 2);
   t.true(spy_a.calledWith(undefined));
 });
+
+test('#fetch(data, context): executes the callbacks on the event', async (t) => {
+  const spy_a = sinon.spy();
+  const data = { cool: 'very' };
+
+  const event = new UttoriEvent('test');
+  t.is(event.callbacks.length, 0);
+  event.register(spy_a);
+  t.is(event.callbacks.length, 1);
+
+  await event.fetch(data);
+  t.is(spy_a.callCount, 1);
+  t.true(spy_a.calledWith(data));
+
+  await event.fetch();
+  t.is(spy_a.callCount, 2);
+  t.true(spy_a.calledWith(undefined));
+});
+
+test('#fetch(data, context): returns the data', async (t) => {
+  const input = 'a';
+
+  const addB = (data) => `${data}b`;
+  const addC = (data) => `${data}c`;
+  const addD = async (data) => {
+    const output = await Promise.resolve(data);
+    return `${output}d`;
+  };
+  const addE = async (data) => {
+    const promise = new Promise((resolve, _reject) => {
+      setTimeout(() => resolve(`${data}e`), 500);
+    });
+    const result = await promise;
+    return result;
+  };
+  const addF = async (data) => `${data}f`;
+  const nop = async (data) => Promise.resolve(data);
+
+  const event = new UttoriEvent('test');
+  t.is(event.callbacks.length, 0);
+  event.register(addB);
+  event.register(addC);
+  event.register(addD);
+  event.register(nop);
+  event.register(addE);
+  event.register(addF);
+  t.is(event.callbacks.length, 6);
+
+  const final = await event.fetch(input);
+
+  t.deepEqual(final, ['ab', 'ac', 'ad', 'a', 'ae', 'af']);
+});

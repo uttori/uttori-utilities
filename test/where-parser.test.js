@@ -299,45 +299,33 @@ test('#parse(sql:String):Object: Unnecessarily nested parentheses do not matter'
 test('#parse(sql:String):Object: Throws a SyntaxError if the supplied parentheses do not match', (t) => {
   const sql = '(name = "First Last" AND age >= 27';
   const parser = new SqlWhereParser({ wrapQuery: false });
-
-  const error = t.throws(() => {
+  t.throws(() => {
     parser.parse(sql);
-  }, SyntaxError);
-
-  t.is(error.message, 'Unmatched parentheses.');
+  }, { message: 'Unmatched parentheses.' });
 });
 
 test('#parse(sql:String):Object: throws a SyntaxError if the supplied brackets do not match in parentheses', (t) => {
   const sql = '([a, b, c)';
   const parser = new SqlWhereParser({ wrapQuery: false });
-
-  const error = t.throws(() => {
+  t.throws(() => {
     parser.parse(sql);
-  }, SyntaxError);
-
-  t.is(error.message, 'Unmatched pair within parentheses.');
+  }, { message: 'Unmatched pair within parentheses.' });
 });
 
 test('#parse(sql:String):Object: throws a SyntaxError if the supplied brackets do not match', (t) => {
   const sql = '[a, b, c';
   const parser = new SqlWhereParser({ wrapQuery: false });
-
-  const error = t.throws(() => {
+  t.throws(() => {
     parser.parse(sql);
-  }, SyntaxError);
-
-  t.is(error.message, 'Unmatched bracket.');
+  }, { message: 'Unmatched bracket.' });
 });
 
 test('#parse(sql:String):Object: throws a SyntaxError if the supplied brackets contain a missing match', (t) => {
   const sql = '[a, b, (]';
   const parser = new SqlWhereParser({ wrapQuery: false });
-
-  const error = t.throws(() => {
+  t.throws(() => {
     parser.parse(sql);
-  }, SyntaxError);
-
-  t.is(error.message, 'Unmatched pair within brackets.');
+  }, { message: 'Unmatched pair within brackets.' });
 });
 
 test('#parse(sql:String, evaluator:Function):*: Uses the supplied `evaluator(operatorValue:String|Symbol, operands:Array)` function to convert an operator and its operands into its evaluation. '

@@ -88,7 +88,7 @@ class DataStream {
   }
 
   available(bytes) {
-    return bytes <= (this.list.availableBytes - this.localOffset);
+    return bytes <= this.remainingBytes();
   }
 
   remainingBytes() {
@@ -97,7 +97,7 @@ class DataStream {
 
   advance(bytes) {
     if (!this.available(bytes)) {
-      throw new UnderflowError();
+      throw new UnderflowError(`Insufficient Bytes: ${bytes} <= ${this.remainingBytes()}`);
     }
 
     this.localOffset += bytes;
@@ -113,7 +113,7 @@ class DataStream {
 
   rewind(bytes) {
     if (bytes > this.offset) {
-      throw new UnderflowError();
+      throw new UnderflowError(`Insufficient Bytes: ${bytes} > ${this.offset}`);
     }
 
     // if we're at the end of the bufferlist, seek from the end
@@ -145,7 +145,7 @@ class DataStream {
 
   readUInt8() {
     if (!this.available(1)) {
-      throw new UnderflowError();
+      throw new UnderflowError('Insufficient Bytes: 1');
     }
 
     const output = this.list.first.data[this.localOffset];
@@ -162,7 +162,7 @@ class DataStream {
 
   peekUInt8(offset = 0) {
     if (!this.available(offset + 1)) {
-      throw new UnderflowError();
+      throw new UnderflowError(`Insufficient Bytes: ${offset} + 1`);
     }
 
     offset = this.localOffset + offset;

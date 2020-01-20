@@ -6,12 +6,13 @@ function calculateRPMS(num_requests, time_started) {
   return num_requests / (Date.now() - time_started);
 }
 
+const request_limit = 10; // NOTE: 100 for full coverage.
+
 test.cb('throttled-queue: should queue all callbacks', (t) => {
   const max_requests_per_interval = 1;
   const interval = 200;
   const throttle = FunctionQueue.throttle(max_requests_per_interval, interval);
   let num_requests = 0;
-  const request_limit = 100;
   for (let x = 0; x < request_limit; x++) {
     throttle(() => {
       console.log('Throttling...');
@@ -31,9 +32,7 @@ test.cb('throttled-queue: should queue the callback within the interval', (t) =>
   const interval = 200;
   const throttle = FunctionQueue.throttle(max_requests_per_interval, interval);
   let last_executed = Date.now();
-
   let num_requests = 0;
-  const request_limit = 100;
 
   for (let x = 0; x < request_limit; x++) {
     throttle(() => {
@@ -61,9 +60,7 @@ test.cb('throttled-queue: should queue the callback and honor the interval', (t)
   const throttle = FunctionQueue.throttle(max_requests_per_interval, interval);
   const time_started = Date.now();
   const max_rpms = max_requests_per_interval / interval;
-
   let num_requests = 0;
-  const request_limit = 100;
 
   for (let x = 0; x < request_limit; x++) {
     throttle(() => {
@@ -88,9 +85,7 @@ test.cb('throttled-queue: should queue the callback and honor the interval with 
   const throttle = FunctionQueue.throttle(max_requests_per_interval, interval);
   const time_started = Date.now();
   const max_rpms = max_requests_per_interval / interval;
-
   let num_requests = 0;
-  const request_limit = 100;
 
   for (let x = 0; x < request_limit; x++) {
     throttle(() => {
@@ -115,9 +110,7 @@ test.cb('throttled-queue: should queue the callback and honor the interval with 
   const throttle = FunctionQueue.throttle(max_requests_per_interval, interval, true);
   const time_started = Date.now();
   const max_rpms = max_requests_per_interval / interval;
-
   let num_requests = 0;
-  const request_limit = 100;
 
   for (let x = 0; x < request_limit; x++) {
     throttle(() => {

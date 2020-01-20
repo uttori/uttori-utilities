@@ -142,6 +142,35 @@ class UttoriEvent {
       callback(data, context);
     });
   }
+
+  /**
+   * Executes all the callbacks present on an event with passed in data and context and returns their output.
+   * @param {*} data - Data to be used by event callbacks.
+   * @param {Object} [context] - Context to help with computing of the data.
+   * @returns {Array} - An array of the results from the fetch.
+   * @example
+   * output = await event.fetch({ data }, this);
+   * @async
+   * @memberof UttoriEvent
+   */
+  async fetch(data, context) {
+    debug('fetch:', this.label);
+    const callbacks = this.callbacks.slice(0);
+    debug('callbacks:', callbacks.length);
+    // Callbacks need to be run in the order recieved.
+    // So we must async/await everything, even if it is not a promise.
+    // We seed a Promise of our input data.
+    // We then await it to resolve it and pass it to the first callback.
+    // Each callback is awaited should the callback be async.
+    const results = [];
+    for (let index = 0; index < callbacks.length; index++) {
+      const callback = callbacks[index];
+      const output = callback(data, context);
+      results.push(output);
+    }
+    debug('fetch =', results.length);
+    return Promise.all(results);
+  }
 }
 
 module.exports = UttoriEvent;

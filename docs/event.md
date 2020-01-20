@@ -19,6 +19,7 @@ Event class used in conjunction with the Event Dispatcher.
     * [.validate(data, [context])](#UttoriEvent+validate) ⇒ <code>Promise</code>
     * [.filter(data, [context])](#UttoriEvent+filter) ⇒ <code>Promise</code>
     * [.fire(data, [context])](#UttoriEvent+fire)
+    * [.fetch(data, [context])](#UttoriEvent+fetch) ⇒ <code>Array</code>
 
 <a name="new_UttoriEvent_new"></a>
 
@@ -115,4 +116,21 @@ Executes all the callbacks present on an event with passed in data and context.
 **Example**  
 ```js
 event.fire({ data }, this);
+```
+<a name="UttoriEvent+fetch"></a>
+
+### uttoriEvent.fetch(data, [context]) ⇒ <code>Array</code>
+Executes all the callbacks present on an event with passed in data and context and returns their output.
+
+**Kind**: instance method of [<code>UttoriEvent</code>](#UttoriEvent)  
+**Returns**: <code>Array</code> - - An array of the results from the fetch.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>\*</code> | Data to be used by event callbacks. |
+| [context] | <code>Object</code> | Context to help with computing of the data. |
+
+**Example**  
+```js
+output = await event.fetch({ data }, this);
 ```

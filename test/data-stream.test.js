@@ -84,7 +84,7 @@ test('advance', (t) => {
   stream.advance(2);
   t.is(2, stream.offset);
 
-  t.throws(() => stream.advance(10), Error);
+  t.throws(() => stream.advance(10), { message: 'Insufficient Bytes: 10 <= 3' });
 });
 
 test('rewind', (t) => {
@@ -115,7 +115,7 @@ test('rewind', (t) => {
   t.is(1, stream.offset);
   t.is(1, stream.localOffset);
 
-  t.throws(() => stream.rewind(10), Error);
+  t.throws(() => stream.rewind(10), { message: 'Insufficient Bytes: 10 > 1' });
 });
 
 test('seek', (t) => {
@@ -134,9 +134,9 @@ test('seek', (t) => {
   t.is(1, stream.offset);
   t.is(1, stream.localOffset);
 
-  t.throws(() => stream.seek(100), Error);
+  t.throws(() => stream.seek(100), { message: 'Insufficient Bytes: 99 <= 4' });
 
-  t.throws(() => stream.seek(-10), Error);
+  t.throws(() => stream.seek(-10), { message: 'Insufficient Bytes: 11 > 1' });
 });
 
 test('remainingBytes', (t) => {
@@ -172,14 +172,14 @@ test('uint8', (t) => {
     t.is(value, stream.peekUInt8(i));
   }
 
-  t.throws(() => stream.peekUInt8(10), Error);
+  t.throws(() => stream.peekUInt8(10), { message: 'Insufficient Bytes: 10 + 1' });
 
   // check reading across buffers
   for (value of [...values]) {
     t.is(value, stream.readUInt8());
   }
 
-  t.throws(() => stream.readUInt8(), Error);
+  t.throws(() => stream.readUInt8(), { message: 'Insufficient Bytes: 1' });
 
   // if it were a signed int, would be -1
   stream = makeStream([255, 23]);
@@ -904,7 +904,7 @@ test('decodeString invalid encoding', (t) => {
   const stream = makeStream([0xDC, 0x00, 0xDC, 0xBB, 0xDC, 0x00]);
   const error = t.throws(() => {
     stream.decodeString(0, null, 'magic');
-  }, Error);
+  }, { message: 'Unknown encoding: magic' });
 
   t.is(error.message, 'Unknown encoding: magic');
 });
@@ -913,7 +913,7 @@ test('decodeString invalid utf8-sequence', (t) => {
   const stream = makeStream([0xDC, 0x00, 0xE0, 0xBB, 0xDC, 0x00]);
   const error = t.throws(() => {
     stream.decodeString(0, null, 'utf16be');
-  }, Error);
+  }, { message: 'Invalid utf16 sequence.' });
 
   t.is(error.message, 'Invalid utf16 sequence.');
 });

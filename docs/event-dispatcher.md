@@ -17,6 +17,7 @@ An event bus system for registering, unregistering and triggering events.
         * [.validate(label, data, [context])](#EventDispatcher+validate) ⇒ <code>Promise</code>
         * [.filter(label, data, [context])](#EventDispatcher+filter) ⇒ <code>\*</code>
         * [.dispatch(label, data, [context])](#EventDispatcher+dispatch)
+        * [.fetch(label, data, [context])](#EventDispatcher+fetch) ⇒ <code>Array</code>
         * [.on(label, callback)](#EventDispatcher+on)
         * [.once(label, callback)](#EventDispatcher+once)
         * [.off(label, callback)](#EventDispatcher+off)
@@ -87,6 +88,24 @@ Fires off an event with passed in data and context for a given label.
 **Example**  
 ```js
 bus.dispatch('loaded', { data }, this);
+```
+<a name="EventDispatcher+fetch"></a>
+
+### eventDispatcher.fetch(label, data, [context]) ⇒ <code>Array</code>
+Fires off an event with passed in data and context for a given label and returns an array of the results.
+
+**Kind**: instance method of [<code>EventDispatcher</code>](#EventDispatcher)  
+**Returns**: <code>Array</code> - - An array of the results.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| label | <code>String</code> | The human readable identifier of the event. |
+| data | <code>\*</code> | Data to be used by event callbacks. |
+| [context] | <code>Object</code> | Context to help with updating or modification of the data. |
+
+**Example**  
+```js
+popular = await bus.fetch('popular-documents', { limit: 10 }, this);
 ```
 <a name="EventDispatcher+on"></a>
 
