@@ -24,6 +24,10 @@ test('validateQuery: can extract fields from a SELECT statement', (t) => {
   t.deepEqual(validateQuery(query).fields, ['field_a', 'field_b']);
 });
 
+test('validateQuery: can remove quotes from fields in a SELECT statement', (t) => {
+  t.deepEqual(validateQuery('SELECT \'field_a\', "field_b", `field_c` FROM table WHERE field_a IS "test" ORDER BY field_b DESC LIMIT 1').fields, ['field_a', 'field_b', 'field_c']);
+});
+
 // FROM
 test('validateQuery: throws an error when missing FROM', (t) => {
   t.throws(() => {

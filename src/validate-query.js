@@ -29,7 +29,7 @@ const validateQuery = (query) => {
     debug(error, pieces[0]);
     throw new Error(error);
   }
-  const fields = pieces[1].split(',').map((field) => field.trim().replace(/["']/g, ''));
+  const fields = pieces[1].split(',').map((field) => field.trim().replace(/["'`]/g, ''));
   if (fields.length === 0 || fields[0] === '') {
     error = 'Invalid Query: Invalid SELECT';
     debug(error, fields);
