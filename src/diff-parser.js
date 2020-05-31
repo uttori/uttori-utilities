@@ -71,10 +71,10 @@ class DiffParser {
     tokenStream.forEach((token, index) => {
       /* istanbul ignore else */
       if (typeof token === 'string') {
-        // console.log('token:', token);
-        // console.log('activeFileComparison:', activeFileComparison);
-        // console.log('activeFileChunk:', activeFileChunk);
-        // console.log('output:', output);
+        // debug('token:', token);
+        // debug('activeFileComparison:', activeFileComparison);
+        // debug('activeFileChunk:', activeFileChunk);
+        // debug('output:', output);
         const output_index = output.length - 1;
         let chunk_index = output[output_index] && output[output_index].chunks ? output[output_index].chunks.length - 1 : 0;
         const literal_index = output[output_index] && output[output_index].git_binary_patch_literals ? output[output_index].git_binary_patch_literals.length - 1 : 0;
@@ -111,7 +111,7 @@ class DiffParser {
           case 'old-file': {
             if (tokenStream[index + 1].startsWith('+++ ')) {
               if (!hasDiffCli) {
-                console.log('no diff found, marking new file comparison');
+                // debug('no diff found, marking new file comparison');
                 output.push({
                   cli: '',
                   chunks: [],
@@ -243,18 +243,18 @@ class DiffParser {
             return;
           }
           case 'chunk-header-combined': {
-            let header = token;
+            let real_token = token;
             let content;
 
             // Check for contect on the same line, is this even valid?
             if (!token.trim().endsWith('@@@')) {
               // Extract header, push content in.
               const last_index = token.lastIndexOf('@@@');
-              header = token.slice(0, last_index + 3);
+              real_token = token.slice(0, last_index + 3);
               content = token.slice(last_index + 3);
             }
 
-            header = DiffParser.praseChunkHeader(header);
+            const header = DiffParser.praseChunkHeader(real_token);
             output[output_index] = {
               ...output[output_index],
               type: 'text',
@@ -286,18 +286,18 @@ class DiffParser {
             return;
           }
           case 'chunk-header': {
-            let header = token;
+            let realToken = token;
             let content;
 
             // Check for contect on the same line, is this even valid?
             if (!token.trim().endsWith('@@')) {
               // Extract header, push content in.
               const last_index = token.lastIndexOf('@@');
-              header = token.slice(0, last_index + 2);
+              realToken = token.slice(0, last_index + 2);
               content = token.slice(last_index + 2);
             }
 
-            header = DiffParser.praseChunkHeader(header);
+            const header = DiffParser.praseChunkHeader(realToken);
             output[output_index] = {
               ...output[output_index],
               type: 'text',

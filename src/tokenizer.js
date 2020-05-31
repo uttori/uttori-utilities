@@ -146,7 +146,8 @@ class Tokenizer {
       while (tokenizeIndex < this.factory.tokenizeList.length) {
         if (this.currentToken.endsWith(this.factory.tokenizeList[tokenizeIndex++])) {
           this.completeCurrentMode();
-          return this.consume(chr);
+          this.consume(chr);
+          return;
         }
       }
     }

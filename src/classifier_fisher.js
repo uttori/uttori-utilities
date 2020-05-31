@@ -12,7 +12,7 @@ const Classifier = require('./classifier');
  * Example: is an email spam, or not spam?
  * Example: is a news article about technology, politics, or sports?
  * Example: is a piece of text expressing positive emotions, or negative emotions?
- * @example <caption>new NaiveBayes()</caption>
+ * @example <caption>new Fisher()</caption>
  * const messages = [
   *   ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'clean'],
   *   ['Donec faucibus vulputate feugiat.', 'spam'],
