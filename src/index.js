@@ -21,5 +21,5 @@ module.exports = {
   ImagePNG: require('./data-image-png'),
   CRC32: require('./data-hash-crc32'),
   DiffParser: require('./diff-parser'),
-  FYShuffle: require('./fisher–yates-shuffle'),
+  fyShuffle: require('./fisher–yates-shuffle'),
 };
