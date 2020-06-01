@@ -725,7 +725,7 @@ class DiffParser {
    * // +++ Date Timestamp[FractionalSeconds] TimeZone
    * // +++ 2002-02-21 23:30:39.942229878 -0800
    * const { filename, fraction_seconds, raw, time_zone, time, type } = DiffParser.praseFileLine('--- a/src/attributes/classes.js\n');
-   * @external https://www.gnu.org/software/diffutils/manual/html_node/Detailed-Unified.html
+   * @see {@link https://www.gnu.org/software/diffutils/manual/html_node/Detailed-Unified.html|Detailed Description of Unified Format}
    */
   static praseFileLine(raw) {
     let date = '';

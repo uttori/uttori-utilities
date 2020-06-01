@@ -29,6 +29,7 @@ The number of operands depends on if the operation is defined as unary, binary, 
         * [.parseUnifiedContent(line, [header])](#DiffParser.parseUnifiedContent) ⇒ <code>Object</code>
         * [.parseCombinedContent(line, [header])](#DiffParser.parseCombinedContent) ⇒ <code>Object</code>
         * [.praseChunkHeader(raw)](#DiffParser.praseChunkHeader) ⇒ <code>Object</code>
+        * [.praseFileLine(raw)](#DiffParser.praseFileLine) ⇒ <code>Object</code>
 
 <a name="new_DiffParser_new"></a>
 
@@ -124,4 +125,23 @@ If a hunk and its context contain two or more lines, its line numbers look like 
 **Example** *(DiffParser.praseChunkHeader(raw))*  
 ```js
 const { line_numbers_from_file, line_numbers_to_file, mode, raw } = DiffParser.praseChunkHeader('@@ -1,5 +1,5 @@');
+```
+<a name="DiffParser.praseFileLine"></a>
+
+### DiffParser.praseFileLine(raw) ⇒ <code>Object</code>
+Parse file lines.
+
+**Kind**: static method of [<code>DiffParser</code>](#DiffParser)  
+**Returns**: <code>Object</code> - - The text parsed into its various parts.  
+**See**: [Detailed Description of Unified Format](https://www.gnu.org/software/diffutils/manual/html_node/Detailed-Unified.html)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| raw | <code>String</code> | The text to parse. |
+
+**Example** *(DiffParser.praseFileLine(raw))*  
+```js
+// +++ Date Timestamp[FractionalSeconds] TimeZone
+// +++ 2002-02-21 23:30:39.942229878 -0800
+const { filename, fraction_seconds, raw, time_zone, time, type } = DiffParser.praseFileLine('--- a/src/attributes/classes.js\n');
 ```

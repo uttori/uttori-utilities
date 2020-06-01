@@ -14,8 +14,8 @@ const https = require('https');
  * @return {Promise} a Promise of requested call
  * @example <caption>Network.request(url, options, context)</caption>
  * const output = await Network.base('https://api.domain.tld', { method: 'POST', data: '{ "user": 1 }' }, {}, callback);
- * @external https://nodejs.org/api/http.html#http_http_request_options_callback
- * @external https://nodejs.org/api/https.html#https_https_request_url_options_callback
+ * @see {@link https://nodejs.org/api/http.html#http_http_request_options_callback|http_http_request_options_callback}
+ * @see {@link https://nodejs.org/api/https.html#https_https_request_url_options_callback|https_https_request_url_options_callback}
  */
 const base = (url, options = {}, context = {}, callback) => {
   debug('base:', url, options, context);
@@ -68,8 +68,8 @@ const base = (url, options = {}, context = {}, callback) => {
  * @return {Promise} a Promise of requested call
  * @example <caption>Network.request(url, options, context)</caption>
  * const json = await Network.json('https://api.domain.tld', { method: 'POST', data: '{ "user": 1 }' }, { fallback: '' });
- * @external https://nodejs.org/api/http.html#http_http_request_options_callback
- * @external https://nodejs.org/api/https.html#https_https_request_url_options_callback
+ * @see {@link https://nodejs.org/api/http.html#http_http_request_options_callback|http_http_request_options_callback}
+ * @see {@link https://nodejs.org/api/https.html#https_https_request_url_options_callback|https_https_request_url_options_callback}
  */
 const json = (url, options, context = {}) => {
   debug('json:', url, options, context);
@@ -97,8 +97,8 @@ const json = (url, options, context = {}) => {
  * @return {Promise} a Promise of requested call
  * @example <caption>Network.request(url, options, context)</caption>
  * const { headers, responseBody } = await Network.raw('https://api.domain.tld', { method: 'POST', data: '{ "user": 1 }' });
- * @external https://nodejs.org/api/http.html#http_http_request_options_callback
- * @external https://nodejs.org/api/https.html#https_https_request_url_options_callback
+ * @see {@link https://nodejs.org/api/http.html#http_http_request_options_callback|http_http_request_options_callback}
+ * @see {@link https://nodejs.org/api/https.html#https_https_request_url_options_callback|https_https_request_url_options_callback}
  */
 const raw = (url, options, context) => {
   debug('raw:', url, options, context);
@@ -117,8 +117,8 @@ const raw = (url, options, context) => {
  * @return {Promise} a Promise of requested call
  * @example <caption>Network.request(url, options, context)</caption>
  * const responseBody = await Network.request('https://api.domain.tld', { method: 'POST', data: '{ "user": 1 }' }, { fallback: '' });
- * @external https://nodejs.org/api/http.html#http_http_request_options_callback
- * @external https://nodejs.org/api/https.html#https_https_request_url_options_callback
+ * @see {@link https://nodejs.org/api/http.html#http_http_request_options_callback|http_http_request_options_callback}
+ * @see {@link https://nodejs.org/api/https.html#https_https_request_url_options_callback|https_https_request_url_options_callback}
  */
 const request = (url, options, context = {}) => {
   debug('request:', url, options, context);

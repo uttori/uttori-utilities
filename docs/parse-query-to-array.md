@@ -1,12 +1,11 @@
 <a name="parseQueryToArray"></a>
 
-## parseQueryToArray()
+## parseQueryToArray(query)
 Parse a query into an array-like structure, where each sub-array is its own group of parentheses in the query.
 
 **Kind**: global function  
-**Properties**
 
-| Name | Type | Description |
+| Param | Type | Description |
 | --- | --- | --- |
 | query | <code>String</code> | The SQL-like string to be parsed. |
 

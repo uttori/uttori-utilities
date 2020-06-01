@@ -3,7 +3,7 @@ const R = require('ramda');
 
 /**
   * Pretty format a value as JSON or a joined array.
-  * @property {*} value - The value to be converted to a nice string.
+  * @param {*} value - The value to be converted to a nice string.
   * @example <caption>parseQueryToRamda(ast)</caption>
   * debugHelper(['one','two']);
   * ➜ '["one", "two"]'
@@ -18,7 +18,7 @@ const debugHelper = (value) => {
 /**
   * Using default SQL tree output, iterate over that to convert to items to be checked group by group (AND, OR), prop by prop to filter functions.
   * Both `+` and `-` should be done in a pre-parser step or before the query is constructed, or after results are returned.
-  * @property {Object} ast - The parsed output of SqlWhereParser to be filtered.
+  * @param {Object} ast - The parsed output of SqlWhereParser to be filtered.
   * @example <caption>parseQueryToRamda(ast)</caption>
   * const filters = parseQueryToRamda(ast);
   * return R.filter(filters)(docs);

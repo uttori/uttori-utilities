@@ -4,7 +4,6 @@ const SqlWhereParser = require('./where-parser');
 
 /**
  * Validates and parses a SQL-like query structure.
- * @async
  * @param {string} query - The conditions on which a document should be returned.
  * @returns {object} The extrated and validated fields, table, where, order and limit properties.
  */

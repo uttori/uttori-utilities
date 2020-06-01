@@ -1,10 +1,10 @@
 ## Functions
 
 <dl>
-<dt><a href="#debugHelper">debugHelper()</a></dt>
+<dt><a href="#debugHelper">debugHelper(value)</a></dt>
 <dd><p>Pretty format a value as JSON or a joined array.</p>
 </dd>
-<dt><a href="#parseQueryToRamda">parseQueryToRamda()</a></dt>
+<dt><a href="#parseQueryToRamda">parseQueryToRamda(ast)</a></dt>
 <dd><p>Using default SQL tree output, iterate over that to convert to items to be checked group by group (AND, OR), prop by prop to filter functions.
 Both <code>+</code> and <code>-</code> should be done in a pre-parser step or before the query is constructed, or after results are returned.</p>
 </dd>
@@ -12,13 +12,12 @@ Both <code>+</code> and <code>-</code> should be done in a pre-parser step or be
 
 <a name="debugHelper"></a>
 
-## debugHelper()
+## debugHelper(value)
 Pretty format a value as JSON or a joined array.
 
 **Kind**: global function  
-**Properties**
 
-| Name | Type | Description |
+| Param | Type | Description |
 | --- | --- | --- |
 | value | <code>\*</code> | The value to be converted to a nice string. |
 
@@ -29,14 +28,13 @@ debugHelper(['one','two']);
 ```
 <a name="parseQueryToRamda"></a>
 
-## parseQueryToRamda()
+## parseQueryToRamda(ast)
 Using default SQL tree output, iterate over that to convert to items to be checked group by group (AND, OR), prop by prop to filter functions.
 Both `+` and `-` should be done in a pre-parser step or before the query is constructed, or after results are returned.
 
 **Kind**: global function  
-**Properties**
 
-| Name | Type | Description |
+| Param | Type | Description |
 | --- | --- | --- |
 | ast | <code>Object</code> | The parsed output of SqlWhereParser to be filtered. |
 

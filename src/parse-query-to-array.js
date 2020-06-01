@@ -4,7 +4,7 @@ const SqlWhereParser = require('./where-parser');
 
 /**
   * Parse a query into an array-like structure, where each sub-array is its own group of parentheses in the query.
-  * @property {String} query - The SQL-like string to be parsed.
+  * @param {String} query - The SQL-like string to be parsed.
   * @example <caption>toArray('SQL-LIKE-QUERY')</caption>
   * parseQueryToArray('(name = "First Last") AND (age >= (20 + 7))');
   * ➜ [
