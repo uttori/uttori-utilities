@@ -10,6 +10,7 @@ const Classifier = require('./classifier');
  * Example: is an email spam, or not spam?
  * Example: is a news article about technology, politics, or sports?
  * Example: is a piece of text expressing positive emotions, or negative emotions?
+ *
  * @example <caption>new NaiveBayes()</caption>
  * const messages = [
  *   ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'clean'],
@@ -29,9 +30,10 @@ const Classifier = require('./classifier');
 class NaiveBayes extends Classifier {
   /**
    * Returns the category for a given item, or a fallback if a category cannot be determined.
-   * @param {String} item - The item to classify.
-   * @param {String} [fallback='_'] - The category to fallback to when one cannot be determined.
-   * @returns {String} - The best category for the provided item.
+   *
+   * @param {string} item - The item to classify.
+   * @param {string} [fallback='_'] - The category to fallback to when one cannot be determined.
+   * @returns {string} - The best category for the provided item.
    * @memberof Classifier
    */
   classify(item, fallback = '_') {
@@ -65,9 +67,10 @@ class NaiveBayes extends Classifier {
 
   /**
    * Returns the weighted probability of a given document (item) in a given category.
-   * @param {String} item - The item to find the probability of being in the given category.
-   * @param {String} category - The category to check against the item.
-   * @returns {Number} - The weighted probability of the item in the category.
+   *
+   * @param {string} item - The item to find the probability of being in the given category.
+   * @param {string} category - The category to check against the item.
+   * @returns {number} - The weighted probability of the item in the category.
    * @memberof Classifier
    */
   documentProbability(item, category) {
@@ -81,9 +84,10 @@ class NaiveBayes extends Classifier {
 
   /**
    * Returns the probability of a given document (item) in a given category.
-   * @param {String} item - The item to find the probability of being in the given category.
-   * @param {String} category - The category to check against the item.
-   * @returns {Number} - The probability of the item in the category.
+   *
+   * @param {string} item - The item to find the probability of being in the given category.
+   * @param {string} category - The category to check against the item.
+   * @returns {number} - The probability of the item in the category.
    * @memberof Classifier
    */
   probability(item, category) {
@@ -98,8 +102,9 @@ class NaiveBayes extends Classifier {
 
   /**
    * Returns the threshold for a given category.
-   * @param {String} category - The category to get the threshold for.
-   * @returns {Number} - The miniumum for the category, or 0.5.
+   *
+   * @param {string} category - The category to get the threshold for.
+   * @returns {number} - The miniumum for the category, or 0.5.
    * @memberof Classifier
    */
   getThreshold(category) {
@@ -111,16 +116,17 @@ class NaiveBayes extends Classifier {
 
   /**
    * Sets the threshold for a given category.
-   * @param {String} category - The category to set the threshold for.
-   * @param {Number} threshold - The threshold to set for the category.
-   * @returns {Number} - The threshold for the category.
+   *
+   * @param {string} category - The category to set the threshold for.
+   * @param {number} threshold - The threshold to set for the category.
+   * @returns {number} - The threshold for the category.
    * @memberof Classifier
    */
   setThreshold(category, threshold) {
     debug('setThreshold:', category, threshold);
     this.thresholds[category] = threshold;
     debug('threshold =', this.thresholds[category]);
-    return this;
+    return threshold;
   }
 
   // eslint-disable-next-line class-methods-use-this

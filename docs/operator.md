@@ -35,16 +35,16 @@ A wrapper class around operators to distinguish them from regular tokens.
 | --- | --- | --- |
 | value | <code>\*</code> | The value. |
 | type | <code>\*</code> | The type of operator. |
-| precedence | <code>Number</code> | Priority to sort the operators with. |
+| precedence | <code>number</code> | Priority to sort the operators with. |
 
 
 * [Operator](#Operator)
     * [new Operator(value, type, precedence)](#new_Operator_new)
     * _instance_
         * [.toJSON()](#Operator+toJSON) ⇒ <code>\*</code>
-        * [.toString()](#Operator+toString) ⇒ <code>String</code>
+        * [.toString()](#Operator+toString) ⇒ <code>string</code>
     * _static_
-        * [.type(value)](#Operator.type) ⇒ <code>\*</code>
+        * [.type(type)](#Operator.type) ⇒ <code>\*</code>
 
 <a name="new_Operator_new"></a>
 
@@ -56,7 +56,7 @@ Creates an instance of Operator.
 | --- | --- | --- |
 | value | <code>\*</code> | The value. |
 | type | <code>\*</code> | The type of operator. |
-| precedence | <code>Number</code> | Priority to sort the operators with. |
+| precedence | <code>number</code> | Priority to sort the operators with. |
 
 **Example** *(Init TokenizeThis)*  
 ```js
@@ -71,14 +71,14 @@ Returns the value as is for JSON.
 **Returns**: <code>\*</code> - value.  
 <a name="Operator+toString"></a>
 
-### operator.toString() ⇒ <code>String</code>
+### operator.toString() ⇒ <code>string</code>
 Returns the value as its string format.
 
 **Kind**: instance method of [<code>Operator</code>](#Operator)  
-**Returns**: <code>String</code> - String representation of value.  
+**Returns**: <code>string</code> - String representation of value.  
 <a name="Operator.type"></a>
 
-### Operator.type(value) ⇒ <code>\*</code>
+### Operator.type(type) ⇒ <code>\*</code>
 Returns a type for a given string.
 
 **Kind**: static method of [<code>Operator</code>](#Operator)  
@@ -86,7 +86,7 @@ Returns a type for a given string.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| value | <code>String</code> | The type to lookup. |
+| type | <code>string</code> | The type to lookup. |
 
 <a name="OPERATOR_UNARY_MINUS"></a>
 

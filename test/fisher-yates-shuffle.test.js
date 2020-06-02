@@ -12,7 +12,7 @@ test('fyShuffle(array): returns the input value when not an array or an empty ar
     fyShuffle(0);
     fyShuffle(true);
     fyShuffle(false);
-    fyShuffle(NaN);
+    fyShuffle(Number.NaN);
     fyShuffle(null);
     fyShuffle({});
     fyShuffle([]);

@@ -3,28 +3,30 @@ const Operator = require('./operator');
 const SqlWhereParser = require('./where-parser');
 
 /**
-  * Parse a query into an array-like structure, where each sub-array is its own group of parentheses in the query.
-  * @param {String} query - The SQL-like string to be parsed.
-  * @example <caption>toArray('SQL-LIKE-QUERY')</caption>
-  * parseQueryToArray('(name = "First Last") AND (age >= (20 + 7))');
-  * ➜ [
-  *    [
-  *      'name',
-  *      Operator('=', 2, 5), // '=',
-  *      'First Last',
-  *    ],
-  *    Operator('AND', 2, 9), // 'AND',
-  *    [
-  *      'age',
-  *      Operator('>=', 2, 5), // '>=',
-  *      [
-  *        20,
-  *        Operator('+', 2, 4), // '+',
-  *        7,
-  *      ],
-  *    ],
-  *  ]
-  */
+ * Parse a query into an array-like structure, where each sub-array is its own group of parentheses in the query.
+ *
+ * @param {string} query - The SQL-like string to be parsed.
+ * @returns {Array} The array AST.
+ * @example <caption>toArray('SQL-LIKE-QUERY')</caption>
+ * parseQueryToArray('(name = "First Last") AND (age >= (20 + 7))');
+ * ➜ [
+ *    [
+ *      'name',
+ *      Operator('=', 2, 5), // '=',
+ *      'First Last',
+ *    ],
+ *    Operator('AND', 2, 9), // 'AND',
+ *    [
+ *      'age',
+ *      Operator('>=', 2, 5), // '>=',
+ *      [
+ *        20,
+ *        Operator('+', 2, 4), // '+',
+ *        7,
+ *      ],
+ *    ],
+ *  ]
+ */
 const parseQueryToArray = (query) => {
   debug('Query:', query);
   const parser = new SqlWhereParser();

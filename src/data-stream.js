@@ -379,7 +379,7 @@ class DataStream {
         return sign * Infinity;
       }
 
-      return NaN;
+      return Number.NaN;
     }
 
     exp -= 16383;

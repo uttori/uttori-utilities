@@ -6,25 +6,27 @@ const Operator = require('./operator');
 const TokenizeThis = require('./tokenizer');
 
 /**
-  * Parses the output of a unified `diff` string into an abstract syntax tree.
-  * The tree is object-based, where each key is the operator, and its value is an array of the operands.
-  * The number of operands depends on if the operation is defined as unary, binary, or ternary in the config.
-  * @property {Object} config - The configuration object.
-  * @property {TokenizeThis} tokenizer - The tokenizer instance.
-  * @property {Object} operators - The operators from config converted to Operator objects.
-  * @example <caption>Init DiffParser</caption>
-  * const parser = new DiffParser();
-  * const parsed = parser.parse(unified_diff);
-  * @class
-  * @see {@link https://git-scm.com/docs/git-diff|git-diff}
-  * @see {@link https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging|Git Tools Advanced Merging}
-  */
+ * Parses the output of a unified `diff` string into an abstract syntax tree.
+ * The tree is object-based, where each key is the operator, and its value is an array of the operands.
+ * The number of operands depends on if the operation is defined as unary, binary, or ternary in the config.
+ *
+ * @property {object} config - The configuration object.
+ * @property {TokenizeThis} tokenizer - The tokenizer instance.
+ * @property {object} operators - The operators from config converted to Operator objects.
+ * @example <caption>Init DiffParser</caption>
+ * const parser = new DiffParser();
+ * const parsed = parser.parse(unified_diff);
+ * @class
+ * @see {@link https://git-scm.com/docs/git-diff|git-diff}
+ * @see {@link https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging|Git Tools Advanced Merging}
+ */
 class DiffParser {
 /**
-  * Creates an instance of SqlWhereParser.
-  * @param {Object} config - A configuration object.
-  * @constructor
-  */
+ * Creates an instance of SqlWhereParser.
+ *
+ * @param {object} config - A configuration object.
+ * @class
+ */
   constructor(config = {}) {
     debug('constructor:', config);
     config = {
@@ -45,9 +47,9 @@ class DiffParser {
   /**
    * Parse a SQL statement with an evaluator function.
    * Uses an implementation of the Shunting-Yard Algorithm.
-   * @param {String} sql - Query string to process.
-   * @param {Function} [evaluator] - Function to evaluate operators.
-   * @returns {Object} - The parsed query tree.
+   *
+   * @param {string} diff - The diff to be parsed.
+   * @returns {object} - The parsed query tree.
    * @see {@link https://en.wikipedia.org/wiki/Shunting-yard_algorithm|Shunting-Yard Algorithm}
    * @see {@link https://wcipeg.com/wiki/Shunting_yard_algorithm|Shunting-Yard Algorithm}
    */
@@ -372,8 +374,9 @@ class DiffParser {
 
   /**
    * Detect the type of diff line provided.
-   * @param {String} line - The line to detect the type of.
-   * @returns {String} - The type of line detected.
+   *
+   * @param {string} line - The line to detect the type of.
+   * @returns {string} - The type of line detected.
    * @static
    */
   static detectLineType(line = '') {
@@ -440,11 +443,12 @@ class DiffParser {
 
   /**
    * Parse Unified Diff content.
-   * @param {String} line - The line to parse.
-   * @param {Object} [header] - The the header for the diff block.
-   * @param {Number} [header.old] - The previous line number of the current line.
-   * @param {Number} [header.new] - The new line number of the current line.
-   * @returns {Object} - The line parsed into its various parts.
+   *
+   * @param {string} line - The line to parse.
+   * @param {object} [header] - The the header for the diff block.
+   * @param {number} [header.old] - The previous line number of the current line.
+   * @param {number} [header.new] - The new line number of the current line.
+   * @returns {object} - The line parsed into its various parts.
    * @static
    */
   static parseUnifiedContent(line = '', header = { old: 0, new: 0 }) {
@@ -502,11 +506,12 @@ class DiffParser {
 
   /**
    * Parse Combined Diff content.
-   * @param {String} line - The line to parse.
-   * @param {Object} [header] - The the header for the diff block.
-   * @param {Number} [header.old] - The previous line number of the current line.
-   * @param {Number} [header.new] - The new line number of the current line.
-   * @returns {Object} - The line parsed into its various parts.
+   *
+   * @param {string} line - The line to parse.
+   * @param {object} [header] - The the header for the diff block.
+   * @param {number} [header.old] - The previous line number of the current line.
+   * @param {number} [header.new] - The new line number of the current line.
+   * @returns {object} - The line parsed into its various parts.
    * @static
    */
   static parseCombinedContent(line = '', header = { old: 0, new: 0 }) {
@@ -621,8 +626,9 @@ class DiffParser {
    * Hunks of differences; each hunk shows one area where the files differ.
    * If a hunk contains just one line, only its start line number appears. Otherwise its line numbers look like ‘start,count’. An empty hunk is considered to start at the line that follows the hunk.
    * If a hunk and its context contain two or more lines, its line numbers look like ‘start,count’. Otherwise only its end line number appears. An empty hunk is considered to end at the line that precedes the hunk.
-   * @param {String} raw - The text to parse.
-   * @returns {Object} - The text parsed into its various parts.
+   *
+   * @param {string} raw - The text to parse.
+   * @returns {object} - The text parsed into its various parts.
    * @static
    * @example <caption>DiffParser.praseChunkHeader(raw)</caption>
    * const { line_numbers_from_file, line_numbers_to_file, mode, raw } = DiffParser.praseChunkHeader('@@ -1,5 +1,5 @@');
@@ -650,12 +656,12 @@ class DiffParser {
       }
       return {
         line_numbers_from_file: {
-          count: parseInt(offsets[0][1] || 0, 10),
-          start: parseInt(offsets[0][0].slice(1), 10),
+          count: Number.parseInt(offsets[0][1] || 0, 10),
+          start: Number.parseInt(offsets[0][0].slice(1), 10),
         },
         line_numbers_to_file: {
-          count: parseInt(offsets[1][1] || 0, 10),
-          start: parseInt(offsets[1][0].slice(1), 10),
+          count: Number.parseInt(offsets[1][1] || 0, 10),
+          start: Number.parseInt(offsets[1][0].slice(1), 10),
         },
         mode: 'unified',
         raw,
@@ -686,16 +692,16 @@ class DiffParser {
       }
       return {
         line_numbers_from_file_a: {
-          count: parseInt(offsets[0][1] || 0, 10),
-          start: parseInt(offsets[0][0].slice(1), 10),
+          count: Number.parseInt(offsets[0][1] || 0, 10),
+          start: Number.parseInt(offsets[0][0].slice(1), 10),
         },
         line_numbers_from_file_b: {
-          count: parseInt(offsets[1][1] || 0, 10),
-          start: parseInt(offsets[1][0].slice(1), 10),
+          count: Number.parseInt(offsets[1][1] || 0, 10),
+          start: Number.parseInt(offsets[1][0].slice(1), 10),
         },
         line_numbers_to_file: {
-          count: parseInt(offsets[2][1] || 0, 10),
-          start: parseInt(offsets[2][0].slice(1), 10),
+          count: Number.parseInt(offsets[2][1] || 0, 10),
+          start: Number.parseInt(offsets[2][0].slice(1), 10),
         },
         mode: 'combined',
         raw,
@@ -718,8 +724,9 @@ class DiffParser {
 
   /**
    * Parse file lines.
-   * @param {String} raw - The text to parse.
-   * @returns {Object} - The text parsed into its various parts.
+   *
+   * @param {string} raw - The text to parse.
+   * @returns {object} - The text parsed into its various parts.
    * @static
    * @example <caption>DiffParser.praseFileLine(raw)</caption>
    * // +++ Date Timestamp[FractionalSeconds] TimeZone

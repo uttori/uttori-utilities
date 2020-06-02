@@ -132,8 +132,11 @@ class ImagePNG extends DataStream {
   }
 
   /**
-   * get the pixel color on a certain location in a normalized way
-   * result is an array: [red, green, blue, alpha]
+   * Get the pixel color at a specified x, y location.
+   *
+   * @param {number} x - The hoizontal offset to read.
+   * @param {number} y - The vertical offset to read.
+   * @returns {Array} the color as [red, green, blue, alpha]
    */
   getPixel(x, y) {
     if (!this.pixels) {
@@ -191,8 +194,8 @@ class ImagePNG extends DataStream {
   }
 
   /**
- * Parse the PNG file
- */
+   * Parse the PNG file
+   */
   parse() {
     debug('parse');
     this.decodeHeader();
@@ -213,9 +216,10 @@ class ImagePNG extends DataStream {
   }
 
   /**
- * http://www.w3.org/TR/2003/REC-PNG-20031110/#5PNG-file-signature
- * [137, 80, 78, 71, 13, 10, 26, 10]
- */
+   * Decodes and validates PNG Header.
+   * http://www.w3.org/TR/2003/REC-PNG-20031110/#5PNG-file-signature
+   * [137, 80, 78, 71, 13, 10, 26, 10]
+   */
   decodeHeader() {
     debug('decodeHeader: offset =', this.offset);
     /* istanbul ignore next */
@@ -233,13 +237,15 @@ class ImagePNG extends DataStream {
   }
 
   /**
- * http://www.w3.org/TR/2003/REC-PNG-20031110/#5Chunk-layout
- *
- * length =  4      bytes
- * type   =  4      bytes (IHDR, PLTE, IDAT, IEND or others)
- * chunk  =  length bytes
- * crc    =  4      bytes
- */
+   * http://www.w3.org/TR/2003/REC-PNG-20031110/#5Chunk-layout
+   *
+   * length =  4      bytes
+   * type   =  4      bytes (IHDR, PLTE, IDAT, IEND or others)
+   * chunk  =  length bytes
+   * crc    =  4      bytes
+   *
+   * @returns {string} Chunk Type
+   */
   decodeChunk() {
     debug('decodeChunk');
     const length = this.readUInt32();
@@ -288,6 +294,8 @@ class ImagePNG extends DataStream {
    * Compression method  1 byte
    * Filter method       1 byte
    * Interlace method    1 byte
+   *
+   * @param {*} chunk - Data Blob
    */
   decodeIHDR(chunk) {
     debug('decodeIHDR');
@@ -313,8 +321,9 @@ class ImagePNG extends DataStream {
   }
 
   /**
-   *
    * http://www.w3.org/TR/PNG/#11PLTE
+   *
+   * @param {*} chunk - Data Blob
    */
   decodePLTE(chunk) {
     debug('decodePLTE');
@@ -324,6 +333,8 @@ class ImagePNG extends DataStream {
   /**
    * http://www.w3.org/TR/2003/REC-PNG-20031110/#11IDAT
    * multiple IDAT chunks will concatenated
+   *
+   * @param {*} chunk - Data Blob
    */
   decodeIDAT(chunk) {
     debug('decodeIDAT:', chunk.length, 'bytes');
@@ -333,6 +344,8 @@ class ImagePNG extends DataStream {
   /**
    * The tRNS chunk specifies that the image uses simple transparency: either alpha values associated with palette entries (for indexed-color images) or a single transparent color (for grayscale and truecolor images). Although simple transparency is not as elegant as the full alpha channel, it requires less storage space and is sufficient for many common cases.
    * https://www.w3.org/TR/PNG/#11tRNS
+   *
+   * @param {*} chunk - Data Blob
    */
   decodeTRNS(chunk) {
     debug('decodeTRNS');
@@ -349,6 +362,7 @@ class ImagePNG extends DataStream {
    * https://www.w3.org/TR/PNG/#11tRNS
    * https://www.w3.org/TR/PNG-Decoders.html#D.Pixel-dimensions
    *
+   * @param {*} chunk - Data Blob
    */
   decodePHYS(chunk) {
     const INCH_TO_METERS = 0.0254;
@@ -359,8 +373,8 @@ class ImagePNG extends DataStream {
 
     switch (unit) {
       case 1: {
-        width = parseInt(width * INCH_TO_METERS, 10);
-        height = parseInt(height * INCH_TO_METERS, 10);
+        width = Number.parseInt(width * INCH_TO_METERS, 10);
+        height = Number.parseInt(height * INCH_TO_METERS, 10);
         break;
       }
       /* istanbul ignore next */
@@ -374,14 +388,16 @@ class ImagePNG extends DataStream {
 
   /**
    * http://www.w3.org/TR/2003/REC-PNG-20031110/#11IEND
+   *
+   * @param {*} _chunk - Unused.
    */
   // eslint-disable-next-line class-methods-use-this
-  decodeIEND() {
+  decodeIEND(_chunk) {
     debug('decodeIEND');
   }
 
   /**
-   * Uncompress IDAT chunks
+   * Uncompress IDAT chunks.
    */
   decodePixels() {
     debug('decodePixels');
@@ -432,6 +448,10 @@ class ImagePNG extends DataStream {
 
   // Different interlace methods
   // https://www.w3.org/TR/PNG-Filters.html
+  /**
+   *
+   * @param {*} data - Data to process.
+   */
   interlaceNone(data) {
     const bytes_per_pixel = Math.max(1, (this.colors * this.bitDepth) / 8);
     const color_bytes_per_row = bytes_per_pixel * this.width;
@@ -484,6 +504,11 @@ class ImagePNG extends DataStream {
 
   /**
    * No filtering, direct copy
+   *
+   * @param {Array|Uint8Array} scanline - Scanline to search for pixels in.
+   * @param {number} bpp - Bytes Per Pixel
+   * @param {number} offset - Offset
+   * @param {number} length - Length
    */
   unFilterNone(scanline, bpp, offset, length) {
     debug('unFilterNone:', 'bpp:', bpp, 'offset:', offset, 'length:', length);
@@ -496,6 +521,11 @@ class ImagePNG extends DataStream {
   /**
    * The Sub() filter transmits the difference between each byte and the value of the corresponding byte of the prior pixel.
    * Sub(x) = Raw(x) + Raw(x - bpp)
+   *
+   * @param {Array|Uint8Array} scanline - Scanline to search for pixels in.
+   * @param {number} bpp - Bytes Per Pixel
+   * @param {number} offset - Offset
+   * @param {number} length - Length
    */
   unFilterSub(scanline, bpp, offset, length) {
     debug('unFilterSub:', 'bpp:', bpp, 'offset:', offset, 'length:', length);
@@ -514,6 +544,11 @@ class ImagePNG extends DataStream {
   /**
    * The Up() filter is just like the Sub() filter except that the pixel immediately above the current pixel, rather than just to its left, is used as the predictor.
    * Up(x) = Raw(x) + Prior(x)
+   *
+   * @param {Array|Uint8Array} scanline - Scanline to search for pixels in.
+   * @param {number} _bpp - Bytes Per Pixel, Unused
+   * @param {number} offset - Offset
+   * @param {number} length - Length
    */
   /* istanbul ignore next */
   unFilterUp(scanline, _bpp, offset, length) {
@@ -540,6 +575,11 @@ class ImagePNG extends DataStream {
   /**
    * The Average() filter uses the average of the two neighboring pixels (left and above) to predict the value of a pixel.
    * Average(x) = Raw(x) + floor((Raw(x-bpp)+Prior(x))/2)
+   *
+   * @param {Array|Uint8Array} scanline - Scanline to search for pixels in.
+   * @param {number} bpp - Bytes Per Pixel
+   * @param {number} offset - Offset
+   * @param {number} length - Length
    */
   /* istanbul ignore next */
   unFilterAverage(scanline, bpp, offset, length) {
@@ -587,6 +627,11 @@ class ImagePNG extends DataStream {
    *       else if pb <= pc then return b
    *       else return c
    *  end
+   *
+   * @param {Array|Uint8Array} scanline - Scanline to search for pixels in.
+   * @param {number} bpp - Bytes Per Pixel
+   * @param {number} offset - Offset
+   * @param {number} length - Length
    */
   /* istanbul ignore next */
   unFilterPaeth(scanline, bpp, offset, length) {

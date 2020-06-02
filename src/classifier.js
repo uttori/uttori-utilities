@@ -4,10 +4,11 @@ const debug = require('debug')('Uttori.Utilities.Classifier');
  * Classifier base class for use with the Naive Bayes and Fisher classifiers.
  * In practice, it is better tolerating false positives for "good", more than false negatives for "good".
  * Example: It is better to see a message that is spam rather than lose a message that is not spam.
- * @property {Object} [categories] - Categories in the classfier.
- * @property {Object} [frequency] - Frequency counts.
- * @property {Object} [minimums] - Used in the Fisher classifier.
- * @property {Object} [thresholds] - Used with the Naive Bayes classifier.
+ *
+ * @property {object} [categories] - Categories in the classfier.
+ * @property {object} [frequency] - Frequency counts.
+ * @property {object} [minimums] - Used in the Fisher classifier.
+ * @property {object} [thresholds] - Used with the Naive Bayes classifier.
  * @example <caption>new Classifier(model)</caption>
  * const classifier = new Classifier();
  * classifier.train(item, category);
@@ -17,8 +18,9 @@ const debug = require('debug')('Uttori.Utilities.Classifier');
 class Classifier {
   /**
    * Creates a new Classifier.
-   * @param {Object} [model] - The trained model to initiate with.
-   * @constructor
+   *
+   * @param {object} [model] - The trained model to initiate with.
+   * @class
    */
   constructor(model = {}) {
     this.categories = model.categories ? { ...model.categories } : {};
@@ -29,8 +31,9 @@ class Classifier {
 
   /**
    * Returns the count for a given category or 0 if the category isn't found.
-   * @param {String} category - The category to find the count for.
-   * @returns {Number} - The count for the provided category.
+   *
+   * @param {string} category - The category to find the count for.
+   * @returns {number} - The count for the provided category.
    * @memberof Classifier
    */
   categoryCount(category) {
@@ -42,9 +45,10 @@ class Classifier {
 
   /**
    * Returns the frequency for a given category in a given feature, or 0 if the feature or category isn't found.
-   * @param {String} feature - The feature to look for the category in.
-   * @param {String} category - The category to find the count for.
-   * @returns {Number} - The count for the provided category of the provided feature.
+   *
+   * @param {string} feature - The feature to look for the category in.
+   * @param {string} category - The category to find the count for.
+   * @returns {number} - The count for the provided category of the provided feature.
    * @memberof Classifier
    */
   featureCount(feature, category) {
@@ -56,9 +60,10 @@ class Classifier {
 
   /**
    * Returns the probability for a given category in a given feature, or 0 if the category isn't found.
-   * @param {String} feature - The feature to look for the category in.
-   * @param {String} category - The category to find the count for.
-   * @returns {Number} - The probability for the feature to match the category (feature count / category count).
+   *
+   * @param {string} feature - The feature to look for the category in.
+   * @param {string} category - The category to find the count for.
+   * @returns {number} - The probability for the feature to match the category (feature count / category count).
    * @memberof Classifier
    */
   featureProbability(feature, category) {
@@ -70,7 +75,8 @@ class Classifier {
 
   /**
    * Returns the names of all the categories.
-   * @returns {String[]} - The array of category keys.
+   *
+   * @returns {string[]} - The array of category keys.
    * @memberof Classifier
    */
   getCategories() {
@@ -84,7 +90,7 @@ class Classifier {
    * This is the default used if one is not provided when instantiated.
    * This attempts to add support for English, Cyrillic, Korean, Japanese and Chinese.
    *
-   * The supported cheacter ranges are:
+   * The supported character ranges are:
    * SU+0400 – U+04FF: Cyrillic, 256 characters
    * SU+0500 – U+052F: Cyrillic Supplement, 48 characters
    * SU+2DE0 – U+2DFF: Cyrillic Extended-A, 32 characters
@@ -104,8 +110,8 @@ class Classifier {
    * See also: https://codeday.me/en/qa/20190306/12457.html
    * See also: http://flyingsky.github.io/2018/01/26/javascript-detect-chinese-japanese/
    *
-   * @param {String} text - Text to extract features from.
-   * @return {String[]} - The features found in the provided text.
+   * @param {string} text - Text to extract features from.
+   * @returns {string[]} - The features found in the provided text.
    * @static
    * @memberof Classifier
    */
@@ -123,7 +129,8 @@ class Classifier {
 
   /**
    * Increment or instantiate a count for a given category.
-   * @param {String} category - The category to increment the count for.
+   *
+   * @param {string} category - The category to increment the count for.
    * @memberof Classifier
    */
   incrementCategory(category) {
@@ -134,8 +141,9 @@ class Classifier {
 
   /**
    * Increment or instantiate a count for a given category of a given feature.
-   * @param {String} feature - The feature to find the category to increment the count for.
-   * @param {String} category - The category to increment the count for.
+   *
+   * @param {string} feature - The feature to find the category to increment the count for.
+   * @param {string} category - The category to increment the count for.
    * @memberof Classifier
    */
   incrementFeature(feature, category) {
@@ -149,19 +157,21 @@ class Classifier {
 
   /**
    * Returns the total count of categories.
-   * @returns {Number} - The count of used categories.
+   *
+   * @returns {number} - The count of used categories.
    * @memberof Classifier
    */
   totalCount() {
     const count = Object.values(this.categories).reduce((result, value) => result + value, 0);
-    debug('count = ', count);
+    debug('totalCount = ', count);
     return count;
   }
 
   /**
    * Trains the classifier with a given item, for a given category
-   * @param {String} item - The item to train a given category.
-   * @param {String} category - The category to increment the count for.
+   *
+   * @param {string} item - The item to train a given category.
+   * @param {string} category - The category to increment the count for.
    * @memberof Classifier
    */
   train(item, category) {
@@ -176,12 +186,13 @@ class Classifier {
 
   /**
    * Returns the weightedProbability for a given feature
-   * @param {String} feature - The feature to find the weighted probability of.
-   * @param {String} _category - Currently unused.
-   * @param {Number} basicProbability - The probability of the applicable classifier (Fisher: category, Naive Bayes: feature)
-   * @param {Number} [weight=1] - The provided weight of the feature.
-   * @param {Number} [assumedProbability=0.5] - Assumed probability of the feature.
-   * @returns {Number} - The weighted probability of the provided feature.
+   *
+   * @param {string} feature - The feature to find the weighted probability of.
+   * @param {string} _category - Currently unused.
+   * @param {number} basicProbability - The probability of the applicable classifier (Fisher: category, Naive Bayes: feature)
+   * @param {number} [weight=1] - The provided weight of the feature.
+   * @param {number} [assumedProbability=0.5] - Assumed probability of the feature.
+   * @returns {number} - The weighted probability of the provided feature.
    * @memberof Classifier
    */
   weightedProbability(feature, _category, basicProbability, weight = 1, assumedProbability = 0.5) {
@@ -194,8 +205,9 @@ class Classifier {
 
   /**
    * Exports the current model as a JSON string.
-   * @param {Number} [spaces=0] - Spaces to indent JSON.
-   * @returns {String} - The model as JSON.
+   *
+   * @param {number} [spaces=0] - Spaces to indent JSON.
+   * @returns {string} - The model as JSON.
    * @memberof Classifier
    */
   save(spaces = 0) {

@@ -8,7 +8,7 @@ Event class used in conjunction with the Event Dispatcher.
 
 | Name | Type | Description |
 | --- | --- | --- |
-| label | <code>String</code> | The human readable identifier of the event. |
+| label | <code>string</code> | The human readable identifier of the event. |
 | callbacks | <code>Array.&lt;function()&gt;</code> | The functions to be executed when an event is fired. |
 
 
@@ -29,7 +29,7 @@ Creates a new event UttoriEvent.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| label | <code>String</code> | The human readable identifier of the event. |
+| label | <code>string</code> | The human readable identifier of the event. |
 
 **Example** *(new UttoriEvent(label))*  
 ```js
@@ -78,7 +78,7 @@ Executes all the callbacks present on an event with passed in data and context.
 | Param | Type | Description |
 | --- | --- | --- |
 | data | <code>\*</code> | Data to be used, updated, or modified by event callbacks. |
-| [context] | <code>Object</code> | Context to help with updating or modification of the data. |
+| [context] | <code>object</code> | Context to help with updating or modification of the data. |
 
 **Example**  
 ```js
@@ -95,7 +95,7 @@ Executes all the callbacks present on an event with passed in data and context.
 | Param | Type | Description |
 | --- | --- | --- |
 | data | <code>\*</code> | Data to be used, updated, or modified by event callbacks. |
-| [context] | <code>Object</code> | Context to help with updating or modification of the data. |
+| [context] | <code>object</code> | Context to help with updating or modification of the data. |
 
 **Example**  
 ```js
@@ -111,7 +111,7 @@ Executes all the callbacks present on an event with passed in data and context.
 | Param | Type | Description |
 | --- | --- | --- |
 | data | <code>\*</code> | Data to be used, updated, or modified by event callbacks. |
-| [context] | <code>Object</code> | Context to help with updating or modification of the data. |
+| [context] | <code>object</code> | Context to help with updating or modification of the data. |
 
 **Example**  
 ```js
@@ -128,7 +128,7 @@ Executes all the callbacks present on an event with passed in data and context a
 | Param | Type | Description |
 | --- | --- | --- |
 | data | <code>\*</code> | Data to be used by event callbacks. |
-| [context] | <code>Object</code> | Context to help with computing of the data. |
+| [context] | <code>object</code> | Context to help with computing of the data. |
 
 **Example**  
 ```js

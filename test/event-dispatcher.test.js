@@ -25,7 +25,7 @@ test('#filter(label, data, context): throws an error with invalid callbacks', as
   await t.throwsAsync(async () => { await ed.filter(1.2); });
   await t.throwsAsync(async () => { await ed.filter(true); });
   await t.throwsAsync(async () => { await ed.filter(false); });
-  await t.throwsAsync(async () => { await ed.filter(NaN); });
+  await t.throwsAsync(async () => { await ed.filter(Number.NaN); });
 });
 
 test('#filter(label, data, context): can dispatch an event', async (t) => {
@@ -44,7 +44,7 @@ test('#filter(label, data, context): can dispatch an event', async (t) => {
   await t.throwsAsync(async () => { await ed.filter(1.2); });
   await t.throwsAsync(async () => { await ed.filter(true); });
   await t.throwsAsync(async () => { await ed.filter(false); });
-  await t.throwsAsync(async () => { await ed.filter(NaN); });
+  await t.throwsAsync(async () => { await ed.filter(Number.NaN); });
 });
 
 test('#dispatch(label, data, context): throws an error with invalid callbacks', (t) => {
@@ -62,7 +62,7 @@ test('#dispatch(label, data, context): throws an error with invalid callbacks', 
   t.throws(() => { ed.dispatch(1.2); });
   t.throws(() => { ed.dispatch(true); });
   t.throws(() => { ed.dispatch(false); });
-  t.throws(() => { ed.dispatch(NaN); });
+  t.throws(() => { ed.dispatch(Number.NaN); });
 });
 
 test('#dispatch(label, data, context): can dispatch an event', (t) => {
@@ -81,7 +81,7 @@ test('#dispatch(label, data, context): can dispatch an event', (t) => {
   t.throws(() => { ed.dispatch(1.2); });
   t.throws(() => { ed.dispatch(true); });
   t.throws(() => { ed.dispatch(false); });
-  t.throws(() => { ed.dispatch(NaN); });
+  t.throws(() => { ed.dispatch(Number.NaN); });
 });
 
 test('#validate(label, data, context): can return dispatched event validation results', async (t) => {
@@ -138,7 +138,7 @@ test('#fetch(label, data, context): throws an error with invalid callbacks', asy
   await t.throwsAsync(async () => { await ed.fetch(1.2); });
   await t.throwsAsync(async () => { await ed.fetch(true); });
   await t.throwsAsync(async () => { await ed.fetch(false); });
-  await t.throwsAsync(async () => { await ed.fetch(NaN); });
+  await t.throwsAsync(async () => { await ed.fetch(Number.NaN); });
 });
 
 test('#fetch(label, data, context): can dispatch an event', async (t) => {
@@ -157,7 +157,7 @@ test('#fetch(label, data, context): can dispatch an event', async (t) => {
   await t.throwsAsync(async () => { await ed.fetch(1.2); });
   await t.throwsAsync(async () => { await ed.fetch(true); });
   await t.throwsAsync(async () => { await ed.fetch(false); });
-  await t.throwsAsync(async () => { await ed.fetch(NaN); });
+  await t.throwsAsync(async () => { await ed.fetch(Number.NaN); });
 });
 
 test('#filter(label, data, context): can return dispatched event modified data', async (t) => {
@@ -274,7 +274,7 @@ test('#on(label, callback): throws an error with invalid label or callback', (t)
   t.throws(() => { ed.on(1.2, a); });
   t.throws(() => { ed.on(true, a); });
   t.throws(() => { ed.on(false, a); });
-  t.throws(() => { ed.on(NaN, a); });
+  t.throws(() => { ed.on(Number.NaN, a); });
 
   t.throws(() => { ed.on('test'); });
   t.throws(() => { ed.on('test', ''); });
@@ -284,7 +284,7 @@ test('#on(label, callback): throws an error with invalid label or callback', (t)
   t.throws(() => { ed.on('test', 1.2); });
   t.throws(() => { ed.on('test', true); });
   t.throws(() => { ed.on('test', false); });
-  t.throws(() => { ed.on('test', NaN); });
+  t.throws(() => { ed.on('test', Number.NaN); });
 });
 
 test('#off(label, callback): removes callbacks from the given event', (t) => {

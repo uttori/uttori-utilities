@@ -12,7 +12,7 @@ test('#constructor(label): can setup an event and throws an error with invalid l
   t.throws(() => { new UttoriEvent(null); });
   t.throws(() => { new UttoriEvent(undefined); });
   t.throws(() => { new UttoriEvent(); });
-  t.throws(() => { new UttoriEvent(NaN); });
+  t.throws(() => { new UttoriEvent(Number.NaN); });
   t.throws(() => { new UttoriEvent(1); });
   t.throws(() => { new UttoriEvent(1.2); });
   t.throws(() => { new UttoriEvent(true); });
@@ -34,7 +34,7 @@ test('#register(callback): throws an error with invalid callbacks', (t) => {
   t.throws(() => { event.register(1.2); });
   t.throws(() => { event.register(true); });
   t.throws(() => { event.register(false); });
-  t.throws(() => { event.register(NaN); });
+  t.throws(() => { event.register(Number.NaN); });
 });
 
 test('#register(callback): adds callbacks to the event', (t) => {
@@ -65,7 +65,7 @@ test('#unregister(callback): throws an error with invalid callbacks', (t) => {
   t.throws(() => { event.unregister(1.2); });
   t.throws(() => { event.unregister(true); });
   t.throws(() => { event.unregister(false); });
-  t.throws(() => { event.unregister(NaN); });
+  t.throws(() => { event.unregister(Number.NaN); });
 });
 
 test('#unregister(callback): removes callbacks from the event', (t) => {

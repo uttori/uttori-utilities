@@ -1,17 +1,19 @@
 const debug = require('debug')('Uttori.Utilities.FunctionQueue');
 
 /**
-  * Queue functionality for function calling.
-  * @example <caption>FunctionQueue.throttle(max_requests_per_interval, interval, evenly_spaced)</caption>
-  * const throttle = FunctionQueue.throttle(max_requests_per_interval, interval, evenly_spaced);
-  * throttle(() => { ... });
-  * @class
-  */
+ * Queue functionality for function calling.
+ *
+ * @example <caption>FunctionQueue.throttle(max_requests_per_interval, interval, evenly_spaced)</caption>
+ * const throttle = FunctionQueue.throttle(max_requests_per_interval, interval, evenly_spaced);
+ * throttle(() => { ... });
+ * @class
+ */
 class FunctionQueue {
   /**
-   * @param {Number} max_requests_per_interval - The number of calls to execute for a single interval.
-   * @param {Number} interval - The time between calls in ms.
-   * @param {Boolean} evenly_spaced - Determines if all requests should be evenly spaced.
+   * @param {number} max_requests_per_interval - The number of calls to execute for a single interval.
+   * @param {number} interval - The time between calls in ms.
+   * @param {boolean} evenly_spaced - Determines if all requests should be evenly spaced.
+   * @returns {Function} A function that can enqueue items.
    * @static
    */
   static throttle(max_requests_per_interval, interval, evenly_spaced) {
@@ -63,6 +65,8 @@ class FunctionQueue {
 
     /**
      * Return a function that can enqueue items.
+     *
+     * @param {Function} callback - The callback to run throttled.
      */
     return (callback) => {
       queue.push(callback);

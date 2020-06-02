@@ -90,7 +90,7 @@ test('NaiveBayes: ignores non string values with "_"', (t) => {
   t.is(filter.classify(''), '_');
   t.is(filter.classify(null), '_');
   t.is(filter.classify(undefined), '_');
-  t.is(filter.classify(NaN), '_');
+  t.is(filter.classify(Number.NaN), '_');
   t.is(filter.classify(1), '_');
   t.is(filter.classify([]), '_');
   t.is(filter.classify({}), '_');
@@ -108,7 +108,7 @@ test('Fisher: ignores non string values with "_"', (t) => {
   t.is(filter.classify(''), '_');
   t.is(filter.classify(null), '_');
   t.is(filter.classify(undefined), '_');
-  t.is(filter.classify(NaN), '_');
+  t.is(filter.classify(Number.NaN), '_');
   t.is(filter.classify(1), '_');
   t.is(filter.classify([]), '_');
   t.is(filter.classify({}), '_');

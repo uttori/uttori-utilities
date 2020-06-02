@@ -19,22 +19,24 @@ const OPERATOR_TYPE_BINARY = 2;
 const OPERATOR_TYPE_TERNARY = 3;
 
 /**
-  * A wrapper class around operators to distinguish them from regular tokens.
-  * @property {*} value - The value.
-  * @property {*} type - The type of operator.
-  * @property {Number} precedence - Priority to sort the operators with.
-  * @example <caption>Init TokenizeThis</caption>
-  * const op = new Operator(value, type, precedence);
-  * @class
-  */
+ * A wrapper class around operators to distinguish them from regular tokens.
+ *
+ * @property {*} value - The value.
+ * @property {*} type - The type of operator.
+ * @property {number} precedence - Priority to sort the operators with.
+ * @example <caption>Init TokenizeThis</caption>
+ * const op = new Operator(value, type, precedence);
+ * @class
+ */
 class Operator {
   /**
-  * Creates an instance of Operator.
-  * @param {*} value - The value.
-  * @param {*} type - The type of operator.
-  * @param {Number} precedence - Priority to sort the operators with.
-  * @constructor
-  */
+   * Creates an instance of Operator.
+   *
+   * @param {*} value - The value.
+   * @param {*} type - The type of operator.
+   * @param {number} precedence - Priority to sort the operators with.
+   * @class
+   */
   constructor(value, type, precedence) {
     this.value = value;
     this.type = type;
@@ -43,6 +45,7 @@ class Operator {
 
   /**
    * Returns the value as is for JSON.
+   *
    * @returns {*} value.
    * @memberof Operator
    */
@@ -52,7 +55,8 @@ class Operator {
 
   /**
    * Returns the value as its string format.
-   * @returns {String} String representation of value.
+   *
+   * @returns {string} String representation of value.
    * @memberof Operator
    */
   toString() {
@@ -61,7 +65,8 @@ class Operator {
 
   /**
    * Returns a type for a given string.
-   * @param {String} value - The type to lookup.
+   *
+   * @param {string} type - The type to lookup.
    * @returns {*} Either number of parameters or Unary Minus Symbol.
    * @memberof Operator
    * @static

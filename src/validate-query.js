@@ -4,6 +4,7 @@ const SqlWhereParser = require('./where-parser');
 
 /**
  * Validates and parses a SQL-like query structure.
+ *
  * @param {string} query - The conditions on which a document should be returned.
  * @returns {object} The extrated and validated fields, table, where, order and limit properties.
  */
@@ -101,7 +102,7 @@ const validateQuery = (query) => {
     debug(error, pieces[8]);
     throw new Error(error);
   }
-  const limit = parseInt(pieces[9].trim(), 10);
+  const limit = Number.parseInt(pieces[9].trim(), 10);
   if (Number.isNaN(limit)) {
     error = 'Invalid Query: Invalid LIMIT';
     debug(error, pieces[9]);

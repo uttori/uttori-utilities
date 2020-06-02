@@ -4,14 +4,15 @@ const https = require('https');
 
 /**
  * Execute a HTTP(S) request with options provided.
- * @param {String|URL} url - URL to communicate with.
- * @param {Object} [options] - Configuration to pass to `http(s).request()`.
- * @param {Object} [options.method] - HTTP Method to use.
- * @param {Object} [context] - Internal options and data used in the request.
- * @param {String} [context.responseEncoding] - Encoding to specify response should be parsed as.
- * @param {String|Buffer} [context.data] - Data to be sent for POST/PUT requests.
+ *
+ * @param {string|URL} url - URL to communicate with.
+ * @param {object} [options] - Configuration to pass to `http(s).request()`.
+ * @param {object} [options.method] - HTTP Method to use.
+ * @param {object} [context] - Internal options and data used in the request.
+ * @param {string} [context.responseEncoding] - Encoding to specify response should be parsed as.
+ * @param {string|Buffer} [context.data] - Data to be sent for POST/PUT requests.
  * @param {Function} callback - Logic for responding to non-error responses.
- * @return {Promise} a Promise of requested call
+ * @returns {Promise} a Promise of requested call
  * @example <caption>Network.request(url, options, context)</caption>
  * const output = await Network.base('https://api.domain.tld', { method: 'POST', data: '{ "user": 1 }' }, {}, callback);
  * @see {@link https://nodejs.org/api/http.html#http_http_request_options_callback|http_http_request_options_callback}
@@ -58,14 +59,15 @@ const base = (url, options = {}, context = {}, callback) => {
 
 /**
  * Execute a HTTP(S) request with options provided and returns a parsed JSON response or a fallback.
- * @param {String|URL} url - URL to communicate with.
- * @param {Object} [options] - Configuration to pass to `http(s).request()`.
- * @param {Object} [options.method] - HTTP Method to use.
- * @param {Object} [context] - Internal options and data used in the request.
- * @param {String} [context.responseEncoding] - Encoding to specify response should be parsed as.
- * @param {String|Buffer} [context.data] - Data to be sent for POST/PUT requests.
+ *
+ * @param {string|URL} url - URL to communicate with.
+ * @param {object} [options] - Configuration to pass to `http(s).request()`.
+ * @param {object} [options.method] - HTTP Method to use.
+ * @param {object} [context] - Internal options and data used in the request.
+ * @param {string} [context.responseEncoding] - Encoding to specify response should be parsed as.
+ * @param {string|Buffer} [context.data] - Data to be sent for POST/PUT requests.
  * @param {*} [context.fallback] - Data to return if no JSON is found.
- * @return {Promise} a Promise of requested call
+ * @returns {Promise} a Promise of requested call
  * @example <caption>Network.request(url, options, context)</caption>
  * const json = await Network.json('https://api.domain.tld', { method: 'POST', data: '{ "user": 1 }' }, { fallback: '' });
  * @see {@link https://nodejs.org/api/http.html#http_http_request_options_callback|http_http_request_options_callback}
@@ -88,13 +90,14 @@ const json = (url, options, context = {}) => {
 
 /**
  * Execute a HTTP(S) request with options provided and returns the full response object.
- * @param {String|URL} url - URL to communicate with.
- * @param {Object} [options] - Configuration to pass to `http(s).request()`.
- * @param {Object} [options.method] - HTTP Method to use.
- * @param {Object} [context] - Internal options and data used in the request.
- * @param {String} [context.responseEncoding] - Encoding to specify response should be parsed as.
- * @param {String|Buffer} [context.data] - Data to be sent for POST/PUT requests.
- * @return {Promise} a Promise of requested call
+ *
+ * @param {string|URL} url - URL to communicate with.
+ * @param {object} [options] - Configuration to pass to `http(s).request()`.
+ * @param {object} [options.method] - HTTP Method to use.
+ * @param {object} [context] - Internal options and data used in the request.
+ * @param {string} [context.responseEncoding] - Encoding to specify response should be parsed as.
+ * @param {string|Buffer} [context.data] - Data to be sent for POST/PUT requests.
+ * @returns {Promise} a Promise of requested call
  * @example <caption>Network.request(url, options, context)</caption>
  * const { headers, responseBody } = await Network.raw('https://api.domain.tld', { method: 'POST', data: '{ "user": 1 }' });
  * @see {@link https://nodejs.org/api/http.html#http_http_request_options_callback|http_http_request_options_callback}
@@ -107,14 +110,15 @@ const raw = (url, options, context) => {
 
 /**
  * Execute a HTTP(S) request with options provided and returns a response body or a fallback.
- * @param {String|URL} url - URL to communicate with.
- * @param {Object} [options] - Configuration to pass to `http(s).request()`.
- * @param {Object} [options.method] - HTTP Method to use.
- * @param {Object} [context] - Internal options and data used in the request.
- * @param {String} [context.responseEncoding] - Encoding to specify response should be parsed as.
- * @param {String|Buffer} [context.data] - Data to be sent for POST/PUT requests.
+ *
+ * @param {string|URL} url - URL to communicate with.
+ * @param {object} [options] - Configuration to pass to `http(s).request()`.
+ * @param {object} [options.method] - HTTP Method to use.
+ * @param {object} [context] - Internal options and data used in the request.
+ * @param {string} [context.responseEncoding] - Encoding to specify response should be parsed as.
+ * @param {string|Buffer} [context.data] - Data to be sent for POST/PUT requests.
  * @param {*} [context.fallback] - Data to return if no responseBody is found.
- * @return {Promise} a Promise of requested call
+ * @returns {Promise} a Promise of requested call
  * @example <caption>Network.request(url, options, context)</caption>
  * const responseBody = await Network.request('https://api.domain.tld', { method: 'POST', data: '{ "user": 1 }' }, { fallback: '' });
  * @see {@link https://nodejs.org/api/http.html#http_http_request_options_callback|http_http_request_options_callback}

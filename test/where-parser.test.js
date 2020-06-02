@@ -68,7 +68,7 @@ test('This evaluation can also be used to convert the AST into a specific tree, 
           },
         };
       default:
-        return null;
+        return undefined;
     }
   });
 

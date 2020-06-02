@@ -1,13 +1,14 @@
 <a name="parseQueryToArray"></a>
 
-## parseQueryToArray(query)
+## parseQueryToArray(query) ⇒ <code>Array</code>
 Parse a query into an array-like structure, where each sub-array is its own group of parentheses in the query.
 
 **Kind**: global function  
+**Returns**: <code>Array</code> - The array AST.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| query | <code>String</code> | The SQL-like string to be parsed. |
+| query | <code>string</code> | The SQL-like string to be parsed. |
 
 **Example** *(toArray(&#x27;SQL-LIKE-QUERY&#x27;))*  
 ```js

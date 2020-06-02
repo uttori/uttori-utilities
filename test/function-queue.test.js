@@ -2,8 +2,15 @@
 const test = require('ava');
 const { FunctionQueue } = require('../src');
 
-function calculateRPMS(num_requests, time_started) {
-  return num_requests / (Date.now() - time_started);
+/**
+ * Returns the requests per millisecond.
+ *
+ * @param {number} requests - The number of requests.
+ * @param {number} time_started - The time started in MS.
+ * @returns {number} the requests per millisecond.
+ */
+function calculateRPMS(requests, time_started) {
+  return requests / (Date.now() - time_started);
 }
 
 const request_limit = 10; // NOTE: 100 for full coverage.

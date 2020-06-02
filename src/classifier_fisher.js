@@ -12,28 +12,30 @@ const Classifier = require('./classifier');
  * Example: is an email spam, or not spam?
  * Example: is a news article about technology, politics, or sports?
  * Example: is a piece of text expressing positive emotions, or negative emotions?
+ *
  * @example <caption>new Fisher()</caption>
  * const messages = [
-  *   ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'clean'],
-  *   ['Donec faucibus vulputate feugiat.', 'spam'],
-  *   ['Duis eu sapien nec elit consectetur convallis.', 'clean'],
-  *   [1, 'spam'],
-  * ];
-  * const filter = new Fisher();
-  * messages.forEach(([message, category]) => {
-  *   filter.train(message, category);
-  * });
-  * filter.setMinimum('spam', 0.5);
-  * filter.classify('dolor sit amet');
-  *  ➜ 'clean'
-  * @class
-  */
+ *   ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'clean'],
+ *   ['Donec faucibus vulputate feugiat.', 'spam'],
+ *   ['Duis eu sapien nec elit consectetur convallis.', 'clean'],
+ *   [1, 'spam'],
+ * ];
+ * const filter = new Fisher();
+ * messages.forEach(([message, category]) => {
+ *   filter.train(message, category);
+ * });
+ * filter.setMinimum('spam', 0.5);
+ * filter.classify('dolor sit amet');
+ *  ➜ 'clean'
+ * @class
+ */
 class Fisher extends Classifier {
   /**
    * Classifies a given item, falling back to a given fallback or underscore.
-   * @param {String} item - The item to classify.
-   * @param {String} [fallback='_'] - The category to fallback to when one cannot be determined.
-   * @returns {String} - The best category for the provided item.
+   *
+   * @param {string} item - The item to classify.
+   * @param {string} [fallback='_'] - The category to fallback to when one cannot be determined.
+   * @returns {string} - The best category for the provided item.
    * @memberof Classifier
    */
   classify(item, fallback = '_') {
@@ -60,9 +62,10 @@ class Fisher extends Classifier {
 
   /**
    * Returns the probability of a given feature in a given category.
-   * @param {String} feature - The feature to look up in the category.
-   * @param {String} category - The category to find the feature in.
-   * @returns {Number} - The probability, the frequency in this category divided by the overall frequency.
+   *
+   * @param {string} feature - The feature to look up in the category.
+   * @param {string} category - The category to find the feature in.
+   * @returns {number} - The probability, the frequency in this category divided by the overall frequency.
    * @memberof Classifier
    */
   categoryProbability(feature, category) {
@@ -83,9 +86,10 @@ class Fisher extends Classifier {
 
   /**
    * Returns the Fisher probability of a given item in a given category.
-   * @param {String} item - The item to determine the probabolity of being in the category.
-   * @param {String} category - The category to find the item in.
-   * @returns {Number} - The probability, using Inverse Chi Squared.
+   *
+   * @param {string} item - The item to determine the probabolity of being in the category.
+   * @param {string} category - The category to find the item in.
+   * @returns {number} - The probability, using Inverse Chi Squared.
    * @memberof Classifier
    */
   fisherProbability(item, category) {
@@ -102,8 +106,9 @@ class Fisher extends Classifier {
 
   /**
    * Returns the minimum for a given category.
-   * @param {String} category - The category to get the minimum for.
-   * @returns {Number} - The miniumum for the category, or 0.5.
+   *
+   * @param {string} category - The category to get the minimum for.
+   * @returns {number} - The miniumum for the category, or 0.5.
    * @memberof Classifier
    */
   getMinimum(category) {
@@ -112,9 +117,10 @@ class Fisher extends Classifier {
 
   /**
    * Sets the minimum for a given category.
-   * @param {String} category - The category to set the minimum for.
-   * @param {Number} minimum - The minimum to set for the category.
-   * @returns {Number} - The miniumum for the category.
+   *
+   * @param {string} category - The category to set the minimum for.
+   * @param {number} minimum - The minimum to set for the category.
+   * @returns {number} - The miniumum for the category.
    * @memberof Classifier
    */
   setMinimum(category, minimum) {
@@ -131,9 +137,10 @@ class Fisher extends Classifier {
    * The inverse chi squared distribution is a continuous probability distribution
    * of the reciprocal of a variable distributed according to the chi squared distribution.
    * See also: https://en.wikipedia.org/wiki/Inverse-chi-squared_distribution
-   * @param {Number} probability - The scale, or, probability.
-   * @param {Number} degreeOfFreedom - The variance, or, degree of freedom.
-   * @returns {Number} - The miniumum for the category.
+   *
+   * @param {number} probability - The scale, or, probability.
+   * @param {number} degreeOfFreedom - The variance, or, degree of freedom.
+   * @returns {number} - The miniumum for the category.
    * @memberof Classifier
    */
   static inverseChiSquared(probability, degreeOfFreedom) {

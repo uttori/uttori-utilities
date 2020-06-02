@@ -2,7 +2,8 @@ const debug = require('debug')('Uttori.Utilities.UttoriEvent');
 
 /**
  * Event class used in conjunction with the Event Dispatcher.
- * @property {String} label - The human readable identifier of the event.
+ *
+ * @property {string} label - The human readable identifier of the event.
  * @property {Function[]} callbacks - The functions to be executed when an event is fired.
  * @example <caption>new UttoriEvent(label)</caption>
  * const event = new UttoriEvent('event-label');
@@ -13,8 +14,9 @@ const debug = require('debug')('Uttori.Utilities.UttoriEvent');
 class UttoriEvent {
   /**
    * Creates a new event UttoriEvent.
-   * @param {String} label - The human readable identifier of the event.
-   * @constructor
+   *
+   * @param {string} label - The human readable identifier of the event.
+   * @class
    */
   constructor(label) {
     if (typeof label !== 'string' || label.length === 0) {
@@ -28,6 +30,7 @@ class UttoriEvent {
 
   /**
    * Add a function to an event that will be called when the event is fired.
+   *
    * @param {Function} callback - Function to be called when the event is fired.
    * @example
    * event.register(callback);
@@ -50,6 +53,7 @@ class UttoriEvent {
 
   /**
    * Remove a function from an event that would be called when the event is fired.
+   *
    * @param {Function} callback - Function to be removed from the event.
    * @example
    * event.unregister(callback);
@@ -72,8 +76,9 @@ class UttoriEvent {
 
   /**
    * Executes all the callbacks present on an event with passed in data and context.
+   *
    * @param {*} data - Data to be used, updated, or modified by event callbacks.
-   * @param {Object} [context] - Context to help with updating or modification of the data.
+   * @param {object} [context] - Context to help with updating or modification of the data.
    * @returns {Promise} - A Promise resolving to the result of the check, either true (invalid) or false (valid).
    * @example
    * is_spam = await event.validate({ data }, this);
@@ -99,8 +104,9 @@ class UttoriEvent {
 
   /**
    * Executes all the callbacks present on an event with passed in data and context.
+   *
    * @param {*} data - Data to be used, updated, or modified by event callbacks.
-   * @param {Object} [context] - Context to help with updating or modification of the data.
+   * @param {object} [context] - Context to help with updating or modification of the data.
    * @returns {Promise} - A Promise resolving to the original input data, either modified or untouched.
    * @example
    * output = await event.filter({ data }, this);
@@ -128,8 +134,9 @@ class UttoriEvent {
 
   /**
    * Executes all the callbacks present on an event with passed in data and context.
+   *
    * @param {*} data - Data to be used, updated, or modified by event callbacks.
-   * @param {Object} [context] - Context to help with updating or modification of the data.
+   * @param {object} [context] - Context to help with updating or modification of the data.
    * @example
    * event.fire({ data }, this);
    * @memberof UttoriEvent
@@ -145,8 +152,9 @@ class UttoriEvent {
 
   /**
    * Executes all the callbacks present on an event with passed in data and context and returns their output.
+   *
    * @param {*} data - Data to be used by event callbacks.
-   * @param {Object} [context] - Context to help with computing of the data.
+   * @param {object} [context] - Context to help with computing of the data.
    * @returns {Array} - An array of the results from the fetch.
    * @example
    * output = await event.fetch({ data }, this);

@@ -8,7 +8,7 @@ An event bus system for registering, unregistering and triggering events.
 
 | Name | Type | Description |
 | --- | --- | --- |
-| events | <code>Object</code> | The collection of events to listen for. |
+| events | <code>object</code> | The collection of events to listen for. |
 
 
 * [EventDispatcher](#EventDispatcher)
@@ -46,9 +46,9 @@ Fires off an event with passed in data and context for a given label.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| label | <code>String</code> | The human readable identifier of the event. |
+| label | <code>string</code> | The human readable identifier of the event. |
 | data | <code>\*</code> | Data to be used, updated, or modified by event callbacks. |
-| [context] | <code>Object</code> | Context to help with updating or modification of the data. |
+| [context] | <code>object</code> | Context to help with updating or modification of the data. |
 
 **Example**  
 ```js
@@ -64,9 +64,9 @@ Fires off an event with passed in data and context for a given label.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| label | <code>String</code> | The human readable identifier of the event. |
+| label | <code>string</code> | The human readable identifier of the event. |
 | data | <code>\*</code> | Data to be used, updated, or modified by event callbacks. |
-| [context] | <code>Object</code> | Context to help with updating or modification of the data. |
+| [context] | <code>object</code> | Context to help with updating or modification of the data. |
 
 **Example**  
 ```js
@@ -81,9 +81,9 @@ Fires off an event with passed in data and context for a given label.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| label | <code>String</code> | The human readable identifier of the event. |
+| label | <code>string</code> | The human readable identifier of the event. |
 | data | <code>\*</code> | Data to be used, updated, or modified by event callbacks. |
-| [context] | <code>Object</code> | Context to help with updating or modification of the data. |
+| [context] | <code>object</code> | Context to help with updating or modification of the data. |
 
 **Example**  
 ```js
@@ -99,9 +99,9 @@ Fires off an event with passed in data and context for a given label and returns
 
 | Param | Type | Description |
 | --- | --- | --- |
-| label | <code>String</code> | The human readable identifier of the event. |
+| label | <code>string</code> | The human readable identifier of the event. |
 | data | <code>\*</code> | Data to be used by event callbacks. |
-| [context] | <code>Object</code> | Context to help with updating or modification of the data. |
+| [context] | <code>object</code> | Context to help with updating or modification of the data. |
 
 **Example**  
 ```js
@@ -117,7 +117,7 @@ If no label is found, one is created.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| label | <code>String</code> | The human readable identifier of the event. |
+| label | <code>string</code> | The human readable identifier of the event. |
 | callback | <code>function</code> | Function to be called when the event is fired. |
 
 **Example**  
@@ -134,7 +134,7 @@ Uses the `EventDispatcher.on` method with a function wrapped to call off on use.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| label | <code>String</code> | The human readable identifier of the event. |
+| label | <code>string</code> | The human readable identifier of the event. |
 | callback | <code>function</code> | Function to be called when the event is fired. |
 
 **Example**  
@@ -150,7 +150,7 @@ Remove a function from an event.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| label | <code>String</code> | The human readable identifier of the event. |
+| label | <code>string</code> | The human readable identifier of the event. |
 | callback | <code>function</code> | Function to be removed. |
 
 **Example**  
@@ -166,7 +166,7 @@ Verifies an event label.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| label | <code>String</code> | The human readable identifier of the event. |
+| label | <code>string</code> | The human readable identifier of the event. |
 
 **Example**  
 ```js

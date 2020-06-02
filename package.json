@@ -22,11 +22,12 @@
   "devDependencies": {
     "ava": "^3.8.2",
     "coveralls": "^3.1.0",
-    "docsify": "^4.11.3",
+    "docsify-cli": "^4.4.0",
     "eslint": "^7.1.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-plugin-ava": "^10.3.0",
     "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jsdoc": "^26.0.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-no-inferred-method-name": "^2.0.0",
     "eslint-plugin-node": "^11.1.0",
@@ -39,7 +40,7 @@
     "eslint-plugin-xss": "^0.1.10",
     "express": "^4.17.1",
     "jsdoc-to-markdown": "^6.0.1",
-    "nyc": "^15.0.1",
+    "nyc": "^15.1.0",
     "sinon": "^9.0.2",
     "uttori-document": "^1.4.1"
   },

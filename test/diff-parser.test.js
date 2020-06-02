@@ -3563,6 +3563,6 @@ test('DiffParser.detectLineType(line): can detect lines of all types', (t) => {
   t.is(DiffParser.detectLineType(), 'unknown');
   t.is(DiffParser.detectLineType(''), 'unknown');
   t.is(DiffParser.detectLineType(null), 'unknown');
-  t.is(DiffParser.detectLineType(NaN), 'unknown');
+  t.is(DiffParser.detectLineType(Number.NaN), 'unknown');
   t.is(DiffParser.detectLineType(false), 'unknown');
 });

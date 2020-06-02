@@ -4,23 +4,25 @@ const Operator = require('./operator');
 const TokenizeThis = require('./tokenizer');
 
 /**
-  * Parses the WHERE portion of an SQL-like string into an abstract syntax tree.
-  * The tree is object-based, where each key is the operator, and its value is an array of the operands.
-  * The number of operands depends on if the operation is defined as unary, binary, or ternary in the config.
-  * @property {Object} config - The configuration object.
-  * @property {TokenizeThis} tokenizer - The tokenizer instance.
-  * @property {Object} operators - The operators from config converted to Operator objects.
-  * @example <caption>Init SqlWhereParser</caption>
-  * const parser = new SqlWhereParser();
-  * const parsed = parser.parse(sql);
-  * @class
-  */
+ * Parses the WHERE portion of an SQL-like string into an abstract syntax tree.
+ * The tree is object-based, where each key is the operator, and its value is an array of the operands.
+ * The number of operands depends on if the operation is defined as unary, binary, or ternary in the config.
+ *
+ * @property {object} config - The configuration object.
+ * @property {TokenizeThis} tokenizer - The tokenizer instance.
+ * @property {object} operators - The operators from config converted to Operator objects.
+ * @example <caption>Init SqlWhereParser</caption>
+ * const parser = new SqlWhereParser();
+ * const parsed = parser.parse(sql);
+ * @class
+ */
 class SqlWhereParser {
 /**
-  * Creates an instance of SqlWhereParser.
-  * @param {Object} config - A configuration object.
-  * @constructor
-  */
+ * Creates an instance of SqlWhereParser.
+ *
+ * @param {object} config - A configuration object.
+ * @class
+ */
   constructor(config = {}) {
     debug('constructor:', config);
     config = {
@@ -100,9 +102,10 @@ class SqlWhereParser {
    * Parse a SQL statement with an evaluator function.
    * Uses an implementation of the Shunting-Yard Algorithm: https://wcipeg.com/wiki/Shunting_yard_algorithm
    * See also: https://en.wikipedia.org/wiki/Shunting-yard_algorithm
-   * @param {String} sql - Query string to process.
+   *
+   * @param {string} sql - Query string to process.
    * @param {Function} [evaluator] - Function to evaluate operators.
-   * @returns {Object} - The parsed query tree.
+   * @returns {object} - The parsed query tree.
    */
   parse(sql, evaluator) {
     debug('parse:', sql);
@@ -252,9 +255,10 @@ class SqlWhereParser {
 
   /**
    * Returns the precedence order from two values.
-   * @param {String|Symbol} operatorValue1
-   * @param {String|Symbol} operatorValue2
-   * @returns {Boolean}
+   *
+   * @param {string|symbol} operatorValue1 - First operator.
+   * @param {string|symbol} operatorValue2 - Second operator.
+   * @returns {boolean} That operatorValue2 precedence is less than or equal to the precedence of operatorValue1.
    */
   operatorPrecedenceFromValues(operatorValue1, operatorValue2) {
     debug('operatorPrecedenceFromValues:', operatorValue1, operatorValue2);
@@ -263,8 +267,9 @@ class SqlWhereParser {
 
   /**
    * Returns the operator from the string or Symbol provided.
-   * @param {String|Symbol} operatorValue
-   * @returns {*}
+   *
+   * @param {string|symbol} operatorValue - The operator.
+   * @returns {*} The operator from the list of operators.
    */
   getOperator(operatorValue) {
     debug('getOperator:', operatorValue);
@@ -279,9 +284,10 @@ class SqlWhereParser {
 
   /**
    * A default fallback evaluator for the parse function.
-   * @param {String|Symbol} operatorValue - The operator to evaluate.
+   *
+   * @param {string|symbol} operatorValue - The operator to evaluate.
    * @param {Array} operands - The list of operands.
-   * @returns {Object}
+   * @returns {Array|object} Either comma seperated values concated, or an object with the key of the operator and operands as the value.
    */
   // eslint-disable-next-line class-methods-use-this
   static defaultEvaluator(operatorValue, operands) {
