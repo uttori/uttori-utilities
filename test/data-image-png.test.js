@@ -47,7 +47,7 @@ test('setCompressionMethod(compressionMethod): throws an error on invalid compre
   t.is(image.compressionMethod, 0);
   t.throws(() => {
     image.setCompressionMethod(1);
-  }, { message: 'Unsupported Compression Method: 1' });
+  }, { message: 'Unsupported Compression Method: 1, should be 0' });
   t.is(image.compressionMethod, 0);
 });
 
@@ -69,7 +69,7 @@ test('setFilterMethod(filterMethod): throws an error on invalid filterMethod val
   t.is(image.filterMethod, 0);
   t.throws(() => {
     image.setFilterMethod(1);
-  }, { message: 'Unsupported Filter Method: 1' });
+  }, { message: 'Unsupported Filter Method: 1, should be 0' });
   t.is(image.filterMethod, 0);
 });
 
@@ -99,7 +99,7 @@ test('setInterlaceMethod(interlaceMethod): throws an error on invalid interlaceM
   t.is(image.interlaceMethod, 0);
 });
 
-test('setPalette(palette): can set the palette', async (t) => {
+test('setPalette(palette): can set the palette with an Array', async (t) => {
   const image_data = await FileUtility.readFile('./test/assets', '512x478x24', 'png', null);
   const buffer = new DataBuffer(image_data);
   const image = ImagePNG.fromBuffer(buffer);
@@ -108,6 +108,18 @@ test('setPalette(palette): can set the palette', async (t) => {
     image.setPalette([1]);
   });
   t.deepEqual(image.palette, [1]);
+});
+
+test('setPalette(palette): can set the palette with an Uint8Array', async (t) => {
+  const image_data = await FileUtility.readFile('./test/assets', '512x478x24', 'png', null);
+  const buffer = new DataBuffer(image_data);
+  const image = ImagePNG.fromBuffer(buffer);
+  const palette = new Uint8Array([1]);
+  t.deepEqual(image.palette, []);
+  t.notThrows(() => {
+    image.setPalette(palette);
+  });
+  t.deepEqual(image.palette, palette);
 });
 
 test('setPalette(palette): return when called with anything other than an array', async (t) => {
@@ -199,15 +211,15 @@ test('decodePLTE(): can read a valid PNG PLTE chunk', async (t) => {
 test('decodeTRNS(): can read a valid PNG tRNS chunk', async (t) => {
   let image_data = await FileUtility.readFile('./test/assets', '150x300x8-MANY-CHUNKS', 'png', null);
   let image = ImagePNG.fromFile(image_data);
-  t.not(image.transparency, null);
+  t.not(image.transparency, undefined);
 
   image_data = await FileUtility.readFile('./test/assets', '512x478x24-compressed', 'png', null);
   image = ImagePNG.fromFile(image_data);
-  t.is(image.transparency, null);
+  t.is(image.transparency, undefined);
 
   image_data = await FileUtility.readFile('./test/assets', 'png-transparent', 'png', null);
   image = ImagePNG.fromFile(image_data);
-  t.is(image.transparency, null);
+  t.is(image.transparency, undefined);
 });
 
 test('decodePHYS(): can read a valid PNG pHYs chunk', async (t) => {

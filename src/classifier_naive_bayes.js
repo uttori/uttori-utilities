@@ -34,7 +34,6 @@ class NaiveBayes extends Classifier {
    * @param {string} item - The item to classify.
    * @param {string} [fallback='_'] - The category to fallback to when one cannot be determined.
    * @returns {string} - The best category for the provided item.
-   * @memberof Classifier
    */
   classify(item, fallback = '_') {
     debug('classify:', item, fallback);
@@ -71,7 +70,6 @@ class NaiveBayes extends Classifier {
    * @param {string} item - The item to find the probability of being in the given category.
    * @param {string} category - The category to check against the item.
    * @returns {number} - The weighted probability of the item in the category.
-   * @memberof Classifier
    */
   documentProbability(item, category) {
     debug('documentProbability:', item, category);
@@ -88,7 +86,6 @@ class NaiveBayes extends Classifier {
    * @param {string} item - The item to find the probability of being in the given category.
    * @param {string} category - The category to check against the item.
    * @returns {number} - The probability of the item in the category.
-   * @memberof Classifier
    */
   probability(item, category) {
     debug('probability:', item, category);
@@ -105,7 +102,6 @@ class NaiveBayes extends Classifier {
    *
    * @param {string} category - The category to get the threshold for.
    * @returns {number} - The miniumum for the category, or 0.5.
-   * @memberof Classifier
    */
   getThreshold(category) {
     debug('getThreshold:', category);
@@ -120,7 +116,6 @@ class NaiveBayes extends Classifier {
    * @param {string} category - The category to set the threshold for.
    * @param {number} threshold - The threshold to set for the category.
    * @returns {number} - The threshold for the category.
-   * @memberof Classifier
    */
   setThreshold(category, threshold) {
     debug('setThreshold:', category, threshold);

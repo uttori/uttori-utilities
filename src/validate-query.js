@@ -4,6 +4,8 @@ const SqlWhereParser = require('./where-parser');
 
 /**
  * Validates and parses a SQL-like query structure.
+ * Pass in: fields, table, conditions, order, limit as a query string:
+ * `SELECT {fields} FROM {table} WHERE {conditions} ORDER BY {order} LIMIT {limit}`
  *
  * @param {string} query - The conditions on which a document should be returned.
  * @returns {object} The extrated and validated fields, table, where, order and limit properties.
@@ -11,17 +13,15 @@ const SqlWhereParser = require('./where-parser');
 const validateQuery = (query) => {
   debug('validateQuery:', query);
   let error;
-  const pieces = query.split(/(SELECT|FROM|WHERE|ORDER BY|LIMIT)/).map((piece) => piece.trim());
-  pieces.shift(); // Empty item is always first.
 
-  // Pass in: fields, table, conditions, order, limit as a query string:
-  // `SELECT {fields} FROM {table} WHERE {conditions} ORDER BY {order} LIMIT {limit}`
   // Split into parts:
   // - fields parser (N/A): 'SELECT'
   // - table parser (N/A): 'FROM'
   // - where parser (SqlWhereParser): 'WHERE'
   // - order parser (TBD): 'ORDER BY', 'ASC', 'DESC', 'RANDOM':
   // - limit parser (N/A): 'LIMIT'
+  const pieces = query.split(/(SELECT|FROM|WHERE|ORDER BY|LIMIT)/).map((piece) => piece.trim());
+  pieces.shift(); // Empty item is always first.
 
   // Fields
   if (pieces[0] !== 'SELECT') {

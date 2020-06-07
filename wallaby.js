@@ -1,9 +1,11 @@
 module.exports = () => ({
   files: [
-    'src/*.js',
+    '**/src/!(*.test).js', // all but specs
+    '!node_modules/**',
   ],
   tests: [
-    'test/*.test.js',
+    '**/test/*.(spec|test).js', // specs only
+    '!node_modules/**',
   ],
   env: {
     type: 'node',

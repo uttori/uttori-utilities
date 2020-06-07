@@ -21,9 +21,15 @@ class SqlWhereParser {
  * Creates an instance of SqlWhereParser.
  *
  * @param {object} config - A configuration object.
+ * @param {object[]} [config.operators] - A collection of operators in precedence order.
+ * @param {object} [config.tokenizer] - A Tokenizer config.
+ * @param {string[]} [config.tokenizer.shouldTokenize] - A collection of items to tokenize.
+ * @param {string[]} [config.tokenizer.shouldMatch] - A collection of items to consider as wrapping tokens.
+ * @param {string[]} [config.tokenizer.shouldDelimitBy] - A collection of items to consider as whitespace to delimit by.
+ * @param {boolean} [config.wrapQuery=true] - Wraps queries in surround parentheses when true.
  * @class
  */
-  constructor(config = {}) {
+  constructor(config) {
     debug('constructor:', config);
     config = {
       operators: [
@@ -81,16 +87,17 @@ class SqlWhereParser {
         shouldMatch: ['"', "'", '`'],
         shouldDelimitBy: [' ', '\n', '\r', '\t'],
       },
-      wrapQuery: true, // Wraps queries in surround parentheses ().
+      wrapQuery: true,
       ...config,
     };
     this.tokenizer = new TokenizeThis(config.tokenizer);
     this.operators = {};
 
-    // Flattens the operator definitions into a single object,
-    // whose keys are the operators, and the values are the Operator class wrappers.
+    // Flatten the operator definitions into a single object, whose keys are the operators, and the values are the Operator class wrappers.
     config.operators.forEach((operators, precedence) => {
-      Object.keys(operators).concat(Object.getOwnPropertySymbols(operators)).forEach((operator) => {
+      const symbols = Object.getOwnPropertySymbols(operators);
+      const strings = Object.keys(operators);
+      [...symbols, ...strings].forEach((operator) => {
         this.operators[operator] = new Operator(operator, operators[operator], precedence);
       });
     });
@@ -99,13 +106,13 @@ class SqlWhereParser {
   }
 
   /**
-   * Parse a SQL statement with an evaluator function.
-   * Uses an implementation of the Shunting-Yard Algorithm: https://wcipeg.com/wiki/Shunting_yard_algorithm
-   * See also: https://en.wikipedia.org/wiki/Shunting-yard_algorithm
+   * Parse a SQL statement with an evaluator function. Uses an implementation of the Shunting-Yard Algorithm.
    *
    * @param {string} sql - Query string to process.
    * @param {Function} [evaluator] - Function to evaluate operators.
    * @returns {object} - The parsed query tree.
+   * @see {@link https://wcipeg.com/wiki/Shunting_yard_algorithm|Shunting-Yard_Algorithm (P3G)}
+   * @see {@link https://en.wikipedia.org/wiki/Shunting-yard_algorithm|Shunting-Yard_Algorithm (Wikipedia)}
    */
   parse(sql, evaluator) {
     debug('parse:', sql);

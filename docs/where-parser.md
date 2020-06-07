@@ -30,9 +30,15 @@ The number of operands depends on if the operation is defined as unary, binary, 
 Creates an instance of SqlWhereParser.
 
 
-| Param | Type | Description |
-| --- | --- | --- |
-| config | <code>object</code> | A configuration object. |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| config | <code>object</code> |  | A configuration object. |
+| [config.operators] | <code>Array.&lt;object&gt;</code> |  | A collection of operators in precedence order. |
+| [config.tokenizer] | <code>object</code> |  | A Tokenizer config. |
+| [config.tokenizer.shouldTokenize] | <code>Array.&lt;string&gt;</code> |  | A collection of items to tokenize. |
+| [config.tokenizer.shouldMatch] | <code>Array.&lt;string&gt;</code> |  | A collection of items to consider as wrapping tokens. |
+| [config.tokenizer.shouldDelimitBy] | <code>Array.&lt;string&gt;</code> |  | A collection of items to consider as whitespace to delimit by. |
+| [config.wrapQuery] | <code>boolean</code> | <code>true</code> | Wraps queries in surround parentheses when true. |
 
 **Example** *(Init SqlWhereParser)*  
 ```js
@@ -42,12 +48,15 @@ const parsed = parser.parse(sql);
 <a name="SqlWhereParser+parse"></a>
 
 ### sqlWhereParser.parse(sql, [evaluator]) ⇒ <code>object</code>
-Parse a SQL statement with an evaluator function.
-Uses an implementation of the Shunting-Yard Algorithm: https://wcipeg.com/wiki/Shunting_yard_algorithm
-See also: https://en.wikipedia.org/wiki/Shunting-yard_algorithm
+Parse a SQL statement with an evaluator function. Uses an implementation of the Shunting-Yard Algorithm.
 
 **Kind**: instance method of [<code>SqlWhereParser</code>](#SqlWhereParser)  
 **Returns**: <code>object</code> - - The parsed query tree.  
+**See**
+
+- [Shunting-Yard_Algorithm (P3G)](https://wcipeg.com/wiki/Shunting_yard_algorithm)
+- [Shunting-Yard_Algorithm (Wikipedia)](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)
+
 
 | Param | Type | Description |
 | --- | --- | --- |

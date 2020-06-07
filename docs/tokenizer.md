@@ -183,7 +183,7 @@ Takes in the config, processes it, and creates tokenizer instances based on that
 
 <a name="TokenizeThis+tokenize"></a>
 
-### tokenizeThis.tokenize(str, forEachToken) ⇒ <code>\*</code>
+### tokenizeThis.tokenize(input, forEachToken) ⇒ <code>\*</code>
 Creates a Tokenizer, then immediately calls "tokenize".
 
 **Kind**: instance method of [<code>TokenizeThis</code>](#TokenizeThis)  
@@ -191,7 +191,7 @@ Creates a Tokenizer, then immediately calls "tokenize".
 
 | Param | Type | Description |
 | --- | --- | --- |
-| str | <code>string</code> | The string to scan for tokens. |
+| input | <code>string</code> | The string to scan for tokens. |
 | forEachToken | <code>function</code> | Function to run over each token. |
 
 <a name="sortTokenizableSubstrings"></a>

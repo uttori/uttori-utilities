@@ -7,7 +7,7 @@ const makeDataBitstream = (bytes) => {
 };
 
 test('copy', (t) => {
-  const bitstream = makeDataBitstream([10, 160], [20, 29, 119]);
+  const bitstream = makeDataBitstream([10, 160]);
   const copy = bitstream.copy();
 
   t.not(copy, bitstream);
@@ -15,7 +15,7 @@ test('copy', (t) => {
 });
 
 test('available', (t) => {
-  const bitstream = makeDataBitstream([10, 160], [20, 29, 119]);
+  const bitstream = makeDataBitstream([10, 160]);
   let available = bitstream.available(1);
 
   t.true(available);
@@ -220,9 +220,9 @@ test('read/peek signed', (t) => {
 });
 
 test('readLSB unsigned', (t) => {
-  // {     byte 1     }{    byte 2  }
-  // { 3   2      1   }{       3    }
-  // { 1][111] [1100] }{ [0000 1000 } -> 0xfc08
+  // {      byte 1   }{    byte 2   }
+  // {  3   2      1 }{       3     }
+  // { [1111] [1100] }{ [0000 1000] } -> 0xfc08
   let bitstream = makeDataBitstream([0xFC, 0x08]);
 
   t.is(0, bitstream.peekLSB(0));
@@ -238,7 +238,7 @@ test('readLSB unsigned', (t) => {
   t.is(0x11, bitstream.readLSB(9));
 
   //      4            3           2           1
-  // [0111 0000] [1001 1010] [0010 0101] 1[111 0011] -> 0x709a25f3
+  // [0111 0000] [1001 1010] [0010 0101] [1111 0011] -> 0x709a25f3
   bitstream = makeDataBitstream([0x70, 0x9A, 0x25, 0xF3]);
   t.is(0xF3259A70, bitstream.peekLSB(32));
   t.is(0x73259A70, bitstream.peekLSB(31));

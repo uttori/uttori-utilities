@@ -47,7 +47,6 @@ class Operator {
    * Returns the value as is for JSON.
    *
    * @returns {*} value.
-   * @memberof Operator
    */
   toJSON() {
     return this.value;
@@ -57,7 +56,6 @@ class Operator {
    * Returns the value as its string format.
    *
    * @returns {string} String representation of value.
-   * @memberof Operator
    */
   toString() {
     return `${this.value}`;
@@ -68,7 +66,6 @@ class Operator {
    *
    * @param {string} type - The type to lookup.
    * @returns {*} Either number of parameters or Unary Minus Symbol.
-   * @memberof Operator
    * @static
    */
 

@@ -34,7 +34,6 @@ class Classifier {
    *
    * @param {string} category - The category to find the count for.
    * @returns {number} - The count for the provided category.
-   * @memberof Classifier
    */
   categoryCount(category) {
     debug('categoryCount:', category);
@@ -49,7 +48,6 @@ class Classifier {
    * @param {string} feature - The feature to look for the category in.
    * @param {string} category - The category to find the count for.
    * @returns {number} - The count for the provided category of the provided feature.
-   * @memberof Classifier
    */
   featureCount(feature, category) {
     debug('featureCount:', feature, category);
@@ -64,7 +62,6 @@ class Classifier {
    * @param {string} feature - The feature to look for the category in.
    * @param {string} category - The category to find the count for.
    * @returns {number} - The probability for the feature to match the category (feature count / category count).
-   * @memberof Classifier
    */
   featureProbability(feature, category) {
     debug('featureProbability:', feature, category);
@@ -77,7 +74,6 @@ class Classifier {
    * Returns the names of all the categories.
    *
    * @returns {string[]} - The array of category keys.
-   * @memberof Classifier
    */
   getCategories() {
     const categories = Object.keys(this.categories);
@@ -113,7 +109,6 @@ class Classifier {
    * @param {string} text - Text to extract features from.
    * @returns {string[]} - The features found in the provided text.
    * @static
-   * @memberof Classifier
    */
   static getFeatures(text) {
     debug('getFeatures:', text);
@@ -131,7 +126,6 @@ class Classifier {
    * Increment or instantiate a count for a given category.
    *
    * @param {string} category - The category to increment the count for.
-   * @memberof Classifier
    */
   incrementCategory(category) {
     debug('incrementCategory:', category);
@@ -144,7 +138,6 @@ class Classifier {
    *
    * @param {string} feature - The feature to find the category to increment the count for.
    * @param {string} category - The category to increment the count for.
-   * @memberof Classifier
    */
   incrementFeature(feature, category) {
     debug('incrementFeature:', feature, category);
@@ -159,7 +152,6 @@ class Classifier {
    * Returns the total count of categories.
    *
    * @returns {number} - The count of used categories.
-   * @memberof Classifier
    */
   totalCount() {
     const count = Object.values(this.categories).reduce((result, value) => result + value, 0);
@@ -172,7 +164,6 @@ class Classifier {
    *
    * @param {string} item - The item to train a given category.
    * @param {string} category - The category to increment the count for.
-   * @memberof Classifier
    */
   train(item, category) {
     debug('train:', item, category);
@@ -193,7 +184,6 @@ class Classifier {
    * @param {number} [weight=1] - The provided weight of the feature.
    * @param {number} [assumedProbability=0.5] - Assumed probability of the feature.
    * @returns {number} - The weighted probability of the provided feature.
-   * @memberof Classifier
    */
   weightedProbability(feature, _category, basicProbability, weight = 1, assumedProbability = 0.5) {
     debug('weightedProbability:', feature, _category, basicProbability, weight, assumedProbability);
@@ -208,7 +198,6 @@ class Classifier {
    *
    * @param {number} [spaces=0] - Spaces to indent JSON.
    * @returns {string} - The model as JSON.
-   * @memberof Classifier
    */
   save(spaces = 0) {
     debug('save:', spaces);

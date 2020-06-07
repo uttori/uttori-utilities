@@ -1,6 +1,4 @@
-/* eslint-disable class-methods-use-this */
 /* eslint-disable no-bitwise */
-/* eslint-disable spaced-comment */
 const debug = require('debug')('Uttori.Utilities.ImagePNG');
 const zlib = require('zlib');
 
@@ -8,14 +6,53 @@ const DataBuffer = require('./data-buffer');
 const DataBufferList = require('./data-buffer-list');
 const DataStream = require('./data-stream');
 
-// https://github.com/jsummers/tweakpng BEST EXAMPLE
-// http://www.simplesystems.org/libpng/FFFF/ EXAMPLES OMG
-// https://www.w3.org/TR/PNG-Chunks.html
-// https://github.com/arian/pngjs/blob/master/PNGReader.js
-// https://ucnv.github.io/pnglitch/
-// http://www.schaik.com/pngsuite/#basic
-// http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html
+/**
+ * PNG Decoder
+ *
+ * @property {number} width - Pixel Width
+ * @property {number} height - Pixel Height
+ * @property {number} bitDepth - Image Bit Depth, one of: 1, 2, 4, 8, 16
+ * @property {number} colorType = Defines pixel structure, one of: 0, 2, 3, 4, 6
+ * @property {number} compressionMethod - Type of compression, always 0
+ * @property {number} filterMethod - Type of filtering, always 0
+ * @property {number} interlaceMethod - Type of interlacing, one of: 0, 1
+ * @property {number} colors - Number of bytes for each pixel
+ * @property {boolean} alpha - True when the image has an alpha transparency layer
+ * @property {Array | Uint8Array} palette - Raw Color data
+ * @property {Uint8Array} pixels - Raw Image Pixel data
+ * @property {Uint8Array} transparency - Raw Transparency data
+ * @property {object} physical - Object containing physical dimension information
+ * @property {number} physical.width - Physical Dimension Width
+ * @property {number} physical.height - Physical Dimension Height
+ * @property {number} physical.unit - Physical Dimension Units, with 0 being unknown and 1 being Meters
+ * @property {Uint8Array[]} dataChunks - Image Data pieces
+ * @property {Uint8Array} header - PNG Signature from the data
+ * @see {@link http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html|Chunk Specifications}
+ * @see {@link https://ucnv.github.io/pnglitch/|The Art of PNG Glitch}
+ * @see {@link http://www.schaik.com/pngsuite/|PngSuite, test-suite for PNG}
+ * @see {@link http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html|Chunk Specifications (LibPNG)}
+ * @see {@link https://www.w3.org/TR/PNG-Chunks.html|Chunk Specifications (W3C)}
+ * @see {@link http://www.simplesystems.org/libpng/FFFF/|PNGs containing a chunk with length 0xffffffff}
+ * @see {@link https://github.com/jsummers/tweakpng|TweakPNG}
+ * @example <caption>new ImagePNG(list, options)</caption>
+ * const image_data = await FileUtility.readFile('./test/assets/PngSuite', 'oi1n0g16', 'png', null);
+ * const image = ImagePNG.fromFile(image_data);
+ * image.decodePixels();
+ * const length = image.pixels.length;
+ *  ➜ 6144
+ * const pixel = image.getPixel(0, 0);
+ *  ➜ [255, 255, 255, 255]
+ * @class
+ */
 class ImagePNG extends DataStream {
+  /**
+   * Creates a new ImagePNG.
+   *
+   * @param {DataBufferList} list - The DataBufferList of the image to process.
+   * @param {object} options - Options for this instance.
+   * @param {number} [options.size=16] - ArrayBuffer byteLength for the underlying binary parsing.
+   * @class
+   */
   constructor(list, options = { size: 16 }) {
     super(list, options);
 
@@ -30,19 +67,29 @@ class ImagePNG extends DataStream {
 
     this.colors = 0;
     this.alpha = false;
-    this.pixelBits = 0;
 
     this.palette = [];
-    this.pixels = null;
-    this.transparency = null;
+    this.pixels = undefined;
+    this.transparency = undefined;
 
-    this.physical = null;
+    this.physical = {
+      width: 0,
+      height: 0,
+      unit: 0,
+    };
 
     this.dataChunks = [];
 
     this.parse();
   }
 
+  /**
+   * Creates a new ImagePNG from file data.
+   *
+   * @param {string | Buffer} data - The data of the image to process.
+   * @returns {ImagePNG} the new ImagePNG instance for the provided file data
+   * @static
+   */
   static fromFile(data) {
     debug('fromFile:', data.length);
     const buffer = new DataBuffer(data);
@@ -51,6 +98,13 @@ class ImagePNG extends DataStream {
     return new ImagePNG(list, { size: data.length });
   }
 
+  /**
+   * Creates a new ImagePNG from a DataBuffer.
+   *
+   * @param {DataBuffer} buffer - The DataBuffer of the image to process.
+   * @returns {ImagePNG} the new ImagePNG instance for the provided DataBuffer
+   * @static
+   */
   static fromBuffer(buffer) {
     debug('fromBuffer:', buffer.length);
     const list = new DataBufferList();
@@ -58,6 +112,11 @@ class ImagePNG extends DataStream {
     return new ImagePNG(list, { size: buffer.length });
   }
 
+  /**
+   * Sets the bitDepth on the ImagePNG instance.
+   *
+   * @param {number} bitDepth - The bitDepth to set, one of: 1, 2, 4, 8, 16
+   */
   setBitDepth(bitDepth) {
     debug('setBitDepth:', bitDepth);
     if (![1, 2, 4, 8, 16].includes(bitDepth)) {
@@ -66,13 +125,20 @@ class ImagePNG extends DataStream {
     this.bitDepth = bitDepth;
   }
 
-  //   Color    Allowed    Interpretation
-  //   Type    Bit Depths
-  //   0       1,2,4,8,16  Each pixel is a grayscale sample.
-  //   2       8,16        Each pixel is an R,G,B triple.
-  //   3       1,2,4,8     Each pixel is a palette index; a PLTE chunk must appear.
-  //   4       8,16        Each pixel is a grayscale sample, followed by an alpha sample.
-  //   6       8,16        Each pixel is an R,G,B triple, followed by an alpha sample.
+  /**
+   * Sets the colorType on the ImagePNG instance.
+   * Both color and alpha properties are inferred from the colorType.
+   *
+   * Color Type | Allowed Bit Depths | Interpretation
+   * 0          | 1,2,4,8,16         | Each pixel is a grayscale sample.
+   * 2          | 8,16               | Each pixel is an R,G,B triple.
+   * 3          | 1,2,4,8            | Each pixel is a palette index; a PLTE chunk must appear.
+   * 4          | 8,16               | Each pixel is a grayscale sample, followed by an alpha sample.
+   * 6          | 8,16               | Each pixel is an R,G,B triple, followed by an alpha sample.
+   *
+   * @param {number} colorType - The colorType to set, one of: 0, 2, 3, 4, 6
+   * @throws {Error} Invalid Color Type, anything other than 0, 2, 3, 4, 6
+   */
   setColorType(colorType) {
     debug('setColorType:', colorType);
     let colors = 0;
@@ -92,22 +158,43 @@ class ImagePNG extends DataStream {
     this.colorType = colorType;
   }
 
+  /**
+   * Sets the compressionMethod on the ImagePNG instance.
+   * The compressionMethod should always be 0.
+   *
+   * @param {number} compressionMethod - The compressionMethod to set, always 0
+   * @throws {Error} Unsupported Compression Method, anything other than 0
+   */
   setCompressionMethod(compressionMethod) {
     debug('setCompressionMethod:', compressionMethod);
     if (compressionMethod !== 0) {
-      throw new Error(`Unsupported Compression Method: ${compressionMethod}`);
+      throw new Error(`Unsupported Compression Method: ${compressionMethod}, should be 0`);
     }
     this.compressionMethod = compressionMethod;
   }
 
+  /**
+   * Sets the filterMethod on the ImagePNG instance.
+   * The filterMethod should always be 0.
+   *
+   * @param {number} filterMethod - The filterMethod to set, always 0
+   * @throws {Error} Unsupported Filter Method, anything other than 0
+   */
   setFilterMethod(filterMethod) {
     debug('setFilterMethod:', filterMethod);
     if (filterMethod !== 0) {
-      throw new Error(`Unsupported Filter Method: ${filterMethod}`);
+      throw new Error(`Unsupported Filter Method: ${filterMethod}, should be 0`);
     }
     this.filterMethod = filterMethod;
   }
 
+  /**
+   * Sets the interlaceMethod on the ImagePNG instance.
+   * The interlaceMethod should always be 0 or 1.
+   *
+   * @param {number} interlaceMethod - The filterMethod to set, always 0 or 1
+   * @throws {Error} Unsupported Interlace Method, anything other than 0 or 1
+   */
   setInterlaceMethod(interlaceMethod) {
     debug('setInterlaceMethod:', interlaceMethod);
     if (interlaceMethod !== 0 && interlaceMethod !== 1) {
@@ -116,10 +203,17 @@ class ImagePNG extends DataStream {
     this.interlaceMethod = interlaceMethod;
   }
 
+  /**
+   * Sets the palette on the ImagePNG instance.
+   *
+   * @param {Array | Uint8Array} palette - The palette to set
+   * @throws {Error} No color in the palette
+   * @throws {Error} Too many colors for the current bit depth
+   */
   setPalette(palette) {
     debug('setPalette:', palette);
     if (!Array.isArray(palette) && !ArrayBuffer.isView(palette)) {
-      debug('No palette provided.');
+      debug('Invalid palette provided.');
       return;
     }
     if (palette.length === 0) {
@@ -137,6 +231,9 @@ class ImagePNG extends DataStream {
    * @param {number} x - The hoizontal offset to read.
    * @param {number} y - The vertical offset to read.
    * @returns {Array} the color as [red, green, blue, alpha]
+   * @throws {Error} x is out of bound for the image
+   * @throws {Error} y is out of bound for the image
+   * @throws {Error} Unknown color types
    */
   getPixel(x, y) {
     if (!this.pixels) {
@@ -194,7 +291,7 @@ class ImagePNG extends DataStream {
   }
 
   /**
-   * Parse the PNG file
+   * Parse the PNG file, decoding the supported chunks.
    */
   parse() {
     debug('parse');
@@ -208,7 +305,7 @@ class ImagePNG extends DataStream {
         // TODO: Find a PNG file with other data types in it?
         /* istanbul ignore next */
         if (leftover) {
-          debug('ending with data left:', this.buf.length - this.i, 'bytes left');
+          debug('ending with data left:', leftover, 'bytes left');
         }
         break;
       }
@@ -217,8 +314,12 @@ class ImagePNG extends DataStream {
 
   /**
    * Decodes and validates PNG Header.
-   * http://www.w3.org/TR/2003/REC-PNG-20031110/#5PNG-file-signature
-   * [137, 80, 78, 71, 13, 10, 26, 10]
+   * Signature (Decimal): [137, 80, 78, 71, 13, 10, 26, 10]
+   * Signature (Hexadecimal): [89, 50, 4E, 47, 0D, 0A, 1A, 0A]
+   * Signature (ASCII): [\211, P, N, G, \r, \n, \032, \n]
+   *
+   * @throws {Error} Missing or invalid PNG header
+   * @see {@link http://www.w3.org/TR/2003/REC-PNG-20031110/#5PNG-file-signature|PNG Signature}
    */
   decodeHeader() {
     debug('decodeHeader: offset =', this.offset);
@@ -237,14 +338,18 @@ class ImagePNG extends DataStream {
   }
 
   /**
-   * http://www.w3.org/TR/2003/REC-PNG-20031110/#5Chunk-layout
+   * Decodes the chunk type, and attempts to parse that chunk if supported.
+   * Supported Chunk Types: IHDR, PLTE, IDAT, IEND, tRNS, pHYs
    *
-   * length =  4      bytes
-   * type   =  4      bytes (IHDR, PLTE, IDAT, IEND or others)
-   * chunk  =  length bytes
-   * crc    =  4      bytes
+   * Chunk Structure:
+   * Length: 4 bytes
+   * Type:   4 bytes (IHDR, PLTE, IDAT, IEND, etc.)
+   * Chunk:  {length} bytes
+   * CRC:    4 bytes
    *
    * @returns {string} Chunk Type
+   * @throws {Error} Invalid Chunk Length when less than 0
+   * @see {@link http://www.w3.org/TR/2003/REC-PNG-20031110/#5Chunk-layout|Chunk Layout}
    */
   decodeChunk() {
     debug('decodeChunk');
@@ -284,18 +389,20 @@ class ImagePNG extends DataStream {
   }
 
   /**
-   * http://www.w3.org/TR/2003/REC-PNG-20031110/#11IHDR
-   * http://www.libpng.org/pub/png/spec/1.2/png-1.2-pdg.html#C.IHDR
+   * Decode the IHDR (Image header) chunk.
+   * Should be the first chunk in the data stream.
    *
-   * Width               4 bytes
-   * Height              4 bytes
-   * Bit depth           1 byte
-   * Colour type         1 byte
-   * Compression method  1 byte
-   * Filter method       1 byte
-   * Interlace method    1 byte
+   * Width:              4 bytes
+   * Height:             4 bytes
+   * Bit Depth:          1 byte
+   * Colour Type:        1 byte
+   * Compression Method: 1 byte
+   * Filter Method:      1 byte
+   * Interlace Method:   1 byte
    *
-   * @param {*} chunk - Data Blob
+   * @param {Uint8Array} chunk - Data Blob
+   * @see {@link http://www.w3.org/TR/2003/REC-PNG-20031110/#11IHDR|Image Header}
+   * @see {@link http://www.libpng.org/pub/png/spec/1.2/png-1.2-pdg.html#C.IHDR|Image Header}
    */
   decodeIHDR(chunk) {
     debug('decodeIHDR');
@@ -321,9 +428,12 @@ class ImagePNG extends DataStream {
   }
 
   /**
-   * http://www.w3.org/TR/PNG/#11PLTE
+   * Decode the PLTE (Palette) chunk.
+   * The PLTE chunk contains from 1 to 256 palette entries, each a three-byte series of the form.
+   * The number of entries is determined from the chunk length. A chunk length not divisible by 3 is an error.
    *
-   * @param {*} chunk - Data Blob
+   * @param {Uint8Array} chunk - Data Blob
+   * @see {@link http://www.w3.org/TR/PNG/#11PLTE|Palette}
    */
   decodePLTE(chunk) {
     debug('decodePLTE');
@@ -331,10 +441,11 @@ class ImagePNG extends DataStream {
   }
 
   /**
-   * http://www.w3.org/TR/2003/REC-PNG-20031110/#11IDAT
-   * multiple IDAT chunks will concatenated
+   * Decode the IDAT (Image Data) chunk.
+   * The IDAT chunk contains the actual image data which is the output stream of the compression algorithm.
    *
-   * @param {*} chunk - Data Blob
+   * @param {Uint8Array} chunk - Data Blob
+   * @see {@link http://www.w3.org/TR/2003/REC-PNG-20031110/#11IDAT|Image Data}
    */
   decodeIDAT(chunk) {
     debug('decodeIDAT:', chunk.length, 'bytes');
@@ -342,27 +453,32 @@ class ImagePNG extends DataStream {
   }
 
   /**
+   * Decode the tRNS (Transparency) chunk.
    * The tRNS chunk specifies that the image uses simple transparency: either alpha values associated with palette entries (for indexed-color images) or a single transparent color (for grayscale and truecolor images). Although simple transparency is not as elegant as the full alpha channel, it requires less storage space and is sufficient for many common cases.
-   * https://www.w3.org/TR/PNG/#11tRNS
    *
-   * @param {*} chunk - Data Blob
+   * @param {Uint8Array} chunk - Data Blob
+   * @see {@link https://www.w3.org/TR/PNG/#11tRNS|Transparency}
    */
   decodeTRNS(chunk) {
     debug('decodeTRNS');
     this.transparency = chunk;
   }
 
-  // Pixels per unit, X axis: 4 bytes (unsigned integer)
-  // Pixels per unit, Y axis: 4 bytes (unsigned integer)
-  // Unit specifier:          1 byte
-  // 0: unit is unknown
-  // 1: unit is the meter
   /**
+   * Decode the pHYs (Pixel Dimensions) chunk.
    * The pHYs chunk specifies the intended pixel size or aspect ratio for display of the image.
-   * https://www.w3.org/TR/PNG/#11tRNS
-   * https://www.w3.org/TR/PNG-Decoders.html#D.Pixel-dimensions
+   * When the unit specifier is 0, the pHYs chunk defines pixel aspect ratio only; the actual size of the pixels remains unspecified.
+   * If the pHYs chunk is not present, pixels are assumed to be square, and the physical size of each pixel is unspecified.
    *
-   * @param {*} chunk - Data Blob
+   * Structure:
+   * Pixels per unit, X axis: 4 bytes (unsigned integer)
+   * Pixels per unit, Y axis: 4 bytes (unsigned integer)
+   * Unit specifier:          1 byte
+   * 0: unit is unknown
+   * 1: unit is the meter
+   *
+   * @param {Uint8Array} chunk - Data Blob
+   * @see {@link https://www.w3.org/TR/PNG/#11pHYs|Pixel Dimensions}
    */
   decodePHYS(chunk) {
     const INCH_TO_METERS = 0.0254;
@@ -373,8 +489,8 @@ class ImagePNG extends DataStream {
 
     switch (unit) {
       case 1: {
-        width = Number.parseInt(width * INCH_TO_METERS, 10);
-        height = Number.parseInt(height * INCH_TO_METERS, 10);
+        width = Math.floor(width * INCH_TO_METERS);
+        height = Math.floor(height * INCH_TO_METERS);
         break;
       }
       /* istanbul ignore next */
@@ -387,9 +503,11 @@ class ImagePNG extends DataStream {
   }
 
   /**
-   * http://www.w3.org/TR/2003/REC-PNG-20031110/#11IEND
+   * Decode the IEND (Image trailer) chunk.
+   * The IEND chunk marks the end of the PNG datastream. The chunk's data field is empty.
    *
-   * @param {*} _chunk - Unused.
+   * @param {Uint8Array} _chunk - Unused.
+   * @see {@link http://www.w3.org/TR/2003/REC-PNG-20031110/#11IEND|Image Trailer}
    */
   // eslint-disable-next-line class-methods-use-this
   decodeIEND(_chunk) {
@@ -398,6 +516,11 @@ class ImagePNG extends DataStream {
 
   /**
    * Uncompress IDAT chunks.
+   *
+   * @throws {Error} No IDAT chunks to decode
+   * @throws {Error} Deinterlacing Error
+   * @throws {Error} Inflating Error
+   * @throws {Error} Adam7 interlaced format is unsupported
    */
   decodePixels() {
     debug('decodePixels');
@@ -419,7 +542,7 @@ class ImagePNG extends DataStream {
       out = zlib.inflateSync(data);
     } catch (err) {
       /* istanbul ignore next */
-      debug('Error Unzipping:', err);
+      debug('Error Inflating:', err);
       /* istanbul ignore next */
       throw err;
     }
@@ -431,7 +554,7 @@ class ImagePNG extends DataStream {
       if (this.interlaceMethod === 0) {
         this.interlaceNone(out);
       } else {
-        // https://github.com/em2046/aperture/blob/master/lib/png/processor/interlace.js#L99
+        // https://github.com/em2046/lens/blob/master/assets/js/interlace.js
         // https://github.com/em2046/aperture/tree/master/lib/png/chunks
         // https://github.com/beejjorgensen/jsmandel/blob/master/src/js/adam7.js
         // http://diyhpl.us/~yenatch/pokecrystal/src/pypng/code/png.py
@@ -446,11 +569,11 @@ class ImagePNG extends DataStream {
     }
   }
 
-  // Different interlace methods
-  // https://www.w3.org/TR/PNG-Filters.html
   /**
+   * Deinterlace with no interlacing.
    *
-   * @param {*} data - Data to process.
+   * @param {Buffer} data - Data to deinterlace.
+   * @see {@link https://www.w3.org/TR/PNG-Filters.html|PNG Filters}
    */
   interlaceNone(data) {
     const bytes_per_pixel = Math.max(1, (this.colors * this.bitDepth) / 8);
@@ -503,7 +626,7 @@ class ImagePNG extends DataStream {
   // Unfiltering
 
   /**
-   * No filtering, direct copy
+   * No filtering, direct copy.
    *
    * @param {Array|Uint8Array} scanline - Scanline to search for pixels in.
    * @param {number} bpp - Bytes Per Pixel

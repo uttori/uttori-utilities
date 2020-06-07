@@ -1,13 +1,37 @@
 /* eslint-disable no-bitwise */
 const debug = require('debug')('Uttori.Utilities.DataBitstream');
 
+/**
+ * Read a DataStream as a stream of bits.
+ *
+ * @property {DataStream} stream - The DataStream to process
+ * @property {number} bitPosition - The number of buffers in the list
+ * @example <caption>new DataBitstream(stream)</caption>
+ * const stream = DataStream.fromBuffer(new DataBuffer(new Uint8Array([0xFC, 0x08])));
+ * const bitstream = new DataBitstream(stream);
+ * bitstream.readLSB(0);
+ * ➜ 0
+ * bitstream.readLSB(4);
+ * ➜ 12
+ * @class
+ */
 class DataBitstream {
+/**
+ * Creates an instance of DataBitstream.
+ *
+ * @param {DataStream} stream - The DataStream to process
+ */
   constructor(stream) {
     debug('constructor');
     this.stream = stream;
     this.bitPosition = 0;
   }
 
+  /**
+   * Creates a copy of the DataBitstream.
+   *
+   * @returns {DataBitstream} - The copied DataBufferList
+   */
   copy() {
     debug('copy');
     const result = new DataBitstream(this.stream.copy());
@@ -15,16 +39,32 @@ class DataBitstream {
     return result;
   }
 
+  /**
+   * Returns the current stream offset in bits.
+   *
+   * @returns {number} - The number of bits read thus far
+   */
   offset() {
     debug('offset');
     return (8 * this.stream.offset) + this.bitPosition;
   }
 
+  /**
+   * Returns if the specified number of bits is avaliable in the stream.
+   *
+   * @param {number} bits - The number of bits to check for avaliablity
+   * @returns {boolean} - If the requested number of bits are avaliable in the stream
+   */
   available(bits) {
     debug('available:', bits);
     return this.stream.available(((bits + 8) - this.bitPosition) / 8);
   }
 
+  /**
+   * Advance the bit position by the specified number of bits in the stream.
+   *
+   * @param {number} bits - The number of bits to advance
+   */
   advance(bits) {
     debug('advance:', bits);
     const position = this.bitPosition + bits;
@@ -32,6 +72,11 @@ class DataBitstream {
     this.bitPosition = position & 7;
   }
 
+  /**
+   * Rewind the bit position by the specified number of bits in the stream.
+   *
+   * @param {number} bits - The number of bits to go back
+   */
   rewind(bits) {
     debug('rewind:', bits);
     const pos = this.bitPosition - bits;
@@ -39,6 +84,11 @@ class DataBitstream {
     this.bitPosition = pos & 7;
   }
 
+  /**
+   * Go to the specified offset in the stream.
+   *
+   * @param {number} offset - The offset to go to
+   */
   seek(offset) {
     debug('seek:', offset);
     const current_offset = this.offset();
@@ -49,6 +99,9 @@ class DataBitstream {
     }
   }
 
+  /**
+   * Reset the bit position back to 0 and advance the stream.
+   */
   align() {
     debug('align');
     if (this.bitPosition !== 0) {
@@ -57,22 +110,30 @@ class DataBitstream {
     }
   }
 
+  /**
+   * Read the specified number of bits.
+   *
+   * @param {number} bits - The number of bits to be read
+   * @param {number} signed - If the sign bit is turned on, flip the bits and add one to convert to a negative value
+   * @param {boolean} [advance=true] - If true, advance the bit position.
+   * @returns {number} The value read in from the stream
+   */
   read(bits, signed, advance = true) {
     debug('read:', bits, signed, advance);
     if (bits === 0) {
       return 0;
     }
 
-    let a;
+    let output;
     const mBits = bits + this.bitPosition;
     if (mBits <= 8) {
-      a = ((this.stream.peekUInt8() << this.bitPosition) & 0xFF) >>> (8 - bits);
+      output = ((this.stream.peekUInt8() << this.bitPosition) & 0xFF) >>> (8 - bits);
     } else if (mBits <= 16) {
-      a = ((this.stream.peekUInt16() << this.bitPosition) & 0xFFFF) >>> (16 - bits);
+      output = ((this.stream.peekUInt16() << this.bitPosition) & 0xFFFF) >>> (16 - bits);
     } else if (mBits <= 24) {
-      a = ((this.stream.peekUInt24() << this.bitPosition) & 0xFFFFFF) >>> (24 - bits);
+      output = ((this.stream.peekUInt24() << this.bitPosition) & 0xFFFFFF) >>> (24 - bits);
     } else if (mBits <= 32) {
-      a = (this.stream.peekUInt32() << this.bitPosition) >>> (32 - bits);
+      output = (this.stream.peekUInt32() << this.bitPosition) >>> (32 - bits);
     } else if (mBits <= 40) {
       const a0 = this.stream.peekUInt8(0) * 0x0100000000; // same as a << 32
       const a1 = (this.stream.peekUInt8(1) << 24) >>> 0;
@@ -80,37 +141,55 @@ class DataBitstream {
       const a3 = this.stream.peekUInt8(3) << 8;
       const a4 = this.stream.peekUInt8(4);
 
-      a = a0 + a1 + a2 + a3 + a4;
-      a %= 2 ** (40 - this.bitPosition); // (a << bitPosition) & 0xffffffffff
-      a = Math.floor(a / 2 ** (40 - this.bitPosition - bits)); // a >>> (40 - bits)
+      output = a0 + a1 + a2 + a3 + a4;
+      output %= 2 ** (40 - this.bitPosition); // (output << bitPosition) & 0xffffffffff
+      output = Math.floor(output / 2 ** (40 - this.bitPosition - bits)); // a >>> (40 - bits)
     } else {
       throw new Error(`Too Large: ${mBits} bits`);
     }
 
-    // if the sign bit is turned on, flip the bits and add one to convert to a negative value
     if (signed) {
       /* istanbul ignore else */
       if (mBits < 32) {
-        if (a >>> (bits - 1)) {
-          a = (((1 << bits) >>> 0) - a) * -1;
+        if (output >>> (bits - 1)) {
+          output = (((1 << bits) >>> 0) - output) * -1;
         }
-      } else if (a / 2 ** (bits - 1) | 0) {
-        a = (2 ** bits - a) * -1;
+      } else if (output / 2 ** (bits - 1) | 0) {
+        output = (2 ** bits - output) * -1;
       }
     }
 
     if (advance) {
       this.advance(bits);
     }
-    return a;
+    return output;
   }
 
+  /**
+   * Read the specified number of bits without advancing the bit position.
+   *
+   * @param {number} bits - The number of bits to be read
+   * @param {number} signed - If the sign bit is turned on, flip the bits and add one to convert to a negative value
+   * @returns {number} The value read in from the stream
+   */
   peek(bits, signed) {
     debug('peek:', bits, signed);
     return this.read(bits, signed, false);
   }
 
-  readLSB(bits, signed, advance = true) {
+  /**
+   * Read the specified number of bits.
+   * In computing, the least significant bit (LSB) is the bit position in a binary integer giving the units value, that is, determining whether the number is even or odd.
+   * The LSB is sometimes referred to as the low-order bit or right-most bit, due to the convention in positional notation of writing less significant digits further to the right.
+   * It is analogous to the least significant digit of a decimal integer, which is the digit in the ones (right-most) position.
+   *
+   * @param {number} bits - The number of bits to be read
+   * @param {boolean} [signed=false] - If the sign bit is turned on, flip the bits and add one to convert to a negative value
+   * @param {boolean} [advance=true] - If true, advance the bit position.
+   * @returns {number} The value read in from the stream
+   * @throws {Error} Too Large, too many bits
+   */
+  readLSB(bits, signed = false, advance = true) {
     debug('readLSB:', bits, signed, advance);
     if (bits === 0) {
       return 0;
@@ -120,45 +199,55 @@ class DataBitstream {
     }
 
     const mBits = bits + this.bitPosition;
-    let a = (this.stream.peekUInt8(0)) >>> this.bitPosition;
+    let output = (this.stream.peekUInt8(0)) >>> this.bitPosition;
     if (mBits > 8) {
-      a |= (this.stream.peekUInt8(1)) << (8 - this.bitPosition);
+      output |= (this.stream.peekUInt8(1)) << (8 - this.bitPosition);
     }
     if (mBits > 16) {
-      a |= (this.stream.peekUInt8(2)) << (16 - this.bitPosition);
+      output |= (this.stream.peekUInt8(2)) << (16 - this.bitPosition);
     }
     if (mBits > 24) {
-      a += ((this.stream.peekUInt8(3)) << (24 - this.bitPosition)) >>> 0;
+      output += ((this.stream.peekUInt8(3)) << (24 - this.bitPosition)) >>> 0;
     }
     if (mBits > 32) {
-      a += (this.stream.peekUInt8(4)) * 2 ** (32 - this.bitPosition);
+      output += (this.stream.peekUInt8(4)) * 2 ** (32 - this.bitPosition);
     }
 
     if (mBits >= 32) {
-      a %= 2 ** bits;
+      output %= 2 ** bits;
     } else {
-      a &= (1 << bits) - 1;
+      output &= (1 << bits) - 1;
     }
 
     if (signed) {
-      // if the sign bit is turned on, flip the bits and add one to convert to a negative value
       /* istanbul ignore else */
       if (mBits < 32) {
-        if (a >>> (bits - 1)) {
-          a = (((1 << bits) >>> 0) - a) * -1;
+        if (output >>> (bits - 1)) {
+          output = (((1 << bits) >>> 0) - output) * -1;
         }
-      } else if (a / 2 ** (bits - 1) | 0) {
-        a = (2 ** bits - a) * -1;
+      } else if (output / 2 ** (bits - 1) | 0) {
+        output = (2 ** bits - output) * -1;
       }
     }
 
     if (advance) {
       this.advance(bits);
     }
-    return a;
+    return output;
   }
 
-  peekLSB(bits, signed) {
+  /**
+   * Read the specified number of bits without advancing the bit position.
+   * In computing, the least significant bit (LSB) is the bit position in a binary integer giving the units value, that is, determining whether the number is even or odd.
+   * The LSB is sometimes referred to as the low-order bit or right-most bit, due to the convention in positional notation of writing less significant digits further to the right.
+   * It is analogous to the least significant digit of a decimal integer, which is the digit in the ones (right-most) position.
+   *
+   * @param {number} bits - The number of bits to be read
+   * @param {boolean} [signed=false] - If the sign bit is turned on, flip the bits and add one to convert to a negative value
+   * @returns {number} The value read in from the stream
+   * @throws {Error} Too Large, too many bits
+   */
+  peekLSB(bits, signed = false) {
     debug('peekLSB:', bits, signed);
     return this.readLSB(bits, signed, false);
   }

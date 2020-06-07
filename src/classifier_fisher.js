@@ -36,7 +36,6 @@ class Fisher extends Classifier {
    * @param {string} item - The item to classify.
    * @param {string} [fallback='_'] - The category to fallback to when one cannot be determined.
    * @returns {string} - The best category for the provided item.
-   * @memberof Classifier
    */
   classify(item, fallback = '_') {
     debug('classify:', item, fallback);
@@ -66,7 +65,6 @@ class Fisher extends Classifier {
    * @param {string} feature - The feature to look up in the category.
    * @param {string} category - The category to find the feature in.
    * @returns {number} - The probability, the frequency in this category divided by the overall frequency.
-   * @memberof Classifier
    */
   categoryProbability(feature, category) {
     // The frequency of this feature in this category.
@@ -90,7 +88,6 @@ class Fisher extends Classifier {
    * @param {string} item - The item to determine the probabolity of being in the category.
    * @param {string} category - The category to find the item in.
    * @returns {number} - The probability, using Inverse Chi Squared.
-   * @memberof Classifier
    */
   fisherProbability(item, category) {
     const features = Classifier.getFeatures(item);
@@ -109,7 +106,6 @@ class Fisher extends Classifier {
    *
    * @param {string} category - The category to get the minimum for.
    * @returns {number} - The miniumum for the category, or 0.5.
-   * @memberof Classifier
    */
   getMinimum(category) {
     return this.minimums[category] || 0.5;
@@ -121,7 +117,6 @@ class Fisher extends Classifier {
    * @param {string} category - The category to set the minimum for.
    * @param {number} minimum - The minimum to set for the category.
    * @returns {number} - The miniumum for the category.
-   * @memberof Classifier
    */
   setMinimum(category, minimum) {
     this.minimums[category] = minimum;
@@ -136,12 +131,11 @@ class Fisher extends Classifier {
   /**
    * The inverse chi squared distribution is a continuous probability distribution
    * of the reciprocal of a variable distributed according to the chi squared distribution.
-   * See also: https://en.wikipedia.org/wiki/Inverse-chi-squared_distribution
    *
    * @param {number} probability - The scale, or, probability.
    * @param {number} degreeOfFreedom - The variance, or, degree of freedom.
    * @returns {number} - The miniumum for the category.
-   * @memberof Classifier
+   * @see {@link https://en.wikipedia.org/wiki/Inverse-chi-squared_distribution|Inverse-Chi-Squared Distribution}
    */
   static inverseChiSquared(probability, degreeOfFreedom) {
     const m = probability / 2;

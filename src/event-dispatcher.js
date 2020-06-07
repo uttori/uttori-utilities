@@ -49,7 +49,6 @@ class EventDispatcher {
    * @example
    * is_spam = await bus.validate('check-for-spam', { data }, this);
    * @async
-   * @memberof EventDispatcher
    */
   async validate(label, data, context) {
     debug('validate:', label);
@@ -74,7 +73,6 @@ class EventDispatcher {
    * @example
    * output = await bus.filter('loaded', { data }, this);
    * @async
-   * @memberof EventDispatcher
    */
   async filter(label, data, context) {
     debug('filter:', label);
@@ -96,7 +94,6 @@ class EventDispatcher {
    * @param {object} [context] - Context to help with updating or modification of the data.
    * @example
    * bus.dispatch('loaded', { data }, this);
-   * @memberof EventDispatcher
    */
   dispatch(label, data, context) {
     debug('dispatch:', label);
@@ -119,7 +116,6 @@ class EventDispatcher {
    * @example
    * popular = await bus.fetch('popular-documents', { limit: 10 }, this);
    * @async
-   * @memberof EventDispatcher
    */
   async fetch(label, data, context) {
     debug('fetch:', label);
@@ -142,7 +138,6 @@ class EventDispatcher {
    * @param {Function} callback - Function to be called when the event is fired.
    * @example
    * bus.on('loaded', callback);
-   * @memberof EventDispatcher
    */
   on(label, callback) {
     debug('on:', label);
@@ -162,7 +157,6 @@ class EventDispatcher {
    * @param {Function} callback - Function to be called when the event is fired.
    * @example
    * bus.once('one-time-process', callback);
-   * @memberof EventDispatcher
    */
   once(label, callback) {
     debug('once:', label);
@@ -180,7 +174,6 @@ class EventDispatcher {
    * @param {Function} callback - Function to be removed.
    * @example
    * bus.off('loaded', callback);
-   * @memberof EventDispatcher
    */
   off(label, callback) {
     debug('off:', label);

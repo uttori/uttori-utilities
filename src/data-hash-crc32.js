@@ -36,12 +36,35 @@ const CRC32_TABLE = [
   0xB3667A2E, 0xC4614AB8, 0x5D681B02, 0x2A6F2B94, 0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D,
 ];
 
-// https://rosettacode.org/wiki/CRC-32
+/**
+ * Deriving the Cyclic Redundancy Check
+ * This variant of CRC-32 uses LSB-first order, sets the initial CRC to FFFFFFFF16, and complements the final CRC.
+ *
+ * @property {number} crc - The internal CRC value
+ * @example <caption>CRC32.of(...)</caption>
+ * CRC32.of('The quick brown fox jumps over the lazy dog');
+ * ➜ '414FA339'
+ * @class
+ * @see {@link https://rosettacode.org/wiki/CRC-32|CRC-32}
+ * @see {@link https://en.wikipedia.org/wiki/Computation_of_cyclic_redundancy_checks|Computation of cyclic redundancy checks}
+ */
 class CRC32 {
+/**
+ * Creates an instance of CRC32.
+ *
+ * @class
+ */
   constructor() {
     this.crc = -1;
   }
 
+  /**
+   * Creates an instance of CRC32 and calculates the checksum of a provided input.
+   *
+   * @param {*} data - The data to calculate the checksum of
+   * @returns {string} The computed CRC value
+   * @static
+   */
   static of(data) {
     const buffer = new DataBuffer(data);
     const crc32 = new CRC32();
@@ -49,12 +72,22 @@ class CRC32 {
     return crc32.toHex();
   }
 
+  /**
+   * Calculates the CRC for a chunk of data.
+   *
+   * @param {DataBuffer} buffer - The data buffer to calculate the checksum of
+   */
   update(buffer) {
     for (const byte of buffer.data) {
       this.crc = (this.crc >>> 8) ^ CRC32_TABLE[(this.crc ^ byte) & 0xFF];
     }
   }
 
+  /**
+   * Returns the internal CRC value as a hexadecimal string.
+   *
+   * @returns {string} The computed CRC value
+   */
   toHex() {
     return (~this.crc >>> 0).toString(16).toUpperCase();
   }

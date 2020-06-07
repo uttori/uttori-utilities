@@ -331,12 +331,12 @@ class TokenizeThis {
   /**
    * Creates a Tokenizer, then immediately calls "tokenize".
    *
-   * @param {string} str - The string to scan for tokens.
+   * @param {string} input - The string to scan for tokens.
    * @param {Function} forEachToken - Function to run over each token.
    * @returns {*} The new Tokenizer instance after being tokenized.
    */
-  tokenize(str, forEachToken) {
-    const tokenizerInstance = new Tokenizer(this, str, forEachToken);
+  tokenize(input, forEachToken) {
+    const tokenizerInstance = new Tokenizer(this, input, forEachToken);
     return tokenizerInstance.tokenize();
   }
 }

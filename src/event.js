@@ -34,7 +34,6 @@ class UttoriEvent {
    * @param {Function} callback - Function to be called when the event is fired.
    * @example
    * event.register(callback);
-   * @memberof UttoriEvent
    */
   register(callback) {
     debug('register:', this.label);
@@ -57,7 +56,6 @@ class UttoriEvent {
    * @param {Function} callback - Function to be removed from the event.
    * @example
    * event.unregister(callback);
-   * @memberof UttoriEvent
    */
   unregister(callback) {
     debug('unregister:', this.label);
@@ -83,7 +81,6 @@ class UttoriEvent {
    * @example
    * is_spam = await event.validate({ data }, this);
    * @async
-   * @memberof UttoriEvent
    */
   async validate(data, context) {
     debug('validate:', this.label);
@@ -111,7 +108,6 @@ class UttoriEvent {
    * @example
    * output = await event.filter({ data }, this);
    * @async
-   * @memberof UttoriEvent
    */
   async filter(data, context) {
     debug('filter:', this.label);
@@ -139,7 +135,6 @@ class UttoriEvent {
    * @param {object} [context] - Context to help with updating or modification of the data.
    * @example
    * event.fire({ data }, this);
-   * @memberof UttoriEvent
    */
   fire(data, context) {
     debug('fire:', this.label);
@@ -159,7 +154,6 @@ class UttoriEvent {
    * @example
    * output = await event.fetch({ data }, this);
    * @async
-   * @memberof UttoriEvent
    */
   async fetch(data, context) {
     debug('fetch:', this.label);
