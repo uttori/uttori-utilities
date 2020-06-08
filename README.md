@@ -8,6 +8,8 @@
 
 A set of helper utilities for Uttoti components. All utilities should be at 100% test coverage to be included here.
 
+Currently being split into smaller components in a mono repo.
+
 ## FileUtility
 
 Utilities for dealing with files on the file system. Wrappers for methods that might change in the future but the method should not need to.
