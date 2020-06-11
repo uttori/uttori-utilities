@@ -2,6 +2,12 @@
 const test = require('ava');
 const { DataBuffer, DataBufferList, DataStream, FileUtility } = require('../src');
 
+/**
+ * Return a new DataStream.
+ *
+ * @param  {Array} arrays - Arrays of numbers
+ * @returns {DataStream} A new DataStream
+ */
 const makeStream = (...arrays) => {
   const list = new DataBufferList();
 
@@ -562,9 +568,56 @@ test('float64', (t) => {
   t.is(-Infinity, copy.readFloat64(true));
 });
 
+test('float48', (t) => {
+  let stream;
+  stream = makeStream([0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
+  t.is(0, stream.peekFloat48(0, true));
+  t.is(0, stream.readFloat48(true));
+
+  stream = makeStream([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00]);
+  t.is(0, stream.peekFloat48(0));
+  t.is(0, stream.readFloat48());
+
+  stream = makeStream([0x00, 0x00, 0x00, 0x00, 0x00, 0x81]);
+  t.is(1, stream.peekFloat48(0));
+  t.is(1, stream.readFloat48());
+
+  stream = makeStream([0x80, 0x00, 0x00, 0x00, 0x00, 0x81]);
+  t.is(-1, stream.peekFloat48(0));
+  t.is(-1, stream.readFloat48());
+
+  stream = makeStream([0x00, 0x00, 0x00, 0x00, 0x00, 0x82]);
+  t.is(2, stream.peekFloat48(0));
+  t.is(2, stream.readFloat48());
+
+  stream = makeStream([0x40, 0x00, 0x00, 0x00, 0x00, 0x81]);
+  t.is(1.5, stream.peekFloat48(0));
+  t.is(1.5, stream.readFloat48());
+
+  stream = makeStream([0x20, 0x00, 0x00, 0x00, 0x00, 0x82]);
+  t.is(2.5, stream.peekFloat48(0));
+  t.is(2.5, stream.readFloat48());
+
+  stream = makeStream([0x74, 0x23, 0xF4, 0x00, 0xD2, 0x94]);
+  t.is(999999.2502, stream.peekFloat48(0));
+  t.is(999999.2502, stream.readFloat48());
+
+  stream = makeStream([0xF4, 0x23, 0xF4, 0x00, 0xD2, 0x94]);
+  t.is(-999999.2502, stream.peekFloat48(0));
+  t.is(-999999.2502, stream.readFloat48());
+});
+
 test('float80', (t) => {
   let stream = makeStream([0x3F, 0xFF, 0x80, 0x00, 0x00, 0x00], [0x00, 0x00, 0x00, 0x00]);
   let copy = stream.copy();
+  t.is(1, stream.peekFloat80());
+  t.is(0, stream.peekFloat80(0, true));
+  t.is(1, stream.readFloat80());
+  t.is(0, copy.readFloat80(true));
+
+  // Same as the above test as a single buffer.
+  stream = makeStream([0x3F, 0xFF, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
+  copy = stream.copy();
   t.is(1, stream.peekFloat80());
   t.is(0, stream.peekFloat80(0, true));
   t.is(1, stream.readFloat80());
@@ -574,7 +627,7 @@ test('float80', (t) => {
   t.is(1, stream.peekFloat80(0, true));
   t.is(1, stream.readFloat80(true));
 
-  stream = makeStream([0xBF, 0xFF, 0x80, 0x00, 0x00, 0x00], [0x00, 0x00, 0x00, 0x00]);
+  stream = makeStream([0xBF, 0xFF, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
   copy = stream.copy();
   t.is(-1, stream.peekFloat80());
   t.is(0, stream.peekFloat80(0, true));
@@ -644,6 +697,30 @@ test('float80', (t) => {
 
   stream = makeStream([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
   t.is(0, stream.peekFloat80());
+
+  stream = makeStream([0x40, 0x02, 0xA0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
+  t.is(10, stream.peekFloat80(0, false));
+  t.is(10, stream.readFloat80(false));
+
+  stream = makeStream([0x40, 0x00, 0xA0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
+  t.is(2.5, stream.peekFloat80(0, false));
+  t.is(2.5, stream.readFloat80(false));
+
+  stream = makeStream([0x40, 0x0C, 0x8C, 0xA2, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
+  t.is(9000.5, stream.peekFloat80(0, false));
+  t.is(9000.5, stream.readFloat80(false));
+
+  stream = makeStream([0x40, 0x05, 0xFA, 0xAA, 0xA6, 0x4C, 0x2F, 0x83, 0x7B, 0x4A]);
+  t.is(125.3333, stream.peekFloat80(0, false));
+  t.is(125.3333, stream.readFloat80(false));
+
+  stream = makeStream([0x40, 0x01, 0xAA, 0xAA, 0xA9, 0xF7, 0xB5, 0xAE, 0xA0, 0x00]);
+  t.is(5.333333, stream.peekFloat80(0, false));
+  t.is(5.333333, stream.readFloat80(false));
+
+  stream = makeStream([0x40, 0x01, 0xB5, 0x55, 0x56, 0x08, 0x4A, 0x51, 0x60, 0x00]);
+  t.is(5.666667, stream.peekFloat80(0, false));
+  t.is(5.666667, stream.readFloat80(false));
 });
 
 test('ascii/latin1', (t) => {

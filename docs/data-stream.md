@@ -88,6 +88,8 @@ Data Stream class to ease working with binary files.
         * [.peekInt32([offset], [littleEndian])](#DataStream+peekInt32) ⇒ <code>\*</code>
         * [.readFloat32([littleEndian])](#DataStream+readFloat32) ⇒ <code>\*</code>
         * [.peekFloat32([offset], [littleEndian])](#DataStream+peekFloat32) ⇒ <code>\*</code>
+        * [.readFloat48([littleEndian])](#DataStream+readFloat48) ⇒ <code>number</code>
+        * [.peekFloat48([offset], [littleEndian])](#DataStream+peekFloat48) ⇒ <code>number</code>
         * [.readFloat64([littleEndian])](#DataStream+readFloat64) ⇒ <code>\*</code>
         * [.peekFloat64([offset], [littleEndian])](#DataStream+peekFloat64) ⇒ <code>\*</code>
         * [.readFloat80([littleEndian])](#DataStream+readFloat80) ⇒ <code>\*</code>
@@ -98,6 +100,7 @@ Data Stream class to ease working with binary files.
         * [.peekSingleBuffer([offset], length)](#DataStream+peekSingleBuffer) ⇒ <code>DataBuffer</code>
         * [.readString(length, [encoding])](#DataStream+readString) ⇒ <code>string</code>
         * [.peekString([offset], length, [encoding])](#DataStream+peekString) ⇒ <code>string</code>
+        * [.float48()](#DataStream+float48) ⇒ <code>number</code>
         * [.float80()](#DataStream+float80) ⇒ <code>number</code> ℗
         * [.decodeString(offset, length, encoding, advance)](#DataStream+decodeString) ⇒ <code>string</code> ℗
     * _static_
@@ -450,6 +453,33 @@ Read from the specified offset without advancing the offsets and return the valu
 | [offset] | <code>number</code> | <code>0</code> | The offset to read from |
 | [littleEndian] | <code>boolean</code> |  | Read in Little Endian format |
 
+<a name="DataStream+readFloat48"></a>
+
+### dataStream.readFloat48([littleEndian]) ⇒ <code>number</code>
+Read from the current offset and return the Turbo Pascal 48 bit extended float value.
+May be faulty with large numbers due to float percision.
+
+**Kind**: instance method of [<code>DataStream</code>](#DataStream)  
+**Returns**: <code>number</code> - - The Float48 value at the current offset  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [littleEndian] | <code>boolean</code> | <code>false</code> | Read in Little Endian format |
+
+<a name="DataStream+peekFloat48"></a>
+
+### dataStream.peekFloat48([offset], [littleEndian]) ⇒ <code>number</code>
+Read from the specified offset without advancing the offsets and return the Turbo Pascal 48 bit extended float value.
+May be faulty with large numbers due to float percision.
+
+**Kind**: instance method of [<code>DataStream</code>](#DataStream)  
+**Returns**: <code>number</code> - - The Float48 value at the specified offset  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [offset] | <code>number</code> | <code>0</code> | The offset to read from |
+| [littleEndian] | <code>boolean</code> | <code>false</code> | Read in Little Endian format |
+
 <a name="DataStream+readFloat64"></a>
 
 ### dataStream.readFloat64([littleEndian]) ⇒ <code>\*</code>
@@ -458,9 +488,9 @@ Read from the current offset and return the value.
 **Kind**: instance method of [<code>DataStream</code>](#DataStream)  
 **Returns**: <code>\*</code> - - The Float64 value at the current offset  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| [littleEndian] | <code>boolean</code> | Read in Little Endian format |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [littleEndian] | <code>boolean</code> | <code>false</code> | Read in Little Endian format |
 
 <a name="DataStream+peekFloat64"></a>
 
@@ -473,7 +503,7 @@ Read from the specified offset without advancing the offsets and return the valu
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [offset] | <code>number</code> | <code>0</code> | The offset to read from |
-| [littleEndian] | <code>boolean</code> |  | Read in Little Endian format |
+| [littleEndian] | <code>boolean</code> | <code>false</code> | Read in Little Endian format |
 
 <a name="DataStream+readFloat80"></a>
 
@@ -481,11 +511,11 @@ Read from the specified offset without advancing the offsets and return the valu
 Read from the current offset and return the IEEE 80 bit extended float value.
 
 **Kind**: instance method of [<code>DataStream</code>](#DataStream)  
-**Returns**: <code>\*</code> - - The Float64 value at the current offset  
+**Returns**: <code>\*</code> - - The Float80 value at the current offset  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| [littleEndian] | <code>boolean</code> | Read in Little Endian format |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [littleEndian] | <code>boolean</code> | <code>false</code> | Read in Little Endian format |
 
 <a name="DataStream+peekFloat80"></a>
 
@@ -577,19 +607,44 @@ Read from the specified offset for a given length and return the value as a stri
 | length | <code>number</code> |  | The number of bytes to read |
 | [encoding] | <code>string</code> | <code>&quot;ascii&quot;</code> | The encoding of the string |
 
+<a name="DataStream+float48"></a>
+
+### dataStream.float48() ⇒ <code>number</code>
+Convert the current buffer into a Turbo Pascal 48 bit float value.
+May be faulty with large numbers due to float percision.
+
+While most languages use a 32-bit or 64-bit floating point decimal variable, usually called single or double,
+Turbo Pascal featured an uncommon 48-bit float called a real which served the same function as a float.
+
+Structure (Bytes, Big Endian)
+5: SMMMMMMM 4: MMMMMMMM 3: MMMMMMMM 2: MMMMMMMM 1: MMMMMMMM 0: EEEEEEEE
+
+Structure (Bytes, Little Endian)
+0: EEEEEEEE 1: MMMMMMMM 2: MMMMMMMM 3: MMMMMMMM 4: MMMMMMMM 5: SMMMMMMM
+
+E[8]: Exponent
+M[39]: Mantissa
+S[1]: Sign
+
+Value: (-1)^s * 2^(e - 129) * (1.f)
+
+**Kind**: instance method of [<code>DataStream</code>](#DataStream)  
+**Returns**: <code>number</code> - - The read value as a number  
+**See**: [Turbo Pascal Real](http://www.shikadi.net/moddingwiki/Turbo_Pascal_Real)  
 <a name="DataStream+float80"></a>
 
 ### dataStream.float80() ⇒ <code>number</code> ℗
 Convert the current buffer into an IEEE 80 bit extended float value.
 
 **Kind**: instance method of [<code>DataStream</code>](#DataStream)  
-**Returns**: <code>number</code> - - The read value as a string  
+**Returns**: <code>number</code> - - The read value as a number  
 **Access**: private  
+**See**: [Extended_Precision](https://en.wikipedia.org/wiki/Extended_precision)  
 <a name="DataStream+decodeString"></a>
 
 ### dataStream.decodeString(offset, length, encoding, advance) ⇒ <code>string</code> ℗
 Read from the specified offset for a given length and return the value as a string in a specified encoding, and optionally advance the offsets.
-Supported Encodings: ascii, latin1, utf8, utf-8, utf16-be, utf16be, utf16le, utf16-le, utf16bom, utf16-bom
+Supported Encodings: ascii / latin1, utf8 / utf-8, utf16-be, utf16be, utf16le, utf16-le, utf16bom, utf16-bom
 
 **Kind**: instance method of [<code>DataStream</code>](#DataStream)  
 **Returns**: <code>string</code> - - The read value as a string  

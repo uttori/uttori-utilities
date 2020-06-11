@@ -533,9 +533,34 @@ class DataStream {
   }
 
   /**
+   * Read from the current offset and return the Turbo Pascal 48 bit extended float value.
+   * May be faulty with large numbers due to float percision.
+   *
+   * @param {boolean} [littleEndian=false] - Read in Little Endian format
+   * @returns {number} - The Float48 value at the current offset
+   */
+  readFloat48(littleEndian) {
+    this.read(6, littleEndian);
+    return this.float48();
+  }
+
+  /**
+   * Read from the specified offset without advancing the offsets and return the Turbo Pascal 48 bit extended float value.
+   * May be faulty with large numbers due to float percision.
+   *
+   * @param {number} [offset=0] - The offset to read from
+   * @param {boolean} [littleEndian=false] - Read in Little Endian format
+   * @returns {number} - The Float48 value at the specified offset
+   */
+  peekFloat48(offset, littleEndian) {
+    this.peek(6, offset, littleEndian);
+    return this.float48();
+  }
+
+  /**
    * Read from the current offset and return the value.
    *
-   * @param {boolean} [littleEndian] - Read in Little Endian format
+   * @param {boolean} [littleEndian=false] - Read in Little Endian format
    * @returns {*} - The Float64 value at the current offset
    */
   readFloat64(littleEndian) {
@@ -547,7 +572,7 @@ class DataStream {
    * Read from the specified offset without advancing the offsets and return the value.
    *
    * @param {number} [offset=0] - The offset to read from
-   * @param {boolean} [littleEndian] - Read in Little Endian format
+   * @param {boolean} [littleEndian=false] - Read in Little Endian format
    * @returns {*} - The Float64 value at the current offset
    */
   peekFloat64(offset = 0, littleEndian) {
@@ -558,8 +583,8 @@ class DataStream {
   /**
    * Read from the current offset and return the IEEE 80 bit extended float value.
    *
-   * @param {boolean} [littleEndian] - Read in Little Endian format
-   * @returns {*} - The Float64 value at the current offset
+   * @param {boolean} [littleEndian=false] - Read in Little Endian format
+   * @returns {*} - The Float80 value at the current offset
    */
   readFloat80(littleEndian) {
     this.read(10, littleEndian);
@@ -661,24 +686,78 @@ class DataStream {
   }
 
   /**
+   * Convert the current buffer into a Turbo Pascal 48 bit float value.
+   * May be faulty with large numbers due to float percision.
+   *
+   * While most languages use a 32-bit or 64-bit floating point decimal variable, usually called single or double,
+   * Turbo Pascal featured an uncommon 48-bit float called a real which served the same function as a float.
+   *
+   * Structure (Bytes, Big Endian)
+   * 5: SMMMMMMM 4: MMMMMMMM 3: MMMMMMMM 2: MMMMMMMM 1: MMMMMMMM 0: EEEEEEEE
+   *
+   * Structure (Bytes, Little Endian)
+   * 0: EEEEEEEE 1: MMMMMMMM 2: MMMMMMMM 3: MMMMMMMM 4: MMMMMMMM 5: SMMMMMMM
+   *
+   * E[8]: Exponent
+   * M[39]: Mantissa
+   * S[1]: Sign
+   *
+   * Value: (-1)^s * 2^(e - 129) * (1.f)
+   *
+   * @returns {number} - The read value as a number
+   * @see {@link http://www.shikadi.net/moddingwiki/Turbo_Pascal_Real|Turbo Pascal Real}
+   */
+  float48() {
+    let mantissa = 0;
+
+    // Bias is 129, which is 0x81
+    let exponent = this.uint8[0];
+    if (exponent === 0) {
+      return 0;
+    }
+    exponent = this.uint8[0] - 0x81;
+
+    for (let i = 1; i <= 4; i++) {
+      mantissa += this.uint8[i];
+      mantissa /= 256;
+    }
+    mantissa += (this.uint8[5] & 0x7F);
+    mantissa /= 128;
+    mantissa += 1;
+
+    // Sign bit check
+    if (this.uint8[5] & 0x80) {
+      mantissa = -mantissa;
+    }
+
+    const output = mantissa * (2 ** exponent);
+    return Number.parseFloat(output.toFixed(4));
+  }
+
+  /**
    * Convert the current buffer into an IEEE 80 bit extended float value.
    *
    * @private
-   * @returns {number} - The read value as a string
+   * @returns {number} - The read value as a number
+   * @see {@link https://en.wikipedia.org/wiki/Extended_precision|Extended_Precision}
    */
   float80() {
     const [high, low] = [...this.uint32];
     const a0 = this.uint8[9];
     const a1 = this.uint8[8];
 
-    const sign = 1 - ((a0 >>> 7) * 2); // -1 or +1
-    let exp = ((a0 & 0x7F) << 8) | a1;
+    // 1 bit sign, -1 or +1
+    const sign = 1 - ((a0 >>> 7) * 2);
+    // 15 bit exponent
+    // let exponent = (((a0 << 1) & 0xFF) << 7) | a1;
+    let exponent = ((a0 & 0x7F) << 8) | a1;
 
-    if ((exp === 0) && (low === 0) && (high === 0)) {
+    if ((exponent === 0) && (low === 0) && (high === 0)) {
       return 0;
     }
 
-    if (exp === 0x7FFF) {
+    // 0x7FFF is a reserved value
+    if (exponent === 0x7FFF) {
       if ((low === 0) && (high === 0)) {
         return sign * Infinity;
       }
@@ -686,16 +765,17 @@ class DataStream {
       return Number.NaN;
     }
 
-    exp -= 16383;
-    let out = low * 2 ** (exp - 31);
-    out += high * 2 ** (exp - 63);
+    // Bias is 16383, which is 0x3FFF
+    exponent -= 0x3FFF;
+    let out = low * 2 ** (exponent - 31);
+    out += high * 2 ** (exponent - 63);
 
     return sign * out;
   }
 
   /**
    * Read from the specified offset for a given length and return the value as a string in a specified encoding, and optionally advance the offsets.
-   * Supported Encodings: ascii, latin1, utf8, utf-8, utf16-be, utf16be, utf16le, utf16-le, utf16bom, utf16-bom
+   * Supported Encodings: ascii / latin1, utf8 / utf-8, utf16-be, utf16be, utf16le, utf16-le, utf16bom, utf16-bom
    *
    * @private
    * @param {number} offset - The offset to read from

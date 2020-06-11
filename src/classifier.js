@@ -2,6 +2,15 @@ const debug = require('debug')('Uttori.Utilities.Classifier');
 
 /**
  * Classifier base class for use with the Naive Bayes and Fisher classifiers.
+ * Text categorization (a.k.a. text classification) is the task of assigning predefined categories to free-text documents.
+ * It can provide conceptual views of document collections and has important applications in the real world.
+ * For example, news stories are typically organized by subject categories (topics) or geographical codes;
+ * academic papers are often classified by technical domains and sub-domains;
+ * patient reports in health-care organizations are often indexed from multiple aspects,
+ * using taxonomies of disease categories, types of surgical procedures, insurance reimbursement codes and so on.
+ * Another widespread application of text categorization is spam filtering,
+ * where email messages are classified into the two categories of spam and non-spam, respectively.
+ *
  * In practice, it is better tolerating false positives for "good", more than false negatives for "good".
  * Example: It is better to see a message that is spam rather than lose a message that is not spam.
  *
@@ -14,6 +23,7 @@ const debug = require('debug')('Uttori.Utilities.Classifier');
  * classifier.train(item, category);
  * Classifier.getFeatures('test');
  * @class
+ * @see {@link http://www.scholarpedia.org/article/Text_categorization|Text Categorization}
  */
 class Classifier {
   /**
