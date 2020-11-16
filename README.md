@@ -1,5 +1,5 @@
-[![view on npm](http://img.shields.io/npm/v/uttori-utilities.svg)](https://www.npmjs.org/package/uttori-utilities)
-[![npm module downloads](http://img.shields.io/npm/dt/uttori-utilities.svg)](https://www.npmjs.org/package/uttori-utilities)
+[![view on npm](https://img.shields.io/npm/v/uttori-utilities.svg)](https://www.npmjs.org/package/uttori-utilities)
+[![npm module downloads](https://img.shields.io/npm/dt/uttori-utilities.svg)](https://www.npmjs.org/package/uttori-utilities)
 [![Build Status](https://travis-ci.org/uttori/uttori-utilities.svg?branch=master)](https://travis-ci.org/uttori/uttori-utilities)
 [![Dependency Status](https://david-dm.org/uttori/uttori-utilities.svg)](https://david-dm.org/uttori/uttori-utilities)
 [![Coverage Status](https://coveralls.io/repos/uttori/uttori-utilities/badge.svg?branch=master)](https://coveralls.io/r/uttori/uttori-utilities?branch=master)
