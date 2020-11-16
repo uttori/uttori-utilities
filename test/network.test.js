@@ -38,7 +38,6 @@ test('Network: can make a HTTP GET request', async (t) => {
   output = await Network.json('http://127.0.0.1:8123/user', {}, { presponseEncoding: 'utf8' });
   t.deepEqual(output, { name: 'tobi' });
 
-
   output = await Network.raw('http://127.0.0.1:8123/user');
   t.is(output.responseBody, '{"name":"tobi"}');
 

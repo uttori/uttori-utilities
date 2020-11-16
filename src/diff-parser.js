@@ -451,7 +451,12 @@ class DiffParser {
    * @returns {object} - The line parsed into its various parts.
    * @static
    */
-  static parseUnifiedContent(line = '', header = { old: 0, new: 0 }) {
+  static parseUnifiedContent(line = '', header) {
+    header = {
+      old: 0,
+      new: 0,
+      ...header,
+    };
     const lineType = line.slice(0, 1);
     const text = line.slice(1);
     switch (lineType) {
@@ -514,7 +519,12 @@ class DiffParser {
    * @returns {object} - The line parsed into its various parts.
    * @static
    */
-  static parseCombinedContent(line = '', header = { old: 0, new: 0 }) {
+  static parseCombinedContent(line = '', header) {
+    header = {
+      old: 0,
+      new: 0,
+      ...header,
+    };
     const lineType = line.slice(0, 2);
     const text = line.slice(2);
     switch (lineType) {

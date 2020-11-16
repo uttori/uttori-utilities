@@ -55,7 +55,6 @@ test('readFile(folder, name, extension, encoding): returns a document found by n
   t.is(result, JSON.stringify(example));
 });
 
-
 test('readFileSync(folder, name, extension, encoding): returns a document found by name', (t) => {
   const result = FileUtility.readFileSync(config.content_dir, example.slug, config.extension);
   t.is(result, JSON.stringify(example));
