@@ -12,11 +12,11 @@ class FunctionQueue {
   /**
    * @param {number} max_requests_per_interval - The number of calls to execute for a single interval.
    * @param {number} interval - The time between calls in ms.
-   * @param {boolean} evenly_spaced - Determines if all requests should be evenly spaced.
+   * @param {boolean} [evenly_spaced=false] - Determines if all requests should be evenly spaced.
    * @returns {Function} A function that can enqueue items.
    * @static
    */
-  static throttle(max_requests_per_interval, interval, evenly_spaced) {
+  static throttle(max_requests_per_interval, interval, evenly_spaced = false) {
     /**
      * If all requests should be evenly spaced, adjust them.
      */

@@ -6,11 +6,11 @@ const https = require('https');
  * Execute a HTTP(S) request with options provided.
  *
  * @param {string|URL} url - URL to communicate with.
- * @param {object} [options] - Configuration to pass to `http(s).request()`.
- * @param {object} [options.method] - HTTP Method to use.
- * @param {object} [context] - Internal options and data used in the request.
- * @param {string} [context.responseEncoding] - Encoding to specify response should be parsed as.
- * @param {string|Buffer} [context.data] - Data to be sent for POST/PUT requests.
+ * @param {object} options - Configuration to pass to `http(s).request()`.
+ * @param {object} options.method - HTTP Method to use.
+ * @param {object} context - Internal options and data used in the request.
+ * @param {string} context.responseEncoding - Encoding to specify response should be parsed as.
+ * @param {string|Buffer} context.data - Data to be sent for POST/PUT requests.
  * @param {Function} callback - Logic for responding to non-error responses.
  * @returns {Promise} a Promise of requested call
  * @example <caption>Network.request(url, options, context)</caption>
@@ -18,7 +18,7 @@ const https = require('https');
  * @see {@link https://nodejs.org/api/http.html#http_http_request_options_callback|http_http_request_options_callback}
  * @see {@link https://nodejs.org/api/https.html#https_https_request_url_options_callback|https_https_request_url_options_callback}
  */
-const base = (url, options = {}, context = {}, callback) => {
+const base = (url, options, context, callback) => {
   debug('base:', url, options, context);
   return new Promise((resolve, reject) => {
     /* istanbul ignore next */
@@ -73,7 +73,7 @@ const base = (url, options = {}, context = {}, callback) => {
  * @see {@link https://nodejs.org/api/http.html#http_http_request_options_callback|http_http_request_options_callback}
  * @see {@link https://nodejs.org/api/https.html#https_https_request_url_options_callback|https_https_request_url_options_callback}
  */
-const json = (url, options, context = {}) => {
+const json = (url, options = {}, context = {}) => {
   debug('json:', url, options, context);
   return base(url, options, context, (response) => {
     let output = context.fallback || undefined;
@@ -103,7 +103,7 @@ const json = (url, options, context = {}) => {
  * @see {@link https://nodejs.org/api/http.html#http_http_request_options_callback|http_http_request_options_callback}
  * @see {@link https://nodejs.org/api/https.html#https_https_request_url_options_callback|https_https_request_url_options_callback}
  */
-const raw = (url, options, context) => {
+const raw = (url, options = {}, context = {}) => {
   debug('raw:', url, options, context);
   return base(url, options, context, (response) => response);
 };
@@ -124,7 +124,7 @@ const raw = (url, options, context) => {
  * @see {@link https://nodejs.org/api/http.html#http_http_request_options_callback|http_http_request_options_callback}
  * @see {@link https://nodejs.org/api/https.html#https_https_request_url_options_callback|https_https_request_url_options_callback}
  */
-const request = (url, options, context = {}) => {
+const request = (url, options = {}, context = {}) => {
   debug('request:', url, options, context);
   return base(url, options, context, (response) => {
     if (response && response.responseBody) {

@@ -1,8 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
-/* eslint-disable security/detect-possible-timing-attacks */
 const debug = require('debug')('Uttori.Utilities.DiffParser');
-const Operator = require('./operator');
 const TokenizeThis = require('./tokenizer');
 
 /**
@@ -445,13 +441,11 @@ class DiffParser {
    * Parse Unified Diff content.
    *
    * @param {string} line - The line to parse.
-   * @param {object} [header] - The the header for the diff block.
-   * @param {number} [header.old] - The previous line number of the current line.
-   * @param {number} [header.new] - The new line number of the current line.
+   * @param {object} [header] - The header with the keys 'old' for the previous line number of the current line and 'new' for the new line number of the current line.
    * @returns {object} - The line parsed into its various parts.
    * @static
    */
-  static parseUnifiedContent(line = '', header) {
+  static parseUnifiedContent(line = '', header = {}) {
     header = {
       old: 0,
       new: 0,
@@ -513,13 +507,11 @@ class DiffParser {
    * Parse Combined Diff content.
    *
    * @param {string} line - The line to parse.
-   * @param {object} [header] - The the header for the diff block.
-   * @param {number} [header.old] - The previous line number of the current line.
-   * @param {number} [header.new] - The new line number of the current line.
+   * @param {object} [header] - The header with the keys 'old' for the previous line number of the current line and 'new' for the new line number of the current line.
    * @returns {object} - The line parsed into its various parts.
    * @static
    */
-  static parseCombinedContent(line = '', header) {
+  static parseCombinedContent(line = '', header = {}) {
     header = {
       old: 0,
       new: 0,

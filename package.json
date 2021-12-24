@@ -14,35 +14,34 @@
     "node": ">= 10.18.0"
   },
   "dependencies": {
-    "debug": "^4.2.0",
-    "fs-extra": "^9.0.1",
+    "debug": "^4.3.3",
+    "fs-extra": "^10.0.0",
     "ramda": "^0.27.1",
     "sanitize-filename": "^1.6.3"
   },
   "devDependencies": {
-    "ava": "^3.13.0",
-    "coveralls": "^3.1.0",
-    "docsify-cli": "^4.4.1",
-    "eslint": "^7.13.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-plugin-ava": "^11.0.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsdoc": "^30.7.8",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "ava": "^3.15.0",
+    "eslint": "^8.5.0",
+    "eslint-config-airbnb": "^19.0.2",
+    "eslint-plugin-anti-trojan-source": "^1.0.6",
+    "eslint-plugin-ava": "^13.1.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsdoc": "^37.4.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-no-inferred-method-name": "^2.0.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-optimize-regex": "^1.2.0",
+    "eslint-plugin-optimize-regex": "^1.2.1",
     "eslint-plugin-ramda": "^2.5.1",
-    "eslint-plugin-react": "^7.21.5",
-    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-security": "^1.4.0",
-    "eslint-plugin-unicorn": "^23.0.0",
-    "eslint-plugin-xss": "^0.1.10",
-    "express": "^4.17.1",
-    "jsdoc-to-markdown": "^6.0.1",
+    "eslint-plugin-xss": "^0.1.11",
+    "express": "^4.17.2",
+    "jsdoc-to-markdown": "^7.1.0",
     "nyc": "^15.1.0",
-    "sinon": "^9.2.1",
-    "uttori-document": "^1.4.1"
+    "sinon": "^12.0.1",
+    "uttori-document": "^1.4.2",
+    "typescript": "^4.5.4"
   },
   "files": [
     "src/*"
@@ -71,11 +70,13 @@
   },
   "scripts": {
     "docs": "jsdoc2md --private --example-lang js src/classifier_fisher.js > docs/classifier_fisher.md; jsdoc2md --private --example-lang js src/classifier_naive_bayes.js > docs/classifier_naive_bayes.md; jsdoc2md --private --example-lang js src/classifier.js > docs/classifier.md; jsdoc2md --private --example-lang js src/diff-parser.js > docs/diff-parser.md; jsdoc2md --private --example-lang js src/file-utility.js > docs/file-utility.md; jsdoc2md --private --example-lang js src/function-queue.js > docs/function-queue.md; jsdoc2md --private --example-lang js src/network.js > docs/network.md; jsdoc2md --private --example-lang js src/operator.js > docs/operator.md; jsdoc2md --private --example-lang js src/parse-query-to-array.js > docs/parse-query-to-array.md; jsdoc2md --private --example-lang js src/parse-query-to-ramda.js > docs/parse-query-to-ramda.md; jsdoc2md --private --example-lang js src/tokenizer.js > docs/tokenizer.md; jsdoc2md --private --example-lang js src/validate-query.js > docs/validate-query.md; jsdoc2md --private --example-lang js src/where-parser.js > docs/where-parser.md; jsdoc2md --private --example-lang js src/fisher–yates-shuffle.js > docs/fisher–yates-shuffle.md;",
-    "docs-serve": "docsify serve ./docs",
+    "docs-serve": "docsify init ./docs && docsify serve ./docs",
     "lint": "eslint .",
+    "make-types": "rm -fr types/ && mkdir types && tsc --project .tsconfig.json",
+    "release": "release-it",
     "report": "nyc report --reporter=html",
     "test": "NODE_ENV=test nyc ava --serial",
-    "test-debug": "DEBUG=Uttori* NODE_ENV=test ava --serial",
+    "test-debug": "DEBUG=Uttori* NODE_ENV=test ava --serial --concurrency=1",
     "validate": "npm ls"
   }
 }

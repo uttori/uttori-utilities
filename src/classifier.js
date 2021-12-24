@@ -197,9 +197,7 @@ class Classifier {
    */
   weightedProbability(feature, _category, basicProbability, weight = 1, assumedProbability = 0.5) {
     debug('weightedProbability:', feature, _category, basicProbability, weight, assumedProbability);
-    const totals = this.getCategories().reduce(
-      (result, category) => result + this.featureCount(feature, category), 0,
-    );
+    const totals = this.getCategories().reduce((result, category) => result + this.featureCount(feature, category), 0);
     return ((weight * assumedProbability) + (totals * basicProbability)) / (weight + totals);
   }
 

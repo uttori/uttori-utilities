@@ -1,7 +1,7 @@
 ## Functions
 
 <dl>
-<dt><a href="#base">base(url, [options], [context], callback)</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#base">base(url, options, context, callback)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Execute a HTTP(S) request with options provided.</p>
 </dd>
 <dt><a href="#json">json(url, [options], [context])</a> ⇒ <code>Promise</code></dt>
@@ -17,7 +17,7 @@
 
 <a name="base"></a>
 
-## base(url, [options], [context], callback) ⇒ <code>Promise</code>
+## base(url, options, context, callback) ⇒ <code>Promise</code>
 Execute a HTTP(S) request with options provided.
 
 **Kind**: global function  
@@ -31,11 +31,11 @@ Execute a HTTP(S) request with options provided.
 | Param | Type | Description |
 | --- | --- | --- |
 | url | <code>string</code> \| <code>URL</code> | URL to communicate with. |
-| [options] | <code>object</code> | Configuration to pass to `http(s).request()`. |
-| [options.method] | <code>object</code> | HTTP Method to use. |
-| [context] | <code>object</code> | Internal options and data used in the request. |
-| [context.responseEncoding] | <code>string</code> | Encoding to specify response should be parsed as. |
-| [context.data] | <code>string</code> \| <code>Buffer</code> | Data to be sent for POST/PUT requests. |
+| options | <code>object</code> | Configuration to pass to `http(s).request()`. |
+| options.method | <code>object</code> | HTTP Method to use. |
+| context | <code>object</code> | Internal options and data used in the request. |
+| context.responseEncoding | <code>string</code> | Encoding to specify response should be parsed as. |
+| context.data | <code>string</code> \| <code>Buffer</code> | Data to be sent for POST/PUT requests. |
 | callback | <code>function</code> | Logic for responding to non-error responses. |
 
 **Example** *(Network.request(url, options, context))*  

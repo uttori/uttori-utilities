@@ -1,4 +1,4 @@
-/* eslint-disable no-console, no-loop-func */
+/* eslint-disable no-console, no-loop-func, ava/no-unknown-modifiers */
 const test = require('ava');
 const { FunctionQueue } = require('../src');
 

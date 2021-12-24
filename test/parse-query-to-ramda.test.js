@@ -36,6 +36,8 @@ const docs = [
     tags: ['new', 'lame'],
     slug: 'no-name',
   },
+  // Check against a completely null document
+  {},
 ];
 
 const filter = (query) => {
@@ -181,7 +183,7 @@ test('Level 0: INCLUDES', (t) => {
 test('Level 0: IS_NULL', (t) => {
   sql = 'favorite IS_NULL';
   out = filter(sql);
-  t.is(out.length, 2);
+  t.is(out.length, 3);
 });
 
 test('Level 0: IS_NOT_NULL', (t) => {

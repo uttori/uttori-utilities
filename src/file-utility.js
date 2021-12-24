@@ -129,7 +129,7 @@ const readFileSync = (folder, name, extension, encoding = 'utf8') => {
   const target = `${folder}/${sanitize(`${name}${extension}`)}`;
   debug('Reading target:', target);
   let content;
-  try { content = fs.readFileSync(target, encoding); } catch (error) {
+  try { content = fs.readFileSync(target, { encoding }); } catch (error) {
     /* istanbul ignore next */
     debug('Error reading file:', target, error);
   }
@@ -196,7 +196,7 @@ const readJSONSync = (folder, name, extension, encoding = 'utf8') => {
   let content;
   if (fs.existsSync(target)) {
     debug('Reading target:', target);
-    try { content = fs.readFileSync(target, encoding); } catch (error) {
+    try { content = fs.readFileSync(target, { encoding }); } catch (error) {
       /* istanbul ignore next */
       debug('Error reading file:', target, error);
     }

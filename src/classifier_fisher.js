@@ -74,9 +74,7 @@ class Fisher extends Classifier {
     }
 
     // The frequency of this feature in all the categories.
-    const frequencySum = this.getCategories().reduce(
-      (result, key) => result + this.featureProbability(feature, key), 0,
-    );
+    const frequencySum = this.getCategories().reduce((result, key) => result + this.featureProbability(feature, key), 0);
 
     // The probability is the frequency in this category divided by the overall frequency.
     return clf / frequencySum;
