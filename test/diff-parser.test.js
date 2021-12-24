@@ -20,7 +20,7 @@ test('parse(sql): parses a unified diff string into an abstract syntax tree', (t
 `;
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -144,7 +144,7 @@ test('should parse unix with \\n diff', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -213,7 +213,7 @@ test('should parse windows with \\r\\n diff', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -282,7 +282,7 @@ test('should parse old os x with \\r diff', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -351,7 +351,7 @@ test('should parse mixed eols diff', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -421,7 +421,7 @@ test('should parse diff with special characters', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -499,7 +499,7 @@ test('should parse diff with deleted file', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -580,7 +580,7 @@ test('should parse diff with new file', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -675,7 +675,7 @@ test('should parse diff with nested diff', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -791,7 +791,7 @@ test('should parse diff with multiple blocks', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -1019,7 +1019,7 @@ test('should parse diff with multiple files', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(2, result.length);
+  t.is(result.length, 2);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -1217,7 +1217,7 @@ test('should parse diffs with copied files', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [],
     cli: 'diff --git a/index.js b/more-index.js',
@@ -1236,7 +1236,7 @@ test('should parse diffs with moved files', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [],
     cli: 'diff --git a/more-index.js b/other-index.js',
@@ -1256,7 +1256,7 @@ test('should parse unified non git diff and strip timestamps off the headers', (
       + '+test2r\n';
   const parser = new DiffParser();
   let result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -1327,7 +1327,7 @@ test('should parse unified non git diff and strip timestamps off the headers', (
       + '+test1r\n'
       + '+test2r\n';
   result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -1401,7 +1401,7 @@ test('should parse unified non git diff', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -1479,7 +1479,7 @@ test('should parse unified diff with multiple hunks and files', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(2, result.length);
+  t.is(result.length, 2);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -1608,7 +1608,7 @@ test('should parse binary file diff', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [],
     cli: 'diff --git a/last-changes-config.png b/last-changes-config.png',
@@ -1653,7 +1653,7 @@ test('should parse diff with --find-renames', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -1779,7 +1779,7 @@ test('should parse diff with prefix', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(3, result.length);
+  t.is(result.length, 3);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -2074,7 +2074,7 @@ test('should parse binary with content', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(2, result.length);
+  t.is(result.length, 2);
   t.deepEqual(result[0], {
     chunks: [],
     cli: 'diff --git a/favicon.png b/favicon.png',
@@ -2194,7 +2194,7 @@ test('should parse diff without proper hunk headers', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -2260,7 +2260,7 @@ test('should parse diff with --- and +++ in the context lines', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -2356,7 +2356,7 @@ test('should parse diffs correct line numbers', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -2445,7 +2445,7 @@ test('should parse combined diff', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -2699,7 +2699,7 @@ test('should parse combined diff with sloppy header', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {
@@ -2942,7 +2942,7 @@ test('should parse combined diff with escaped quotes', (t) => {
 
   const parser = new DiffParser();
   const result = parser.parse(diff);
-  t.is(1, result.length);
+  t.is(result.length, 1);
   t.deepEqual(result[0], {
     chunks: [
       {

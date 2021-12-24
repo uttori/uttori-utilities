@@ -118,19 +118,18 @@ test('TokenizeThis: Here it is tokenizing XML like a boss', (t) => {
     tokens.push(token);
   });
 
-  t.deepEqual(tokens,
-    [
-      '<?', 'xml-stylesheet', 'href', '=', 'catalog.xsl', 'type', '=', 'text/xsl', '?>',
-      '<!', 'DOCTYPE', 'catalog', 'SYSTEM', 'catalog.dtd', '>',
-      '<', 'catalog', '>',
-      '<', 'product', 'description', '=', 'Cardigan Sweater', 'product_image', '=', 'cardigan.jpg', '>',
-      '<', 'size', 'description', '=', 'Large', '/>',
-      '<', 'color_swatch', 'image', '=', 'red_cardigan.jpg', '>',
-      'Red',
-      '</', 'color_swatch', '>',
-      '</', 'product', '>',
-      '</', 'catalog', '>',
-    ]);
+  t.deepEqual(tokens, [
+    '<?', 'xml-stylesheet', 'href', '=', 'catalog.xsl', 'type', '=', 'text/xsl', '?>',
+    '<!', 'DOCTYPE', 'catalog', 'SYSTEM', 'catalog.dtd', '>',
+    '<', 'catalog', '>',
+    '<', 'product', 'description', '=', 'Cardigan Sweater', 'product_image', '=', 'cardigan.jpg', '>',
+    '<', 'size', 'description', '=', 'Large', '/>',
+    '<', 'color_swatch', 'image', '=', 'red_cardigan.jpg', '>',
+    'Red',
+    '</', 'color_swatch', '>',
+    '</', 'product', '>',
+    '</', 'catalog', '>',
+  ]);
 });
 
 test('TokenizeThis: #tokenize(str:String, forEachToken:Function): sends each token to the `forEachToken(token:String, surroundedBy:String)` callback', (t) => {

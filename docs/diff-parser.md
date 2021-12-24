@@ -87,9 +87,7 @@ Parse Unified Diff content.
 | Param | Type | Description |
 | --- | --- | --- |
 | line | <code>string</code> | The line to parse. |
-| [header] | <code>object</code> | The the header for the diff block. |
-| [header.old] | <code>number</code> | The previous line number of the current line. |
-| [header.new] | <code>number</code> | The new line number of the current line. |
+| [header] | <code>object</code> | The header with the keys 'old' for the previous line number of the current line and 'new' for the new line number of the current line. |
 
 <a name="DiffParser.parseCombinedContent"></a>
 
@@ -102,9 +100,7 @@ Parse Combined Diff content.
 | Param | Type | Description |
 | --- | --- | --- |
 | line | <code>string</code> | The line to parse. |
-| [header] | <code>object</code> | The the header for the diff block. |
-| [header.old] | <code>number</code> | The previous line number of the current line. |
-| [header.new] | <code>number</code> | The new line number of the current line. |
+| [header] | <code>object</code> | The header with the keys 'old' for the previous line number of the current line and 'new' for the new line number of the current line. |
 
 <a name="DiffParser.praseChunkHeader"></a>
 

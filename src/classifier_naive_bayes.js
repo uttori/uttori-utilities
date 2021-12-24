@@ -73,9 +73,7 @@ class NaiveBayes extends Classifier {
    */
   documentProbability(item, category) {
     debug('documentProbability:', item, category);
-    const probability = Classifier.getFeatures(item).reduce(
-      (result, feature) => result * this.weightedProbability(feature, category, this.featureProbability(feature, category)), 1,
-    );
+    const probability = Classifier.getFeatures(item).reduce((result, feature) => result * this.weightedProbability(feature, category, this.featureProbability(feature, category)), 1);
     debug('documentProbability =', probability);
     return probability;
   }

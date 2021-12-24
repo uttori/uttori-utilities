@@ -80,7 +80,8 @@ test('This array structure is useful for displaying the query on the front-end, 
     const html = toConvert.map((i) => toHtml(i));
     return `<div class="expression">${html.join('')}</div>`;
   };
-  t.deepEqual(toHtml(sqlArray),
+  t.deepEqual(
+    toHtml(sqlArray),
     '<div class="expression">'
           + '<div class="expression">'
               + '<span class="operand">name</span>'
@@ -95,5 +96,6 @@ test('This array structure is useful for displaying the query on the front-end, 
               + '<strong class="operator">+</strong>'
               + '<span class="operand">7</span>'
           + '</div>'
-      + '</div>');
+      + '</div>',
+  );
 });
