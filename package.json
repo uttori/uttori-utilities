@@ -1,6 +1,6 @@
 {
   "name": "uttori-utilities",
-  "version": "2.3.1-pre",
+  "version": "2.3.0",
   "description": "A set of helper utilities for Uttoti components.",
   "author": "Matthew Callis <matthew.callis@gmail.com>",
   "contributors": [],
@@ -39,6 +39,7 @@
     "express": "^4.17.2",
     "jsdoc-to-markdown": "^7.1.0",
     "nyc": "^15.1.0",
+    "release-it": "^14.11.8",
     "sinon": "^12.0.1",
     "uttori-document": "^1.4.2",
     "typescript": "^4.5.4"
